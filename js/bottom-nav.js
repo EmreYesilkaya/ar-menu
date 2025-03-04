@@ -92,27 +92,26 @@ document.addEventListener('DOMContentLoaded', function() {
         showFavoritesBtn.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Favoriler sekmesini kontrol et 
-            const favoritesTab = document.querySelector('.menu-tab[data-target="favorites"]');
-            if (favoritesTab) {
-                // Tıklama olayını tetikle
-                favoritesTab.click();
-            } else {
-                // Favoriler bölümüne git ve güncelle
-                const favoritesSection = document.getElementById('favoritesSection');
-                if (favoritesSection) {
-                    // Favoriler bölümünü görünür yap ve sayfayı kaydır
-                    favoritesSection.scrollIntoView({ behavior: 'smooth' });
-                    
-                    // Favoriler bölümünü güncelle
-                    if (window.updateFavoritesSection) {
-                        window.updateFavoritesSection();
-                    }
-                } else {
-                    console.error('Favoriler bölümü (favoritesSection) bulunamadı!');
-                    // Bildirim göster
-                    showNotification('Favoriler bölümüne ulaşılamıyor', 'error');
+            // Doğrudan favoriler bölümüne git
+            const favoritesSection = document.getElementById('favoritesSection');
+            if (favoritesSection) {
+                // Favoriler bölümünü görünür yap ve sayfayı kaydır
+                favoritesSection.scrollIntoView({ behavior: 'smooth' });
+                
+                // Favoriler bölümünü güncelle
+                if (window.updateFavoritesSection) {
+                    window.updateFavoritesSection();
                 }
+                
+                // Vurgu animasyonu ekle (isteğe bağlı)
+                favoritesSection.classList.add('highlight-section');
+                setTimeout(() => {
+                    favoritesSection.classList.remove('highlight-section');
+                }, 2000);
+            } else {
+                console.error('Favoriler bölümü (favoritesSection) bulunamadı!');
+                // Bildirim göster
+                showNotification('Favoriler bölümüne ulaşılamıyor', 'error');
             }
             
             // Dokunma geri bildirimi

@@ -723,6 +723,17 @@ body {
     animation: heartbeat 1s ease-in-out;
 }
 
+/* Favoriler bölümü vurgu animasyonu */
+@keyframes highlight-section {
+    0% { background-color: rgba(106, 90, 224, 0.1); }
+    50% { background-color: rgba(106, 90, 224, 0.2); }
+    100% { background-color: rgba(106, 90, 224, 0); }
+}
+
+.highlight-section {
+    animation: highlight-section 2s ease-out;
+}
+
 /* Sonuç bulunamadı mesajı */
 .no-results {
     text-align: center;

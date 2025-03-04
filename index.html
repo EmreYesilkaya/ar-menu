@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="css/search.css">
     <link rel="stylesheet" href="css/share.css">
     <link rel="stylesheet" href="css/ios-style.css">
+    <link rel="stylesheet" href="css/bottom-nav.css"> <!-- YENİ: Bottom nav CSS eklendi -->
     
     <!-- Font Awesome ikonu kütüphanesi -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
@@ -89,7 +90,7 @@
             </div>
         </div>
 
-        <!-- Arama kutusu - Geliştirildi -->
+        <!-- Arama kutusu - Etiketler güncellendi -->
         <div class="search-container">
             <div class="search-box">
                 <i class="fas fa-search search-icon"></i>
@@ -98,12 +99,17 @@
             <div class="filter-container">
                 <button class="filter-btn active" data-filter="all">Tümü</button>
                 <button class="filter-btn" data-filter="popular">🔥 Popüler</button>
-                <button class="filter-btn" data-filter="vegan">🥗 Vegan</button>
+                <button class="filter-btn" data-filter="vegan">🌱 Vegan</button>
+                <button class="filter-btn" data-filter="vegetarian">🥕 Vejetaryen</button>
+                <button class="filter-btn" data-filter="meat">🥩 Et</button>
+                <button class="filter-btn" data-filter="chicken">🍗 Tavuk</button>
                 <button class="filter-btn" data-filter="spicy">🌶️ Acılı</button>
+                <button class="filter-btn" data-filter="fresh">✨ Taze</button>
+                <button class="filter-btn" data-filter="hot">🔥 Sıcak</button>
             </div>
         </div>
 
-        <!-- Yapışkan menü sekmeleri -->
+        <!-- Yapışkan menü sekmeleri - Sıralaması düzeltildi -->
         <div class="menu-tabs-container">
             <div class="menu-tabs">
                 <a href="#mainDishesSection" class="menu-tab active" data-target="mainDishes">
@@ -118,10 +124,19 @@
                 <a href="#popularSection" class="menu-tab" data-target="popular">
                     <span class="tab-emoji">🔥</span> Popüler
                 </a>
+                <a href="#breakfastSection" class="menu-tab" data-target="breakfast">
+                    <span class="tab-emoji">☕</span> Kahvaltı
+                </a>
+                <a href="#soupsSection" class="menu-tab" data-target="soups">
+                    <span class="tab-emoji">🍲</span> Çorbalar
+                </a>
+                <a href="#saladsSection" class="menu-tab" data-target="salads">
+                    <span class="tab-emoji">🥗</span> Salatalar
+                </a>
             </div>
         </div>
 
-        <!-- AR Container -->
+        <!-- AR Container - DÜZELTILDI -->
         <div class="ar-container" id="arContainer" style="display: none;">
             <canvas id="ar-canvas"></canvas>
             <div id="model-error" style="display: none; color: #ff5a5a; background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; max-width: 80%;">
@@ -164,7 +179,7 @@
         </section>
         
         <section id="drinksSection" class="menu-section">
-            <h2 class="section-title">🍹 İçecekler</h2>
+            <h2 class="section-title">🍹 İçecekler</h>
             <div class="menu-items" id="drinks">
                 <!-- Menu items will be dynamically populated -->
             </div>
@@ -177,8 +192,43 @@
             </div>
         </section>
         
-        <!-- Call to Action Button -->
-        <button class="cta-button">
+        <!-- Yeni kategori bölümleri -->
+        <section id="breakfastSection" class="menu-section">
+            <h2 class="section-title">☕ Kahvaltı</h2>
+            <div class="menu-items" id="breakfast">
+                <!-- Menu items will be dynamically populated -->
+            </div>
+        </section>
+
+        <section id="soupsSection" class="menu-section">
+            <h2 class="section-title">🍲 Çorbalar</h2>
+            <div class="menu-items" id="soups">
+                <!-- Menu items will be dynamically populated -->
+            </div>
+        </section>
+
+        <section id="saladsSection" class="menu-section">
+            <h2 class="section-title">🥗 Salatalar</h2>
+            <div class="menu-items" id="salads">
+                <!-- Menu items will be dynamically populated -->
+            </div>
+        </section>
+        
+        <!-- Favoriler bölümü yeniden eklendi -->
+        <section id="favoritesSection" class="menu-section">
+            <h2 class="section-title">❤️ Favorilerim</h2>
+            <div class="menu-items" id="favoriteItems">
+                <!-- Favoriler dinamik olarak yüklenecek -->
+                <div class="no-favorites">
+                    <div class="no-favorites-emoji">💔</div>
+                    <h3 class="no-favorites-title">Henüz favoriniz yok</h3>
+                    <p class="no-favorites-message">Favori ürünlerinizi eklemek için menü öğelerindeki kalp ikonuna tıklayın.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Call to Action Button - margin-bottom değeri eklendi -->
+        <button class="cta-button" style="margin-bottom: 100px;">
             <i class="fas fa-utensils"></i> Sipariş Ver
         </button>
     </div>
@@ -187,6 +237,31 @@
     <div id="backToTop" class="back-to-top">
         <i class="fas fa-arrow-up"></i>
     </div>
+
+    <!-- Alt Gezinme Çubuğu - AR düğmesi güncellendi -->
+    <nav class="bottom-nav">
+        <a href="#" class="bottom-nav-item active" data-action="home">
+            <div class="bottom-nav-icon"><i class="fas fa-home"></i></div>
+            <div class="bottom-nav-label">Anasayfa</div>
+        </a>
+        <a href="#" class="bottom-nav-item" data-action="categories">
+            <div class="bottom-nav-icon"><i class="fas fa-th-large"></i></div>
+            <div class="bottom-nav-label">Kategoriler</div>
+        </a>
+        <a href="#" class="bottom-nav-item bottom-nav-ar" id="openARCamera">
+            <div class="bottom-nav-icon bottom-nav-icon-large"><i class="fas fa-qrcode"></i></div>
+            <div class="bottom-nav-label">QR Tara</div>
+        </a>
+        <a href="#" class="bottom-nav-item" data-action="profile">
+            <div class="bottom-nav-icon"><i class="fas fa-user"></i></div>
+            <div class="bottom-nav-label">Profil</div>
+        </a>
+        <a href="#" class="bottom-nav-item" id="showFavorites">
+            <div class="bottom-nav-icon"><i class="fas fa-heart"></i></div>
+            <div class="bottom-nav-label">Favoriler</div>
+            <span class="bottom-nav-badge" id="favoritesBadge">0</span>
+        </a>
+    </nav>
 
     <!-- AR Instructions Modal -->
     <div class="modal" id="instructionsModal">
@@ -218,14 +293,19 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
     
-    <!-- Uygulama Scriptleri - sıralama düzeltildi -->
+    <!-- Uygulama Scriptleri - sıralama güncellendi -->
     <script src="js/resolveAssetPath.js"></script>
     <script src="js/popup.js"></script>
-    <script src="js/fix-ar-model.js"></script>
+    <script src="js/menu-data.js"></script> <!-- YENİ: Menü veri modülü -->
+    <script src="js/ar-module.js"></script>
     <script src="js/search.js"></script>
+    <script src="js/menu-loader.js"></script> <!-- YENİ: Menü yükleme modülü -->
+    <script src="js/bottom-nav.js"></script>
+    <script src="js/favorites.js"></script> <!-- YENİ: Favoriler modülü -->
     <script src="models/tutorial.js"></script>
     <script src="js/share.js"></script>
-    <script src="js/fix-share.js"></script> <!-- Paylaşım sorunu için düzeltme dosyası -->
+    <script src="js/qr-scanner.js"></script> <!-- QR tarayıcı -->
+    <!-- QR test modülü kaldırıldı -->
     <script src="js/index.js" defer></script>
     <script src="js/header.js"></script>
     <script src="js/troubleshoot.js"></script>

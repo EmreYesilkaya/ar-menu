@@ -1,52 +1,153 @@
 /**
- * Favoriler Özelliği
- * Kullanıcıların menü öğelerini favorilere eklemelerini ve daha sonra görüntülemelerini sağlar.
+ * Favoriler Özelliği - Düzenlendi ve Hataları Giderildi
+ * Kullanıcıların menü öğelerini favorilere ekleyip görebilmelerini sağlar
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Favoriler sistemi ayarları
-    setupFavoritesSystem();
+    // Favoriler sistemini ve rozetini hemen başlat
+    updateFavoritesCount();
     
-    // Favoriler sekmesi ekle
-    addFavoritesTab();
-});
-
-// Favorilere ekle/çıkar butonunu her menü öğesine ekle
-function setupFavoritesSystem() {
     // LocalStorage'da favoriler varsa al, yoksa boş array oluştur
     const favorites = JSON.parse(localStorage.getItem('arMenuFavorites')) || [];
     
-    // Tüm menü öğelerine favori butonu ekle
-    document.querySelectorAll('.menu-item').forEach(menuItem => {
-        // Menü öğesinin ID'sini al
-        const itemId = menuItem.dataset.itemId || generateItemId(menuItem);
-        menuItem.dataset.itemId = itemId;
-        
-        // Favori butonu oluştur
-        const favoriteBtn = document.createElement('button');
-        favoriteBtn.className = 'favorite-btn';
-        favoriteBtn.innerHTML = favorites.includes(itemId) 
-            ? '<i class="fas fa-heart"></i>' 
-            : '<i class="far fa-heart"></i>';
-        
-        // Favori butonunu menü öğesinin içine ekle
-        const menuItemImg = menuItem.querySelector('.menu-item-img-container') || menuItem.querySelector('.menu-item-img').parentNode;
-        menuItemImg.style.position = 'relative';
-        menuItemImg.appendChild(favoriteBtn);
-        
-        // Favori butonu olayı
-        favoriteBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Butonun altındaki öğelere tıklamayı engelle
-            toggleFavorite(itemId, favoriteBtn);
+    // Favori sekmesi ekle
+    addFavoritesTab();
+    
+    // Sayfa yüklendiğinde mevcut menü öğelerine favori butonlarını ekle
+    setupInitialFavoriteButtons();
+    
+    // Yeni eklenen menü öğeleri için MutationObserver ekle
+    setupMenuItemsObserver();
+});
+
+// LocalStorage'dan favori sayısını alıp badge'i güncelle
+function updateFavoritesCount() {
+    const favorites = JSON.parse(localStorage.getItem('arMenuFavorites')) || [];
+    const favoritesBadge = document.getElementById('favoritesBadge');
+    
+    if (favoritesBadge) {
+        favoritesBadge.textContent = favorites.length;
+        favoritesBadge.style.display = favorites.length > 0 ? 'flex' : 'none';
+    }
+    
+    // Ayrıca üst menüdeki favoriler butonundaki badge'i de güncelle
+    const headerFavoritesBadge = document.querySelector('#favoritesBtn .notification-badge');
+    if (headerFavoritesBadge) {
+        headerFavoritesBadge.textContent = favorites.length;
+        headerFavoritesBadge.style.display = favorites.length > 0 ? 'inline-flex' : 'none';
+    }
+    
+    // Bu fonksiyonu global olarak erişilebilir yap
+    window.updateFavoritesCount = updateFavoritesCount;
+}
+
+// Sayfa ilk yüklendiğinde mevcut menü öğelerine favori butonları ekle
+function setupInitialFavoriteButtons() {
+    // Tüm menü öğelerini seç
+    const menuItems = document.querySelectorAll('.menu-item');
+    
+    if (menuItems.length > 0) {
+        // Her menü öğesine favori butonu ekle
+        menuItems.forEach(menuItem => addFavoriteButtonToMenuItem(menuItem));
+    } else {
+        // Eğer henüz menü öğeleri yüklenmediyse, kısa bir gecikmeyle tekrar dene
+        setTimeout(() => {
+            const delayedMenuItems = document.querySelectorAll('.menu-item');
+            if (delayedMenuItems.length > 0) {
+                delayedMenuItems.forEach(menuItem => addFavoriteButtonToMenuItem(menuItem));
+            }
+        }, 1000);
+    }
+}
+
+// Yeni eklenen menü öğeleri için MutationObserver
+function setupMenuItemsObserver() {
+    // DOM değişikliklerini izlemek için bir observer oluştur
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            // Eğer yeni elemanlar eklendiyse
+            if (mutation.addedNodes.length) {
+                mutation.addedNodes.forEach(node => {
+                    // Eğer eklenen bir menu-item ise
+                    if (node.nodeType === 1 && node.classList.contains('menu-item')) {
+                        // Favori butonu ekle
+                        addFavoriteButtonToMenuItem(node);
+                    }
+                    
+                    // Alt elemanlarda menu-item öğeleri var mı diye kontrol et
+                    if (node.nodeType === 1) {
+                        const menuItems = node.querySelectorAll('.menu-item');
+                        if (menuItems.length) {
+                            menuItems.forEach(menuItem => addFavoriteButtonToMenuItem(menuItem));
+                        }
+                    }
+                });
+            }
         });
+    });
+    
+    // Kontrol edilecek elementleri izle
+    const menuSections = document.querySelectorAll('.menu-section');
+    menuSections.forEach(section => {
+        observer.observe(section, { childList: true, subtree: true });
     });
 }
 
-// Menü öğesi için benzersiz ID oluştur
-function generateItemId(menuItem) {
-    const title = menuItem.querySelector('.menu-item-title').textContent;
-    const price = menuItem.querySelector('.menu-item-price').textContent;
-    return `${title.trim()}_${price.trim()}`.replace(/\s+/g, '_').replace(/[^a-z0-9_]/gi, '').toLowerCase();
+// Menü öğesine favori butonu ekle
+function addFavoriteButtonToMenuItem(menuItem) {
+    // Eğer bu öğeye zaten favori butonu eklenmiş ise tekrar ekleme
+    if (menuItem.querySelector('.favorite-btn')) return;
+    
+    // Favori listesini al
+    const favorites = JSON.parse(localStorage.getItem('arMenuFavorites')) || [];
+    
+    // Menü öğesi ID'si için veri öğesi kullan ya da oluştur
+    let itemId = menuItem.dataset.itemId;
+    
+    if (!itemId) {
+        // ID üretmek için öğe başlığı ve fiyatını kullan
+        const menuItemTitle = menuItem.querySelector('.menu-item-title');
+        const menuItemPrice = menuItem.querySelector('.menu-item-price');
+        
+        if (menuItemTitle && menuItemPrice) {
+            itemId = `${menuItemTitle.textContent.trim().toLowerCase().replace(/\s+/g, '_')}_${menuItemPrice.textContent.trim().replace(/\s+/g, '')}`;
+            menuItem.dataset.itemId = itemId;
+        } else {
+            // Eğer başlık ve fiyat bulunamazsa benzersiz bir ID oluştur
+            itemId = 'item_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+            menuItem.dataset.itemId = itemId;
+        }
+    }
+    
+    // Favori butonu oluştur
+    const favoriteBtn = document.createElement('button');
+    favoriteBtn.className = 'favorite-btn';
+    favoriteBtn.innerHTML = favorites.includes(itemId) 
+        ? '<i class="fas fa-heart"></i>' 
+        : '<i class="far fa-heart"></i>';
+    
+    // Menü öğesi resim konteynerini bul
+    const menuItemImgContainer = menuItem.querySelector('.menu-item-img-container');
+    
+    if (menuItemImgContainer) {
+        // Menü öğesi resim konteynerine butonu ekle
+        menuItemImgContainer.style.position = 'relative';
+        menuItemImgContainer.appendChild(favoriteBtn);
+    } else {
+        // Eğer resim konteyneri yoksa, doğrudan menü öğesine ekle
+        const menuItemImg = menuItem.querySelector('.menu-item-img');
+        if (menuItemImg) {
+            const parentElement = menuItemImg.parentNode;
+            parentElement.style.position = 'relative';
+            parentElement.appendChild(favoriteBtn);
+        }
+    }
+    
+    // Favori butonu için olay dinleyicisi ekle
+    favoriteBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Butonun altındaki öğeye tıklanmasını engelle
+        toggleFavorite(itemId, favoriteBtn);
+    });
 }
 
 // Öğeyi favorilere ekle/çıkar
@@ -65,35 +166,50 @@ function toggleFavorite(itemId, button) {
         button.innerHTML = '<i class="fas fa-heart"></i>'; // Dolu kalp ikonu
         showStatusMessage('Favorilere eklendi');
         
-        // Haptic feedback
+        // Dokunma geri bildirimi
         if (window.navigator && window.navigator.vibrate) {
             window.navigator.vibrate([50, 30, 50]);
         }
     }
     
-    // Favorileri güncelle
+    // LocalStorage'a kaydet
     localStorage.setItem('arMenuFavorites', JSON.stringify(favorites));
     
-    // Eğer favoriler sekmesi mevcutsa, içeriğini güncelle
-    updateFavoritesSection();
+    // Favoriler rozetini güncelle
+    updateFavoritesCount();
+    
+    // Favoriler sekmesini güncelle
+    if (document.querySelector('#favoritesSection')) {
+        updateFavoritesSection();
+    }
+    
+    // Aynı ID'ye sahip tüm diğer favori butonlarını da güncelle
+    document.querySelectorAll(`.menu-item[data-item-id="${itemId}"] .favorite-btn`).forEach(btn => {
+        if (btn !== button) {
+            btn.innerHTML = button.innerHTML;
+        }
+    });
 }
 
-// Favoriler sekmesini ekle
+// Favoriler sekmesi ekle
 function addFavoritesTab() {
-    // Önce mevcut sekmeleri kontrol et
+    // Menü sekmeleri konteyneri var mı kontrol et
     const menuTabs = document.querySelector('.menu-tabs');
-    if (!menuTabs || document.querySelector('.menu-tab[data-target="favorites"]')) return;
+    if (!menuTabs) return;
     
-    // Favoriler sekmesi oluştur
+    // Favoriler sekmesi zaten var mı kontrol et
+    if (document.querySelector('.menu-tab[data-target="favorites"]')) return;
+    
+    // Favoriler sekmesi oluştur ve ekle
     const favoritesTab = document.createElement('a');
     favoritesTab.href = '#favoritesSection';
     favoritesTab.className = 'menu-tab';
     favoritesTab.setAttribute('data-target', 'favorites');
     favoritesTab.innerHTML = `
-        <span class="tab-emoji">❤️</span> Favoriler
+        <span class="tab-emoji">❤️</span> Favorilerim
     `;
     
-    // Sekmeyi ekle
+    // Sekmeyi ekle - son sekme olarak
     menuTabs.appendChild(favoritesTab);
     
     // Favoriler bölümü oluştur
@@ -107,7 +223,9 @@ function addFavoritesTab() {
     
     // Ana içerik alanına ekle
     const mainContainer = document.querySelector('.main-container');
-    mainContainer.appendChild(favoritesSection);
+    if (mainContainer) {
+        mainContainer.appendChild(favoritesSection);
+    }
     
     // İlk içeriği yükle
     updateFavoritesSection();
@@ -124,23 +242,29 @@ function addFavoritesTab() {
         // Bu sekmeye active class ekle
         favoritesTab.classList.add('active');
         
+        // Favoriler içeriğini güncelle
+        updateFavoritesSection();
+        
         // Favoriler bölümüne git
         favoritesSection.scrollIntoView({
             behavior: 'smooth'
         });
-        
-        // İçeriği güncelle
-        updateFavoritesSection();
     });
 }
 
-// Favoriler bölümünü güncelle
-function updateFavoritesSection() {
+// Favoriler bölümünü güncelle - scroll işlemi ekleyerek
+function updateFavoritesSection(scrollToSection = false) {
     const favoritesContainer = document.getElementById('favoriteItems');
     if (!favoritesContainer) return;
     
     // Favorileri local storage'dan al
     let favorites = JSON.parse(localStorage.getItem('arMenuFavorites')) || [];
+    
+    // Favori sayısını güncelle
+    updateFavoritesCount();
+    
+    // İçeriği temizle
+    favoritesContainer.innerHTML = '';
     
     // Favoriler boşsa mesaj göster
     if (favorites.length === 0) {
@@ -154,112 +278,156 @@ function updateFavoritesSection() {
         return;
     }
     
-    // Favorilere eklenen menü öğelerini göster
-    favoritesContainer.innerHTML = '';
+    // Her favori öğeyi bul ve kopyasını favoriler bölümüne ekle
+    let foundItems = 0;
+    
     favorites.forEach(itemId => {
-        // ID ile menü öğesini bul
+        // DOM'da itemId'ye sahip menü öğesini bul
         const originalItem = document.querySelector(`.menu-item[data-item-id="${itemId}"]`);
+        
         if (originalItem) {
-            // Menü öğesini kopyala ve favorilere ekle
+            // Orijinal öğeyi kopyala
             const itemClone = originalItem.cloneNode(true);
+            
+            // Kopya öğeyi favoriler bölümüne ekle
             favoritesContainer.appendChild(itemClone);
+            foundItems++;
             
-            // Yeni favori butonuna tıklama olayı ekle
-            const newFavoriteBtn = itemClone.querySelector('.favorite-btn');
-            if (newFavoriteBtn) {
-                newFavoriteBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    // Hem orijinal hem de kopya butonu güncelle
-                    toggleFavorite(itemId, newFavoriteBtn);
-                    const originalBtn = originalItem.querySelector('.favorite-btn');
-                    if (originalBtn) {
-                        originalBtn.innerHTML = newFavoriteBtn.innerHTML;
-                    }
-                });
-            }
-            
-            // AR butonu için doğru olayı ayarla
-            const arButton = itemClone.querySelector('.menu-item-ar');
-            if (arButton) {
-                // Orijinal düğme olaylarını kopyalayamayacağımız için, item veri özelliğini ekleyip
-                // o menü öğesi için AR'ı başlatan fonksiyonu çağırıyoruz
-                arButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    
-                    // Orijinal öğenin ID'sine göre menuData'dan öğeyi bulalım
-                    const menuItemData = findMenuItemById(itemId);
-                    if (menuItemData) {
-                        // AR görüntüleyicisini başlat
-                        if (arSupport === 'quicklook' && menuItemData.usdz) {
-                            initQuickLook(menuItemData);
-                        } else if (arSupport === 'webxr') {
-                            initWebXR(menuItemData);
-                        } else {
-                            initModelViewer(menuItemData);
-                        }
-                    } else {
-                        showStatusMessage('Bu öğe için AR modeli bulunamadı.');
-                    }
-                });
-            }
-        } else {
-            // Eğer orijinal öğe bulunamadıysa (muhtemelen silinmiş veya değişmiş bir öğe)
-            // Bu öğeyi favorilerden kaldır
-            console.warn(`Favorilerdeki öğe bulunamadı. ID: ${itemId}`);
-            favorites = favorites.filter(id => id !== itemId);
-            localStorage.setItem('arMenuFavorites', JSON.stringify(favorites));
+            // AR ve favoriler butonlarını yeniden ayarla
+            setupClonedItemButtons(itemClone, itemId);
         }
     });
-}
-
-// ID'ye göre menuData içinden öğe bulma
-function findMenuItemById(itemId) {
-    let allMenuItems = [];
     
-    // Tüm kategorilerdeki öğeleri topla
-    for (const category in menuData) {
-        if (Array.isArray(menuData[category])) {
-            allMenuItems = [...allMenuItems, ...menuData[category]];
-        }
-    }
-    
-    // ID'ye göre eşleşen öğeyi bul
-    for (const item of allMenuItems) {
-        const generatedId = `${item.name.trim()}_${item.price.trim()}`.replace(/\s+/g, '_').replace(/[^a-z0-9_]/gi, '').toLowerCase();
-        if (generatedId === itemId) {
-            return item;
-        }
-    }
-    
-    return null;
-}
-
-// Favori sayısını güncelleme ve sekme badge'ini güncelleyen yardımcı fonksiyon
-function updateFavoritesCount() {
-    const favorites = JSON.parse(localStorage.getItem('arMenuFavorites')) || [];
-    const favoritesTab = document.querySelector('.menu-tab[data-target="favorites"]');
-    
-    if (favoritesTab) {
-        // Mevcut badge'i bul veya oluştur
-        let badge = favoritesTab.querySelector('.tab-count');
-        if (!badge && favorites.length > 0) {
-            badge = document.createElement('span');
-            badge.className = 'tab-count';
-            favoritesTab.appendChild(badge);
-        }
+    // Eğer hiç öğe bulunamadıysa, favoriler listesini temizle
+    if (foundItems === 0 && favorites.length > 0) {
+        favoritesContainer.innerHTML = `
+            <div class="no-favorites">
+                <div class="no-favorites-emoji">🔍</div>
+                <h3 class="no-favorites-title">Favorileriniz bulunamadı</h3>
+                <p class="no-favorites-message">Favorilerinize eklediğiniz ürünler menüde bulunamadı. Başka ürünler ekleyebilirsiniz.</p>
+            </div>
+        `;
         
-        // Badge içeriğini güncelle veya gizle
-        if (badge) {
-            if (favorites.length > 0) {
-                badge.textContent = favorites.length;
-                badge.style.display = 'inline-block';
-            } else {
-                badge.style.display = 'none';
-            }
+        // Eski favori listesini temizle
+        localStorage.setItem('arMenuFavorites', JSON.stringify([]));
+        updateFavoritesCount();
+    }
+    
+    // Scroll işlemi gerekli ise favoriler bölümüne kaydır
+    if (scrollToSection) {
+        const favoritesSection = document.getElementById('favoritesSection');
+        if (favoritesSection) {
+            favoritesSection.scrollIntoView({ behavior: 'smooth' });
         }
     }
 }
 
-// Sayfa yüklendiğinde ve her favori değişikliğinde sayıyı güncelle
-document.addEventListener('DOMContentLoaded', updateFavoritesCount);
-window.addEventListener('storage', updateFavoritesCount); // Diğer sekmelerde yapılan değişiklikleri yakala
+// Kopyalanmış menü öğesindeki butonları ayarla
+function setupClonedItemButtons(itemClone, itemId) {
+    // Favori butonunu ayarla
+    const favoriteBtn = itemClone.querySelector('.favorite-btn');
+    if (favoriteBtn) {
+        favoriteBtn.innerHTML = '<i class="fas fa-heart"></i>'; // Favori olduğundan emin ol
+        
+        // Tıklama olayını yeniden ekle
+        favoriteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFavorite(itemId, favoriteBtn);
+            
+            // Favoriler listesinde artık öğe kalmadıysa, güncelle
+            setTimeout(() => {
+                const favorites = JSON.parse(localStorage.getItem('arMenuFavorites')) || [];
+                if (favorites.length === 0) {
+                    updateFavoritesSection();
+                }
+            }, 100);
+        });
+    }
+    
+    // AR butonunu ayarla
+    const arButton = itemClone.querySelector('.menu-item-ar');
+    if (arButton) {
+        arButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            
+            // Bu öğe için AR modülünü başlat
+            if (window.ARModule) {
+                const modelPath = arButton.getAttribute('data-model');
+                const usdzPath = arButton.getAttribute('data-usdz');
+                
+                const item = {
+                    name: itemClone.querySelector('.menu-item-title')?.textContent,
+                    modelPath: modelPath,
+                    usdz: usdzPath,
+                    image: itemClone.querySelector('.menu-item-img')?.src
+                };
+                
+                ARModule.showAR(item);
+            } else {
+                console.error('AR modülü bulunamadı');
+                showStatusMessage('AR görüntüleme için gerekli modül yüklenemedi.', 3000);
+            }
+        });
+    }
+}
+
+// Favoriler düğmesine tıklama olayını global olarak erişilebilir hale getir
+window.showFavoritesSection = function() {
+    const favoritesSection = document.getElementById('favoritesSection');
+    if (favoritesSection) {
+        // Favoriler bölümüne git
+        favoritesSection.scrollIntoView({ behavior: 'smooth' });
+        
+        // Favoriler bölümünü güncelle
+        updateFavoritesSection(false);
+        
+        // Vurgu için geçici sınıf ekle
+        favoritesSection.classList.add('highlight-section');
+        setTimeout(() => {
+            favoritesSection.classList.remove('highlight-section');
+        }, 2000);
+    }
+};
+
+// Bu fonksiyonu global olarak erişilebilir yap
+window.updateFavoritesSection = updateFavoritesSection;
+
+// Bildirim göster
+function showStatusMessage(message, duration = 2000) {
+    // PopupManager varsa onu kullan
+    if (window.PopupManager && window.PopupManager.showStatusMessage) {
+        window.PopupManager.showStatusMessage(message, duration);
+        return;
+    }
+    
+    // Varolan status mesaj elementini kullan
+    const statusEl = document.getElementById('statusMessage');
+    if (statusEl) {
+        statusEl.innerHTML = `<div class="alert alert-info"><div class="alert-emoji">ℹ️</div><div>${message}</div></div>`;
+        statusEl.style.display = 'block';
+        
+        setTimeout(() => {
+            statusEl.style.display = 'none';
+        }, duration);
+        return;
+    }
+    
+    // Hiçbiri yoksa basit bir bildirim oluştur
+    const notification = document.createElement('div');
+    notification.style.position = 'fixed';
+    notification.style.top = '80px';
+    notification.style.left = '50%';
+    notification.style.transform = 'translateX(-50%)';
+    notification.style.background = 'rgba(0,0,0,0.8)';
+    notification.style.color = 'white';
+    notification.style.padding = '10px 20px';
+    notification.style.borderRadius = '20px';
+    notification.style.zIndex = '1000';
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        document.body.removeChild(notification);
+    }, duration);
+}

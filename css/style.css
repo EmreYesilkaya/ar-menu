@@ -683,11 +683,17 @@ body {
     text-align: center;
     padding: 3rem 1rem;
     color: var(--text-medium);
+    background-color: rgba(245, 245, 250, 0.5);
+    border-radius: 12px;
+    margin: 1rem auto;
+    max-width: 500px;
+    box-shadow: var(--shadow-sm);
 }
 
 .no-favorites-emoji {
     font-size: 3rem;
     margin-bottom: 1rem;
+    animation: pulse 2s infinite;
 }
 
 .no-favorites-title {
@@ -700,6 +706,21 @@ body {
 .no-favorites-message {
     color: var(--text-medium);
     font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0 auto;
+    max-width: 300px;
+}
+
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.favorites-animation {
+    animation: heartbeat 1s ease-in-out;
 }
 
 /* Sonuç bulunamadı mesajı */
@@ -1070,6 +1091,9 @@ body {
     box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
     width: 100%;
     max-width: 300px;
+    position: relative;
+    z-index: 80; /* Bottom nav'dan daha düşük ama çoğu öğeden daha yüksek */
+    margin-bottom: 100px; /* Alt navigasyonun üzerinde görünmesi için boşluk */
 }
 
 .cta-button:hover {

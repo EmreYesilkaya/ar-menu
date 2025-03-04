@@ -1,0 +1,223 @@
+/* Alt Gezinme Çubuğu Stilleri */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #FFFFFF;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 90; /* Sayfadaki çoğu öğeden daha yüksek */
+    padding: 10px 0 8px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.bottom-nav::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--text-medium);
+    position: relative;
+    flex: 1;
+    padding: 6px 0;
+    transition: all 0.3s ease;
+}
+
+.bottom-nav-icon {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+    color: var(--text-medium);
+}
+
+.bottom-nav-icon-large {
+    font-size: 1.5rem;
+    background-color: var(--primary);
+    color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -25px;
+    box-shadow: 0 4px 10px rgba(106, 90, 224, 0.3);
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bottom-nav-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.bottom-nav-badge {
+    position: absolute;
+    top: 3px;
+    right: calc(50% - 18px);
+    background-color: var(--danger);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 600;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+    border: 2px solid white;
+}
+
+/* Aktif öğe için özel stil */
+.bottom-nav-item.active {
+    color: var(--primary);
+}
+
+.bottom-nav-item.active .bottom-nav-icon {
+    color: var(--primary);
+}
+
+/* AR kamera düğmesi için animasyon */
+.bottom-nav-ar:hover .bottom-nav-icon-large {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 6px 15px rgba(106, 90, 224, 0.4);
+}
+
+.bottom-nav-ar:active .bottom-nav-icon-large {
+    transform: translateY(0) scale(0.95);
+}
+
+/* Diğer öğeler için hover etkileri */
+.bottom-nav-item:not(.bottom-nav-ar):hover {
+    color: var(--primary);
+}
+
+.bottom-nav-item:not(.bottom-nav-ar):hover .bottom-nav-icon {
+    color: var(--primary);
+    transform: translateY(-3px);
+}
+
+/* Alt gezinme çubuğunda sayfa kaydırıldıkça daha kompakt hale getirilmesi */
+.bottom-nav.compact {
+    padding: 8px 0 6px;
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.bottom-nav.compact .bottom-nav-icon-large {
+    transform: scale(0.9);
+}
+
+/* Animasyon */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.bottom-nav-badge.pulse {
+    animation: pulse 0.6s infinite;
+}
+
+/* Ana içerik alanı için alt boşluk */
+.main-container {
+    padding-bottom: 100px; /* Alt gezinme çubuğu için alan bırak */
+}
+
+/* Responsive düzenlemeler */
+@media (min-width: 768px) {
+    .bottom-nav {
+        max-width: 500px; /* Büyük ekranlarda ortalanmış gezinme çubuğu */
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 20px;
+        bottom: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+}
+
+@media (max-width: 360px) {
+    .bottom-nav-label {
+        font-size: 0.65rem;
+    }
+
+    .bottom-nav-icon {
+        font-size: 1.1rem;
+    }
+    
+    .bottom-nav-icon-large {
+        width: 42px;
+        height: 42px;
+    }
+}
+
+/* Kategoriler grid düzeni güncellendi - daha fazla kategori için */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* 2 yerine 3 kolon */
+    gap: 15px;
+    padding: 10px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Kategoriler için ikonları güncelleme */
+.category-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+    color: var(--primary);
+}
+
+.category-item:hover .category-icon {
+    transform: translateY(-5px);
+}
+
+/* Daha güzel kaydırma çubuğu */
+.categories-grid::-webkit-scrollbar {
+    width: 5px;
+}
+
+.categories-grid::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.categories-grid::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 10px;
+}
+
+.categories-grid::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* Responsive düzenlemeler */
+@media (max-width: 480px) {
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

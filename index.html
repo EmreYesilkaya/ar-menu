@@ -3,21 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>AR Menü - Modern Restoran Deneyimi</title>
-    
-    <!-- Başlangıç scripti - hemen yükleme ekranını gösterir -->
-    <script src="js/init.js"></script>
-    
-    <!-- CSS Dosyaları - Doğru klasör yapısıyla -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/tutorial.css">
-    <link rel="stylesheet" href="css/loading.css">
-    <link rel="stylesheet" href="css/search.css">
-    <link rel="stylesheet" href="css/share.css">
     
     <!-- iOS için meta etiketleri -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AR Menü">
+    <meta name="theme-color" content="#6A5AE0">
+    
+    <!-- Preconnect ve DNS prefetch ile daha hızlı yükleme -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    
+    <!-- Stil dosyaları -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/loading.css">
+    <link rel="stylesheet" href="css/tutorial.css">
+    <link rel="stylesheet" href="css/search.css">
+    <link rel="stylesheet" href="css/share.css">
+    <link rel="stylesheet" href="css/ios-style.css">
     
     <!-- Font Awesome ikonu kütüphanesi -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
@@ -26,16 +33,8 @@
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer-usdz-ios-support.js"></script>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
-    <!-- Eksik meta tag'leri -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="theme-color" content="#6A5AE0"> 
-    <meta name="apple-mobile-web-app-title" content="AR Menü">
-
-    <!-- Preconnect ve DNS prefetch ile daha hızlı yükleme -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://unpkg.com">
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    <link rel="dns-prefetch" href="https://unpkg.com">
+    <!-- Başlangıç scripti - hemen yükleme ekranını gösterir -->
+    <script src="js/init.js"></script>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -50,10 +49,18 @@
     <!-- Status Message -->
     <div class="status-message" id="statusMessage"></div>
 
-    <!-- Header -->
-    <header class="header">
-        <h1>✨ AR Menü</h1>
-        <img src="https://placehold.co/120/40" alt="Restaurant Logo" class="logo">
+    <!-- Enhanced iOS-style Header - Düzeltildi -->
+    <header class="header ios-header">
+        <div class="header-branding">
+            <div class="logo-container">
+                <img src="https://placehold.co/120/40" alt="Restaurant Logo" class="logo">
+            </div>
+            <div class="brand-text">
+                <h1>✨ AR Menü</h1>
+                <h2>Modern AR Restoran Deneyimi</h2>
+                <p>Yemeklerinizi gerçek boyutlarıyla görün!</p>
+            </div>
+        </div>
     </header>
 
     <!-- Main Container -->
@@ -127,7 +134,7 @@
             </div>
         </div>
 
-        <!-- Menü Bölümleri -->
+        <!-- Menü Bölümleri - Açılış kapanış etiketleri düzeltildi -->
         <section id="mainDishesSection" class="menu-section">
             <h2 class="section-title">🍳 Ana Yemekler</h2>
             <div class="menu-items" id="mainDishes">
@@ -141,7 +148,7 @@
                 <!-- Menu items will be dynamically populated -->
             </div>
         </section>
-
+        
         <section id="drinksSection" class="menu-section">
             <h2 class="section-title">🍹 İçecekler</h2>
             <div class="menu-items" id="drinks">
@@ -199,7 +206,7 @@
     
     <!-- Uygulama Scriptleri -->
     <script src="js/popup.js"></script>
-    <script src="js/tutorial.js"></script>
+    <script src="models/tutorial.js"></script> <!-- Path düzeltildi: js -> models -->
     <script src="js/search.js"></script>
     <script src="js/share.js"></script>
     <script src="js/index.js" defer></script>
@@ -237,6 +244,13 @@
                 }
             }, 1000);
         });
+
+        // Tutorial doğru gösterilsin diye localStorage temizleme seçeneği
+        // Sadece geliştirme aşamasında aktif olmalı
+        if (window.location.hash === '#test-tutorial') {
+            localStorage.removeItem('ar_tutorial_shown');
+            console.log('Tutorial test modu: localStorage temizlendi.');
+        }
     </script>
 </body>
 </html>

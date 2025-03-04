@@ -36,16 +36,19 @@ body {
     overflow-x: hidden;
     line-height: 1.5;
     min-height: 100vh;
+    padding-top: 60px; /* Header yüksekliği için alan açılır */
 }
 
-/* Header styles with branding */
+/* Header düzeltildi - position fixed ve yükseklik belirtildi */
 .header {
     background-color: var(--card-bg);
     box-shadow: var(--shadow-sm);
-    padding: 1.2rem;
+    padding: 1rem;
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
+    height: 60px; /* Sabit yükseklik */
     z-index: 100;
     display: flex;
     justify-content: space-between;
@@ -113,8 +116,34 @@ body {
     color: var(--primary);
 }
 
+/* Hero Section düzeltildi - margin-top değeri eklendi */
+.hero-section {
+    background: linear-gradient(120deg, var(--primary), #8A7CE8);
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 4px 12px rgba(106, 90, 224, 0.2);
+    margin-top: 60px; /* Header yüksekliği kadar yukarıdan boşluk bırakır */
+    margin-bottom: 20px;
+}
+
+.hero-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.hero-section p {
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+}
+
+/* Main container düzeltildi - margin-top kaldırıldı */
 .main-container {
-    margin-top: 80px;
+    /* margin-top kaldırıldı çünkü body'ye padding-top verildi */
     padding: 1.2rem;
     max-width: 1200px;
     margin-left: auto;
@@ -261,27 +290,36 @@ body {
     background-color: var(--card-bg);
     border-radius: var(--border-radius);
     padding: 1.8rem;
-    box-shadow: var(--shadow-sm);
     margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
     transition: var(--transition);
     position: relative;
     overflow: hidden;
-    scroll-margin-top: 180px; /* Yapışkan başlık ve sekmeler için yeterli alan */
-    scroll-snap-align: start; /* Kaydırma için snap noktaları eklendi */
-    padding-top: 2rem; /* Üstte biraz daha boşluk bırak */
+    scroll-margin-top: 140px; /* Yapışkan başlık için boşluk azaltıldı */
+    scroll-snap-align: start;
 }
 
 .menu-section:hover {
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-lg);
 }
 
 /* Redesigned menu tabs with indicators */
+.menu-tabs-container {
+    position: sticky;
+    top: 60px; /* Header'ın yüksekliğine göre ayarlandı */
+    background-color: var(--background);
+    padding: 1rem 0.5rem;
+    margin-bottom: 1.5rem;
+    z-index: 90;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 16px 16px;
+    overflow-x: auto;
+}
+
 .menu-tabs {
     display: flex;
-    overflow-x: auto;
     gap: 0.8rem;
-    margin-bottom: 1.8rem;
-    padding: 0.3rem 0;
+    padding: 0.2rem;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -290,7 +328,6 @@ body {
     display: none;
 }
 
-/* Menü sekmeleri için iyileştirmeler */
 .menu-tab {
     white-space: nowrap;
     padding: 0.9rem 1.3rem;
@@ -307,8 +344,6 @@ body {
     box-shadow: var(--shadow-sm);
     position: relative;
     text-decoration: none; /* Link görünümünden kurtulmak için */
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
-                transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .menu-tab.active::after {
@@ -328,8 +363,8 @@ body {
 .menu-tab.active {
     background-color: var(--primary);
     color: white;
-    box-shadow: 0 6px 14px rgba(106, 90, 224, 0.3);
-    transform: translateY(-3px);
+    box-shadow: 0 5px 12px rgba(106, 90, 224, 0.3);
+    transform: translateY(-2px);
 }
 
 .tab-emoji {
@@ -354,24 +389,25 @@ body {
 /* Enhanced menu items grid */
 .menu-items {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 1.2rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
 }
 
 .menu-item {
     background-color: var(--card-bg);
-    border-radius: var(--border-radius);
+    border-radius: 12px;
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    transition: var (--transition);
+    transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
     border: 1px solid rgba(0,0,0,0.03);
-    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .menu-item:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-lg);
 }
 
 .menu-item-img-container {
@@ -381,7 +417,7 @@ body {
 
 .menu-item-img {
     width: 100%;
-    height: 150px;
+    height: 180px;
     object-fit: cover;
     transition: transform 0.5s ease;
 }
@@ -414,55 +450,52 @@ body {
 }
 
 .menu-item-info {
-    padding: 1rem;
+    padding: 1.2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .menu-item-title {
     font-family: var(--font-headings);
     font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 0.4rem;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
     color: var(--text-dark);
 }
 
 .menu-item-description {
+    font-size: 0.9rem;
     color: var(--text-medium);
-    font-size: 0.85rem;
-    margin-bottom: 0.5rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    height: 2.6em;
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
 }
 
 .menu-item-price {
     color: var(--primary);
     font-weight: 700;
     font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
+    margin-top: auto;
+    margin-bottom: 0.8rem;
 }
 
 .menu-item-ar {
     background-color: var(--primary);
-    padding: 0.6rem;
-    border-radius: 12px;
+    color: white;
+    padding: 0.8rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.4rem;
-    margin-top: 0.8rem;
-    font-size: 0.9rem;
-    color: white;
-    font-weight: 500;
-    transition: var(--transition);
+    gap: 0.5rem;
 }
 
 .menu-item-ar:hover {
     background-color: var(--primary-dark);
-    transform: translateY(-2px);
 }
 
 /* Favori butonu stillendirme */
@@ -809,22 +842,28 @@ body {
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 500;
-    box-shadow: var(--shadow-sm);
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .tag-vegan {
-    background-color: rgba(0, 217, 170, 0.15);
-    color: #00A87D;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.tag-vegetarian {
+    background-color: #8BC34A;
+    color: white;
 }
 
 .tag-spicy {
-    background-color: rgba(255, 90, 90, 0.15);
-    color: #D13030;
+    background-color: #FF5722;
+    color: white;
 }
 
 .tag-popular {
-    background-color: rgba(253, 202, 64, 0.15);
-    color: #B38600;
+    background-color: #FFC107;
+    color: #333;
 }
 
 .tag-new {
@@ -1195,11 +1234,11 @@ body {
 .back-to-top {
     position: fixed;
     bottom: 2rem;
-    right: 2rem; /* Sağ alt köşede */
+    right: 2rem;
     background-color: var(--primary);
     color: white;
-    width: 56px;
-    height: 56px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -1257,13 +1296,14 @@ body {
     font-size: 1.4rem;
     font-weight: 700;
     color: var(--primary);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid rgba(106, 90, 224, 0.1);
 }
 
 .section-title::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -2px;
     left: 0;
     width: 80px;
     height: 4px;
@@ -1402,4 +1442,277 @@ html {
     color: white;
     box-shadow: var(--shadow-md);
     transform: translateY(-2px);
+}
+
+/* Alerjen bilgileri için stil */
+.allergen-info {
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: #777;
+}
+
+.allergen-tag {
+    background-color: #f0f0f5;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 4px;
+    font-size: 0.7rem;
+}
+
+/* Hero Section Styles - YENİ EKLENDİ */
+.hero-section {
+    background: linear-gradient(120deg, #6A5AE0, #9086E5);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 4px 12px rgba(106, 90, 224, 0.2);
+    margin-bottom: 20px;
+}
+
+.hero-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.hero-section p {
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+}
+
+/* Category Intro Styles - YENİ EKLENDİ */
+.category-intro {
+    background-color: #f8f9fe;
+    padding: 25px 20px;
+    border-radius: 12px;
+    margin: 30px 0;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.category-intro h2 {
+    color: #6A5AE0;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.category-intro p {
+    color: #666;
+    margin-bottom: 20px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.featured-items {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px; /* Boşluk artırıldı */
+}
+
+.featured-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s;
+    text-align: center;
+}
+
+.featured-item:hover {
+    transform: translateY(-5px);
+}
+
+.featured-item img {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    margin-bottom: 10px;
+}
+
+.featured-item span {
+    font-weight: 500;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+/* Responsive styles for new sections */
+@media (max-width: 768px) {
+    body {
+        padding-top: 55px;
+    }
+    
+    .header {
+        height: 55px;
+        padding: 0.8rem;
+    }
+    
+    .hero-section {
+        margin-top: 55px;
+        padding: 25px 15px;
+    }
+    
+    .hero-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    .main-container {
+        padding: 1rem;
+    }
+    
+    .menu-tabs-container {
+        top: 55px;
+        padding: 0.8rem 0.5rem;
+    }
+    
+    .menu-tab {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .menu-items {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+    
+    .category-intro {
+        padding: 20px 15px;
+    }
+    
+    .category-intro h2 {
+        font-size: 1.3rem;
+    }
+    
+    .featured-item img {
+        width: 100px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-items {
+        grid-template-columns: 1fr;
+    }
+    
+    .featured-items {
+        gap: 10px;
+    }
+    
+    .featured-item img {
+        width: 80px;
+        height: 60px;
+    }
+    
+    .menu-section {
+        padding: 1.4rem;
+    }
+    
+    .section-title {
+        font-size: 1.2rem;
+    }
+}
+
+/* Bölüm açıklamaları için yeni stil */
+.section-desc {
+    color: var(--text-medium);
+    margin: 0 0 20px;
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Öne çıkan menü öğeleri önizlemesi için stil */
+.featured-items-preview {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 15px;
+    padding: 10px 0;
+}
+
+/* Öne çıkan menü öğesi stilleri */
+.featured-items-preview .featured-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 120px;
+}
+
+.featured-items-preview .featured-item:hover {
+    transform: translateY(-5px);
+}
+
+.featured-items-preview .featured-item img {
+    width: 100px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    margin-bottom: 10px;
+    border: 2px solid white;
+    transition: all 0.3s ease;
+}
+
+.featured-items-preview .featured-item:hover img {
+    box-shadow: 0 10px 25px rgba(106, 90, 224, 0.35);
+    transform: scale(1.05);
+}
+
+.featured-items-preview .featured-item span {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+}
+
+.featured-items-preview .featured-item-desc {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-medium);
+    margin-top: 3px;
+}
+
+/* Responsive düzenlemeler */
+@media (max-width: 768px) {
+    .featured-items-preview {
+        gap: 15px;
+    }
+    
+    .featured-items-preview .featured-item {
+        width: 100px;
+    }
+    
+    .featured-items-preview .featured-item img {
+        width: 85px;
+        height: 65px;
+    }
+}
+
+@media (max-width: 480px) {
+    .featured-items-preview {
+        gap: 10px;
+    }
+    
+    .featured-items-preview .featured-item {
+        width: 80px;
+    }
+    
+    .featured-items-preview .featured-item img {
+        width: 70px;
+        height: 55px;
+    }
+    
+    .featured-items-preview .featured-item span {
+        font-size: 0.8rem;
+    }
 }

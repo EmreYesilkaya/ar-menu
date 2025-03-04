@@ -19,18 +19,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Tüm butonlar için event listener'ları doğrudan ekle
     attachButtonHandlers();
     
-    // Sayfa ilk açıldığında anlatıcı gösterilmeli mi kontrol et
-    setTimeout(checkFirstVisit, 500);
+    // Sayfa ilk açıldığında anlatıcı gösterilmeli mi kontrol et - zamanlama düzeltildi
+    checkFirstVisit();
 });
 
-// İlk ziyaret kontrolü
+// İlk ziyaret kontrolü - düzeltildi
 function checkFirstVisit() {
-    // Test sırasında devre dışı bırakabilirsiniz
-    // localStorage.removeItem('ar_tutorial_shown');
-    
+    // localStorage'dan tutorial_shown değerini kontrol et
+    // NOT: Test modunda değilsek, localStorage'a kaydet
     const tutorialShown = localStorage.getItem('ar_tutorial_shown');
+    console.log('Tutorial: İlk ziyaret kontrolü, daha önce gösterilmiş mi:', tutorialShown);
+    
+    // Eğer tutorial daha önce gösterilmediyse göster
     if (!tutorialShown) {
+        console.log('Tutorial: İlk ziyaret tespit edildi, tutorial gösteriliyor...');
         showTutorial();
+        // Gösterildiğini işaretle (artık otomatik gösterilmeyecek)
+        localStorage.setItem('ar_tutorial_shown', 'true');
+    } else {
+        console.log('Tutorial: Daha önce gösterilmiş, atlanıyor...');
     }
 }
 
@@ -325,9 +332,7 @@ function showTutorial() {
     
     // Modal'ı göster
     modal.style.display = 'flex';
-    
-    // Gösterildiğini kaydet
-    localStorage.setItem('ar_tutorial_shown', 'true');
+    modal.classList.add('modal-enter');
 }
 
 // Tutorial'ı kapat
@@ -342,6 +347,13 @@ function closeTutorial() {
 
 // Global olarak erişilebilir fonksiyonlar
 window.openTutorialModal = showTutorial;
+
+// Test için tutorial'ı zorunlu göster
+window.showTutorialForced = function() {
+    // localStorage değerini sıfırla ve tutorial'ı göster
+    localStorage.removeItem('ar_tutorial_shown');
+    showTutorial();
+};
 
 // Sayfa tamamen yüklendiğinde "Nasıl Kullanılır" butonunu etkinleştir
 window.addEventListener('load', function() {

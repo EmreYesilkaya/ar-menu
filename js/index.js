@@ -155,6 +155,9 @@ function init() {
 function initAfterDOMLoaded() {
     console.log("DOM yüklendi, AR desteği kontrol ediliyor...");
     
+    // Tutorial'ı gösterme kontrolü ekleyelim (ek güvenlik için)
+    ensureTutorialCheck();
+    
     // Bağımlı kütüphanelerin yüklendiğini kontrol et
     if (!window.THREE) {
         console.error("THREE.js kütüphanesi yüklenemedi!");
@@ -188,6 +191,26 @@ function initAfterDOMLoaded() {
         console.error("Başlatma sırasında bir hata oluştu:", err);
         hideLoadingScreen();
         showStatusMessage("Uygulama başlatılırken bir hata oluştu. Sayfayı yenileyin.", 5000);
+    }
+}
+
+// Tutorial gösteriminin kontrol edildiğinden emin ol
+function ensureTutorialCheck() {
+    if (typeof window.checkFirstVisit === 'function') {
+        console.log('Tutorial fonksiyonu bulundu, çağrılıyor...');
+        window.checkFirstVisit();
+    } else {
+        console.log('Tutorial fonksiyonu bulunamadı, alternatif yükleme deneniyor...');
+        
+        // Tutorial.js yüklenmediyse veya fonksiyona erişilemiyorsa
+        if (document.getElementById('instructionsModal')) {
+            const tutorialShown = localStorage.getItem('ar_tutorial_shown');
+            if (!tutorialShown) {
+                console.log('Tutorial manuel olarak gösteriliyor');
+                document.getElementById('instructionsModal').style.display = 'flex';
+                localStorage.setItem('ar_tutorial_shown', 'true');
+            }
+        }
     }
 }
 
@@ -817,6 +840,14 @@ document.addEventListener('DOMContentLoaded', () => {
         checkCompatibility();
         init();
         
+        // Tutorial gösterim kontrolü ekle
+        setTimeout(function() {
+            if (typeof window.checkFirstVisit === 'function' && 
+                !localStorage.getItem('ar_tutorial_shown')) {
+                window.checkFirstVisit();
+            }
+        }, 1000); // 1 saniye sonra tekrar kontrol et
+        
         // Zaman aşımı kontrolü - 10 saniye sonra hala yükleme ekranı açıksa otomatik kapat
         setTimeout(() => {
             if (loadingScreen && loadingScreen.style.display !== 'none') {
@@ -1244,3 +1275,455 @@ function showPopularItems() {
     console.warn("showPopularItems kullanımı eski, fillPopularItems kullanılmalı");
     fillPopularItems();
 }
+
+/**
+ * AR Menü Uygulaması - Ana JavaScript Dosyası
+ * - Menü öğelerinin dinamik olarak yüklenmesi
+ * - AR deneyimi için etkileşimlerin yönetimi
+ * - Zenginleştirilmiş menü öğeleri ve kategoriler
+ */
+
+// Sayfa yüklenmesi tamamlandığında çalışacak
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('AR Menü uygulaması başlatılıyor...');
+    
+    // Menü öğelerini yükle
+    loadMenuItems();
+    
+    // Menü sekmesi değişikliklerini yönet
+    setupTabNavigation();
+    
+    // Sayfa kaydırma olaylarını yönet
+    setupScrollEvents();
+});
+
+// Menü öğelerini yükle
+function loadMenuItems() {
+    // Tüm menü öğeleri
+    const menuData = {
+        // ANA YEMEKLER
+        mainDishes: [
+            {
+                id: 'kofte',
+                name: 'Izgara Köfte',
+                description: 'Özel baharatlarla hazırlanmış el yapımı ızgara köfte',
+                price: 85,
+                rating: 4.5,
+                ratingCount: 124,
+                image: '/api/placeholder/220/140',
+                tags: ['popular', 'meat'],
+                modelPath: 'assets/models/kofte.glb',
+                allergens: ['gluten']
+            },
+            {
+                id: 'tavuk_sis',
+                name: 'Baharatlı Tavuk Şiş',
+                description: 'Özel marine edilmiş baharatlı tavuk şiş',
+                price: 75,
+                rating: 4.0,
+                ratingCount: 86,
+                image: '/api/placeholder/220/140',
+                tags: ['spicy', 'chicken'],
+                modelPath: 'models/tavuk_sis.glb',
+                allergens: []
+            },
+            {
+                id: 'karisik_izgara',
+                name: 'Karışık Izgara',
+                description: 'Kuzu pirzola, köfte, tavuk şiş ve dana bonfileden oluşan karışık ızgara',
+                price: 140,
+                rating: 4.8,
+                ratingCount: 156,
+                image: '/api/placeholder/220/140',
+                tags: ['popular', 'meat'],
+                modelPath: 'models/karisik.glb',
+                allergens: []
+            },
+            {
+                id: 'adana',
+                name: 'Adana Kebap',
+                description: 'Geleneksel tarifle hazırlanan acılı Adana kebap',
+                price: 90,
+                rating: 4.7,
+                ratingCount: 112,
+                image: '/api/placeholder/220/140',
+                tags: ['spicy', 'meat', 'popular'],
+                modelPath: 'models/adana.glb',
+                allergens: []
+            },
+            {
+                id: 'veggie_burger',
+                name: 'Vegan Burger',
+                description: 'Nohut köftesi, avokado ve taze sebzelerden hazırlanan vegan burger',
+                price: 70,
+                rating: 4.6,
+                ratingCount: 82,
+                image: '/api/placeholder/220/140',
+                tags: ['vegan', 'popular'],
+                modelPath: 'models/veggie_burger.glb',
+                allergens: ['soy']
+            },
+            {
+                id: 'patlican',
+                name: 'Patlıcan Musakka',
+                description: 'Fırında pişirilmiş ve beşamel soslu patlıcan musakka',
+                price: 65,
+                rating: 4.2,
+                ratingCount: 64,
+                image: '/api/placeholder/220/140',
+                tags: ['vegetarian'],
+                modelPath: 'models/musakka.glb',
+                allergens: ['milk', 'gluten']
+            }
+        ],
+        
+        // TATLILAR
+        desserts: [
+            {
+                id: 'kunefe',
+                name: 'Künefe',
+                description: 'Özel kadayıf ve eritilmiş peynir üzerine Antep fıstıklı künefe',
+                price: 65,
+                rating: 5.0,
+                ratingCount: 210,
+                image: '/api/placeholder/220/140',
+                tags: ['popular', 'hot'],
+                modelPath: 'models/kunefe.glb',
+                allergens: ['milk', 'nuts']
+            },
+            {
+                id: 'baklava',
+                name: 'Antep Fıstıklı Baklava',
+                description: '40 kat el açma yufka ile hazırlanmış geleneksel Antep fıstıklı baklava',
+                price: 75,
+                rating: 4.9,
+                ratingCount: 185,
+                image: '/api/placeholder/220/140',
+                tags: ['popular', 'nuts'],
+                modelPath: 'models/baklava.glb',
+                allergens: ['nuts', 'gluten']
+            },
+            {
+                id: 'sutlac',
+                name: 'Fırın Sütlaç',
+                description: 'Fırında karamelize edilmiş geleneksel sütlaç',
+                price: 40,
+                rating: 4.4,
+                ratingCount: 96,
+                image: '/api/placeholder/220/140',
+                tags: ['vegetarian'],
+                modelPath: 'models/sutlac.glb',
+                allergens: ['milk']
+            },
+            {
+                id: 'kazandibi',
+                name: 'Kazandibi',
+                description: 'Geleneksel yöntemle hazırlanmış karamelize tatlı',
+                price: 45,
+                rating: 4.6,
+                ratingCount: 102,
+                image: '/api/placeholder/220/140',
+                tags: ['vegetarian'],
+                modelPath: 'models/kazandibi.glb',
+                allergens: ['milk', 'eggs']
+            },
+            {
+                id: 'vegan_cheesecake',
+                name: 'Vegan Çilekli Cheesecake',
+                description: 'Kaju bazlı vegan cheesecake, çilek sosu ile servis edilir',
+                price: 55,
+                rating: 4.7,
+                ratingCount: 78,
+                image: '/api/placeholder/220/140',
+                tags: ['vegan', 'raw'],
+                modelPath: 'models/vegan_cake.glb',
+                allergens: ['nuts']
+            }
+        ],
+        
+        // İÇECEKLER
+        drinks: [
+            {
+                id: 'ayran',
+                name: 'Ayran',
+                description: 'Geleneksel ev yapımı ayran',
+                price: 15,
+                rating: 4.2,
+                ratingCount: 92,
+                image: '/api/placeholder/220/140',
+                tags: [],
+                modelPath: 'models/ayran.glb',
+                allergens: ['milk']
+            },
+            {
+                id: 'turkish_coffee',
+                name: 'Türk Kahvesi',
+                description: 'Geleneksel yöntemle pişirilmiş Türk kahvesi, lokum ile servis edilir',
+                price: 25,
+                rating: 4.8,
+                ratingCount: 156,
+                image: '/api/placeholder/220/140',
+                tags: ['popular'],
+                modelPath: 'models/kahve.glb',
+                allergens: []
+            },
+            {
+                id: 'sahlep',
+                name: 'Tarçınlı Sahlep',
+                description: 'Geleneksel kış içeceği, tarçın ve fındık ile servis edilir',
+                price: 30,
+                rating: 4.5,
+                ratingCount: 78,
+                image: '/api/placeholder/220/140',
+                tags: ['hot', 'seasonal'],
+                modelPath: 'models/sahlep.glb',
+                allergens: ['milk', 'nuts']
+            },
+            {
+                id: 'fresh_orange',
+                name: 'Taze Sıkılmış Portakal Suyu',
+                description: '100% taze sıkılmış portakal suyu',
+                price: 25,
+                rating: 4.7,
+                ratingCount: 104,
+                image: '/api/placeholder/220/140',
+                tags: ['vegan', 'fresh'],
+                modelPath: 'models/orange_juice.glb',
+                allergens: []
+            },
+            {
+                id: 'limonata',
+                name: 'Ev Yapımı Limonata',
+                description: 'Taze sıkılmış limon ve nane yaprakları ile hazırlanmış limonata',
+                price: 20,
+                rating: 4.6,
+                ratingCount: 112,
+                image: '/api/placeholder/220/140',
+                tags: ['vegan', 'fresh', 'popular'],
+                modelPath: 'models/limonata.glb',
+                allergens: []
+            },
+            {
+                id: 'coconut_smoothie',
+                name: 'Hindistan Cevizi Smoothie',
+                description: 'Hindistan cevizi sütü ve muz ile hazırlanmış ferahlatıcı içecek',
+                price: 35,
+                rating: 4.4,
+                ratingCount: 64,
+                image: '/api/placeholder/220/140',
+                tags: ['vegan'],
+                modelPath: 'models/coconut_smoothie.glb',
+                allergens: ['nuts']
+            }
+        ]
+    };
+    
+    // Popüler ürünleri filtrele
+    const popularItems = [
+        ...menuData.mainDishes.filter(item => item.tags.includes('popular')),
+        ...menuData.desserts.filter(item => item.tags.includes('popular')),
+        ...menuData.drinks.filter(item => item.tags.includes('popular'))
+    ];
+    
+    // Ana yemekleri yükle
+    renderMenuItems(menuData.mainDishes, 'mainDishes');
+    
+    // Tatlıları yükle
+    renderMenuItems(menuData.desserts, 'desserts');
+    
+    // İçecekleri yükle
+    renderMenuItems(menuData.drinks, 'drinks');
+    
+    // Popüler ürünleri yükle
+    renderMenuItems(popularItems, 'popularItems');
+    
+    // AR butonları için olay dinleyicileri ekle
+    setupARButtons();
+}
+
+// Menü öğelerini HTML'e render et
+function renderMenuItems(items, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.error(`Container not found: ${containerId}`);
+        return;
+    }
+    
+    container.innerHTML = ''; // Container'ı temizle
+    
+    items.forEach(item => {
+        // Etiketleri oluştur
+        let tagHtml = '';
+        if (item.tags.includes('popular')) {
+            tagHtml += `<span class="food-tag tag-popular">🔥 Popüler</span>`;
+        }
+        if (item.tags.includes('vegan')) {
+            tagHtml += `<span class="food-tag tag-vegan">🥗 Vegan</span>`;
+        }
+        if (item.tags.includes('spicy')) {
+            tagHtml += `<span class="food-tag tag-spicy">🌶️ Acılı</span>`;
+        }
+        if (item.tags.includes('vegetarian')) {
+            tagHtml += `<span class="food-tag tag-vegetarian">🥕 Vejetaryen</span>`;
+        }
+        
+        // Yıldız derecelendirmesi oluştur
+        let ratingHtml = '';
+        const fullStars = Math.floor(item.rating);
+        const hasHalfStar = item.rating % 1 >= 0.5;
+        
+        for (let i = 0; i < fullStars; i++) {
+            ratingHtml += `<i class="fas fa-star"></i>`;
+        }
+        
+        if (hasHalfStar) {
+            ratingHtml += `<i class="fas fa-star-half-alt"></i>`;
+        }
+        
+        const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+        for (let i = 0; i < emptyStars; i++) {
+            ratingHtml += `<i class="far fa-star"></i>`;
+        }
+        
+        // Menü öğesi HTML'i oluştur
+        const menuItemHtml = `
+            <div class="menu-item" data-item-id="${item.id}">
+                <img src="${item.image}" alt="${item.name}" class="menu-item-img">
+                <div class="menu-item-info">
+                    <div>
+                        ${tagHtml}
+                    </div>
+                    <h3 class="menu-item-title">${item.name}</h3>
+                    <p class="menu-item-description">${item.description}</p>
+                    <div class="rating">
+                        ${ratingHtml}
+                        <span>${item.rating}</span>
+                        <span class="rating-count">(${item.ratingCount})</span>
+                    </div>
+                    <p class="menu-item-price">₺${item.price} <span style="font-size: 1.2rem;">💰</span></p>
+                    <div class="menu-item-ar" data-model="${item.modelPath}">
+                        <i class="fas fa-cube"></i> AR'da Gör
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        container.innerHTML += menuItemHtml;
+    });
+    
+    // Yukarıdaki kod menü öğelerini sayfaya ekliyor
+    console.log(`${items.length} adet öğe ${containerId} içine yüklendi.`);
+}
+
+// Menü sekmeleri için navigasyon işlevini ayarla
+function setupTabNavigation() {
+    const tabs = document.querySelectorAll('.menu-tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Aktif sekmeyi güncelle
+            tabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Hedef bölüme kaydır
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                const headerOffset = 80; // Header yüksekliği
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
+
+// Scroll olaylarını yönet
+function setupScrollEvents() {
+    // Yukarı çıkma butonu
+    const backToTopButton = document.getElementById('backToTop');
+    if (backToTopButton) {
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+    
+    // Sticky menü
+    const menuTabs = document.querySelector('.menu-tabs-container');
+    if (menuTabs) {
+        const stickyOffset = menuTabs.offsetTop;
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > stickyOffset) {
+                menuTabs.classList.add('sticky');
+            } else {
+                menuTabs.classList.remove('sticky');
+            }
+        });
+    }
+}
+
+// AR butonları için olay dinleyicilerini ayarla
+function setupARButtons() {
+    const arButtons = document.querySelectorAll('.menu-item-ar');
+    
+    arButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const modelPath = this.getAttribute('data-model');
+            if (modelPath) {
+                showARView(modelPath);
+            } else {
+                console.error('Model yolu bulunamadı');
+                // Hata bildir
+                if (window.PopupManager) {
+                    window.PopupManager.showStatusMessage('⚠️ Bu ürün için AR modeli bulunamadı.');
+                }
+            }
+        });
+    });
+}
+
+// AR görünümünü aç
+function showARView(modelPath) {
+    console.log(`AR görünümü açılıyor: ${modelPath}`);
+    
+    // AR konteynerini göster
+    const arContainer = document.getElementById('arContainer');
+    if (!arContainer) return;
+    
+    arContainer.style.display = 'block';
+    
+    // Model-viewer ile modeli yükle
+    loadARModel(modelPath);
+}
+
+// AR modelini yükle
+function loadARModel(modelPath) {
+    // Bu fonksiyon içeriği başka bir dosyada olabilir
+    console.log(`Model yükleniyor: ${modelPath}`);
+    // AR modelini yükleme kodları burada olacak
+}
+
+// AR görünümünü kapat
+window.closeARView = function() {
+    const arContainer = document.getElementById('arContainer');
+    if (arContainer) {
+        arContainer.style.display = 'none';
+    }
+};

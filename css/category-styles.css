@@ -1,0 +1,314 @@
+/**
+ * AR Menü - Kategori Tanıtım Bölümleri Stilleri
+ * Bu dosya, kategori tanıtım bölümlerinin özel stillerini içerir.
+ */
+
+/* Genel kategori tasarımı */
+.category-intro {
+    background-color: white;
+    padding: 25px 20px;
+    border-radius: 12px;
+    margin: 30px 0;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #ffffff, #f5f5fa);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.category-intro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(to right, var(--primary), var(--primary-light));
+}
+
+.category-intro h2 {
+    color: var(--primary-dark);
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: var(--font-headings);
+    position: relative;
+    display: inline-block;
+}
+
+.category-intro h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background-color: var(--primary);
+    border-radius: 3px;
+}
+
+.category-intro p {
+    color: var(--text-medium);
+    margin-bottom: 25px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Kategori örneklerinin görsel tasarımı - iyileştirildi */
+.featured-items {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.featured-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 140px;
+}
+
+.featured-item:hover {
+    transform: translateY(-8px);
+}
+
+/* Resimlerde daha belirgin görünüm için gölgeler eklendi */
+.featured-item img {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    margin-bottom: 12px;
+    border: 2px solid white;
+    transition: all 0.3s ease;
+}
+
+.featured-item:hover img {
+    box-shadow: 0 10px 25px rgba(106, 90, 224, 0.35);
+    border-color: rgba(106, 90, 224, 0.3);
+    transform: scale(1.05);
+}
+
+/* Etiket stili iyileştirildi - daha görünür ve okunabilir */
+.featured-item span {
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 1.05rem;
+    font-family: var(--font-headings);
+    padding: 5px 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: inline-block;
+}
+
+/* Tanıtım öğeleri için açıklama metni stili */
+.featured-item-desc {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 3px;
+}
+
+/* Kategoriye özel stillemeler */
+/* Ana Yemekler */
+.category-intro.main-dishes::before {
+    background: linear-gradient(to right, #6A5AE0, #9086E5);
+}
+
+/* Tatlılar */
+.category-intro.desserts::before {
+    background: linear-gradient(to right, #E91E63, #FF5252);
+}
+
+/* İçecekler */
+.category-intro.drinks::before {
+    background: linear-gradient(to right, #2196F3, #03A9F4);
+}
+
+/* Responsive düzenlemeler */
+@media (max-width: 768px) {
+    .featured-items {
+        gap: 15px;
+    }
+    
+    .featured-item {
+        width: 110px;
+    }
+    
+    .featured-item img {
+        width: 100px;
+        height: 75px;
+    }
+    
+    .category-intro {
+        padding: 20px 15px;
+    }
+    
+    .category-intro h2 {
+        font-size: 1.4rem;
+    }
+    
+    .category-intro p {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .featured-items {
+        gap: 10px;
+    }
+    
+    .featured-item {
+        width: 90px;
+    }
+    
+    .featured-item img {
+        width: 80px;
+        height: 60px;
+        margin-bottom: 8px;
+    }
+    
+    .featured-item span {
+        font-size: 0.85rem;
+    }
+    
+    .category-intro {
+        padding: 15px 12px;
+        margin: 20px 0;
+    }
+    
+    .category-intro h2 {
+        font-size: 1.3rem;
+    }
+    
+    .category-intro p {
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+    
+    .category-intro::before {
+        height: 4px;
+    }
+    
+    .category-intro h2::after {
+        width: 40px;
+        height: 2px;
+    }
+}
+
+/* Kategorileri HTML sınıflarıyla eşleştirmek için */
+#mainDishesSection + .category-intro {
+    margin-top: 0; /* İlk kategori için üst boşluğu kaldır */
+}
+
+.category-intro + #mainDishesSection,
+.category-intro + #dessertsSection,
+.category-intro + #drinksSection {
+    margin-top: 10px; /* Kategori ile menü bölümü arasındaki boşluk */
+}
+
+/* Kategori hover efektleri */
+.category-intro {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.category-intro:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+/* Kategori içeriklerine animasyon ekle */
+.category-intro h2 {
+    transition: color 0.3s ease;
+}
+
+.category-intro:hover h2 {
+    color: var(--primary);
+}
+
+/* Kategori görsellerinde badge efekti */
+.featured-item {
+    position: relative;
+}
+
+.featured-item .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--accent);
+    color: white;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Kategori bölümü arka plan varyasyonları */
+.category-intro:nth-of-type(3n+1) {
+    background-color: #FFFFFF;
+}
+
+.category-intro:nth-of-type(3n+2) {
+    background-color: #F8F9FE;
+}
+
+.category-intro:nth-of-type(3n+3) {
+    background-color: #F5F5FA;
+}
+
+.category-intro.main-dishes {
+    background-color: rgba(106, 90, 224, 0.05);
+}
+
+.category-intro.desserts {
+    background-color: rgba(233, 30, 99, 0.05);
+}
+
+.category-intro.drinks {
+    background-color: rgba(33, 150, 243, 0.05);
+}
+
+/* Kategori başlık stilleri - boşluklar düzeltildi */
+.section-title {
+    position: relative;
+    padding: 0.6rem 0;
+    font-family: var(--font-headings);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1.2rem;
+    border-bottom: 2px solid rgba(106, 90, 224, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary), var(--primary-light));
+    border-radius: 4px;
+}

@@ -72,7 +72,7 @@ function resolveAssetPath(relativePath) {
     return relativePath; // Göreceli yol döndür, fetch kendisi taban URL ekleyecektir
 }
 
-// Menu data - Dosya yolları düzenlendi ve kesinleştirildi
+// Menu data - Path correction for kofte.glb file
 const menuData = {
     mainDishes: [
         { 
@@ -80,9 +80,11 @@ const menuData = {
           name: 'Izgara Köfte', 
           price: '120 TL', 
           image: 'https://placehold.co/220x140/e8e0d5/333?text=Köfte', 
-          // Projenin kök klasörüne göre doğru yollar
-          modelPath: './models/kofte.glb',  
-          usdz: './models/kofte.usdz'
+          // Modelin model-test'te çalışan tam yolunu kullan - çok önemli!
+          modelPath: 'models/kofte.glb',  
+          usdz: 'models/kofte.usdz',
+          // Alternatif yolları çalışma önceliğine göre düzenleyelim
+          modelAlternates: ['models/kofte.glb', './models/kofte.glb', '/models/kofte.glb', 'assets/models/kofte.glb']
         },
         { 
           id: 2, 
@@ -351,96 +353,179 @@ function createMenuItemElement(item) {
     return menuItem;
 }
 
-// Initialize AR with model-viewer (works on most browsers including iOS) - Tamamen iyileştirildi
+// Initialize AR with model-viewer (works on most browsers including iOS)
 function initModelViewer(item) {
     showLoading(true, "3D Model yükleniyor...");
     
-    // Dosya yolunu doğrulama ve hata ayıklama için resolveAssetPath kullan
-    const modelPath = resolveAssetPath(item.modelPath); 
+    // Extract model name for debugging
+    const modelName = item.modelPath.split('/').pop().replace('.glb', '');
+    console.log(`Trying to load model for: ${item.name} (${modelName})`);
     
-    console.log("Model yolu kontrol ediliyor:", modelPath);
-    console.log("Tüm proje dizini:", window.location.href);
+    // Köfte modeli için özel işlem yapalım (model-test.html'de çalıştığını bildiğimiz)
+    if (modelName === 'kofte') {
+        console.log("Köfte modeli için özel yükleme işlevi kullanılıyor...");
+        hideLoadingScreen(); // Önce mevcut yükleme ekranını kapat
+        
+        // Özelleştirilmiş yükleme işlevini çağır
+        if (window.directLoadModel) {
+            window.directLoadModel('kofte');
+        } else {
+            console.error("directLoadModel fonksiyonu bulunamadı!");
+            showStatusMessage("Model yükleme kodu bulunamadı. Lütfen sayfayı yenileyip tekrar deneyin.", 4000);
+        }
+        return;
+    }
     
-    // Model yüklemeden önce dosya varlığını kontrol et
+    // Use our debug function which tries all possible paths
+    if (window.debugARModel) {
+        window.debugARModel(modelName);
+        return;
+    }
+    
+    // If debug function is not available, try with standard approach
+    const modelPath = resolveAssetPath(item.modelPath);
+    console.log("Attempting to load model from:", modelPath);
+    
+    // First check if the file exists
     fetch(modelPath, { method: 'HEAD' })
         .then(response => {
             if (!response.ok) {
-                console.error(`Model dosyası bulunamadı: HTTP ${response.status} ${response.statusText}`);
-                throw new Error(`Model dosyası bulunamadı: ${modelPath} (HTTP ${response.status})`);
+                console.warn(`Primary model path failed: ${modelPath}`);
+                throw new Error(`Model not found at primary path: ${modelPath}`);
             }
-            console.log("Model dosyası mevcut, model-viewer oluşturuluyor...");
-            
-            // Model mevcut, model-viewer oluştur
-            let modelViewer = document.querySelector('model-viewer');
-            if (!modelViewer) {
-                modelViewer = document.createElement('model-viewer');
-                modelViewer.setAttribute('id', 'ar-model-viewer');
-                modelViewer.setAttribute('camera-controls', '');
-                modelViewer.setAttribute('auto-rotate', '');
-                modelViewer.setAttribute('shadow-intensity', '1');
-                modelViewer.setAttribute('ar', ''); 
-                modelViewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
-                modelViewer.setAttribute('ar-scale', 'auto');
-                modelViewer.setAttribute('touch-action', 'pan-y');
-                modelViewer.style.width = '100%';
-                modelViewer.style.height = '100%';
-                modelViewer.style.backgroundColor = '#f2f2f7';
-                
-                // Çıkış butonu ekle
-                const exitButton = document.createElement('button');
-                exitButton.slot = 'exit-button';
-                exitButton.textContent = 'Kapat ×';
-                exitButton.style.backgroundColor = 'var(--danger)';
-                exitButton.style.color = 'white';
-                exitButton.style.borderRadius = '8px';
-                exitButton.style.border = 'none';
-                exitButton.style.padding = '8px 12px';
-                exitButton.style.position = 'absolute';
-                exitButton.style.top = '10px';
-                exitButton.style.right = '10px';
-                exitButton.style.zIndex = '100';
-                exitButton.onclick = closeARView;
-                modelViewer.appendChild(exitButton);
-                
-                // Hata izleme
-                modelViewer.addEventListener('error', (error) => {
-                    console.error('Model-viewer yükleme hatası:', error);
-                    document.getElementById('model-error').style.display = 'block';
-                    document.getElementById('model-error-details').textContent = 
-                        `Tam dosya yolu: ${modelPath}\nHata: ${error.target.error || 'Bilinmeyen hata'}`;
-                    
-                    showStatusMessage("Model yüklenemedi: " + modelPath, 5000);
-                });
-                
-                // Yükleme izleme
-                modelViewer.addEventListener('load', () => {
-                    console.log('Model başarıyla yüklendi');
-                    showStatusMessage("Model yüklendi! 3D modeli döndürmek için sürükleyin.", 3000);
-                    document.getElementById('model-error').style.display = 'none';
-                });
-                
-                // Clear and add model-viewer to AR container
-                arContainer.innerHTML = '';
-                arContainer.appendChild(modelViewer);
-            }
-            
-            // Set the source of model-viewer
-            modelViewer.setAttribute('src', modelPath);
-            if (item.usdz) {
-                modelViewer.setAttribute('ios-src', resolveAssetPath(item.usdz));
-            }
-            
-            // Show AR container
-            arContainer.style.display = 'block';
-            showLoading(false);
+            return actuallyLoadModel(modelPath, item);
         })
         .catch(error => {
-            console.error("Model dosyası kontrolü hatası:", error);
-            showStatusMessage("Model dosyası yüklenemedi: " + error.message, 5000);
-            document.getElementById('model-error').style.display = 'block';
-            document.getElementById('model-error-details').textContent = `Tam hata: ${error.message}\nDosya yolu: ${modelPath}`;
-            showLoading(false);
+            console.error("Primary model path error:", error);
+            
+            // Try alternatives in a sequential manner
+            tryAlternativePaths(item);
         });
+}
+
+// New function to try alternative model paths
+function tryAlternativePaths(item) {
+    console.log("Trying alternative model paths");
+    
+    // Collect all possible paths to try
+    const pathsToTry = [
+        item.modelPath,
+        // Check if we have alternates defined
+        ...(item.modelAlternates || []),
+        // Add common fallbacks
+        'models/kofte.glb',
+        './models/kofte.glb',
+        '/models/kofte.glb',
+        'assets/models/kofte.glb',
+        './assets/models/kofte.glb'
+    ];
+    
+    // Try paths one by one
+    let currentPathIndex = 0;
+    
+    function tryNextPath() {
+        if (currentPathIndex >= pathsToTry.length) {
+            console.error("All model paths failed!");
+            showModelError(item.modelPath, "Could not find model file in any location");
+            showLoading(false);
+            return;
+        }
+        
+        const currentPath = pathsToTry[currentPathIndex];
+        console.log(`Trying path ${currentPathIndex + 1}/${pathsToTry.length}: ${currentPath}`);
+        
+        fetch(currentPath, { method: 'HEAD' })
+            .then(response => {
+                if (response.ok) {
+                    console.log(`✅ Found working model path: ${currentPath}`);
+                    actuallyLoadModel(currentPath, item);
+                } else {
+                    console.log(`❌ Path failed: ${currentPath}`);
+                    currentPathIndex++;
+                    tryNextPath();
+                }
+            })
+            .catch(error => {
+                console.log(`❌ Path error: ${currentPath}`, error);
+                currentPathIndex++;
+                tryNextPath();
+            });
+    }
+    
+    // Start trying paths
+    tryNextPath();
+}
+
+// Helper function to actually load the model once path is verified
+function actuallyLoadModel(modelPath, item) {
+    console.log(`✓ Loading model from verified path: ${modelPath}`);
+    
+    // Get or create model-viewer element
+    let modelViewer = document.querySelector('model-viewer');
+    if (!modelViewer) {
+        console.log("Creating new model-viewer element");
+        modelViewer = document.createElement('model-viewer');
+        modelViewer.setAttribute('id', 'ar-model-viewer');
+        modelViewer.setAttribute('camera-controls', '');
+        modelViewer.setAttribute('auto-rotate', '');
+        modelViewer.setAttribute('shadow-intensity', '1');
+        modelViewer.setAttribute('ar', ''); 
+        modelViewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
+        modelViewer.setAttribute('ar-scale', 'auto');
+        modelViewer.setAttribute('touch-action', 'pan-y');
+        modelViewer.style.width = '100%';
+        modelViewer.style.height = '100%';
+        modelViewer.style.backgroundColor = '#f2f2f7';
+        
+        // Add exit button
+        const exitButton = document.createElement('button');
+        exitButton.slot = 'exit-button';
+        exitButton.textContent = 'Kapat ×';
+        exitButton.style.backgroundColor = 'var(--danger)';
+        exitButton.style.color = 'white';
+        exitButton.style.borderRadius = '8px';
+        exitButton.style.border = 'none';
+        exitButton.style.padding = '8px 12px';
+        exitButton.style.position = 'absolute';
+        exitButton.style.top = '10px';
+        exitButton.style.right = '10px';
+        exitButton.style.zIndex = '100';
+        exitButton.onclick = closeARView;
+        modelViewer.appendChild(exitButton);
+        
+        // Error tracking
+        modelViewer.addEventListener('error', (error) => {
+            console.error('Model-viewer loading error:', error);
+            document.getElementById('model-error').style.display = 'block';
+            document.getElementById('model-error-details').textContent = 
+                `Full path: ${modelPath}\nError: ${error.target.error || 'Unknown error'}`;
+            
+            showStatusMessage("Model loading failed: " + modelPath, 5000);
+        });
+        
+        // Load tracking
+        modelViewer.addEventListener('load', () => {
+            console.log('Model loaded successfully');
+            showStatusMessage("Model loaded! Drag to rotate the 3D model.", 3000);
+            document.getElementById('model-error').style.display = 'none';
+        });
+        
+        // Clear and add model-viewer to AR container
+        const arContainer = document.getElementById('arContainer');
+        arContainer.innerHTML = '';
+        arContainer.appendChild(modelViewer);
+    }
+    
+    // Set the source of model-viewer
+    modelViewer.setAttribute('src', modelPath);
+    if (item.usdz) {
+        const usdzPath = modelPath.replace('.glb', '.usdz');
+        modelViewer.setAttribute('ios-src', usdzPath);
+    }
+    
+    // Show AR container and hide loading screen
+    document.getElementById('arContainer').style.display = 'block';
+    showLoading(false);
 }
 
 // Improved AR Quick Look for iOS - completely revised for better iOS compatibility
@@ -1727,3 +1812,48 @@ window.closeARView = function() {
         arContainer.style.display = 'none';
     }
 };
+
+// Eksik showModelError fonksiyonu ekleniyor
+function showModelError(modelPath, errorMessage) {
+    console.error(`Model error: ${errorMessage} (${modelPath})`);
+    
+    // Model error elementini göster
+    const modelError = document.getElementById('model-error');
+    if (modelError) {
+        modelError.style.display = 'block';
+        
+        // Hata detaylarını göster
+        const errorDetails = document.getElementById('model-error-details');
+        if (errorDetails) {
+            errorDetails.textContent = `Yol: ${modelPath}\nHata: ${errorMessage}`;
+        }
+    }
+    
+    // Kullanıcıya bildirim göster
+    showStatusMessage(`Model yüklenemedi: ${errorMessage}`, 5000);
+}
+
+// createBackToTopButton fonksiyonu eksik, ekleniyor
+function createBackToTopButton() {
+    // Eğer buton zaten varsa, tekrar oluşturma
+    if (document.getElementById('backToTop')) return;
+    
+    // Yukarı çık butonu oluştur
+    const backToTopBtn = document.createElement('div');
+    backToTopBtn.id = 'backToTop';
+    backToTopBtn.className = 'back-to-top';
+    backToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+    
+    // HTML'e ekle
+    document.body.appendChild(backToTopBtn);
+    
+    // Tıklama olayı
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    
+    console.log("Yukarı çık butonu oluşturuldu");
+}

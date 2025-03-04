@@ -18,6 +18,9 @@
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://unpkg.com">
     
+    <!-- Yükleme ekranı acil durum düzeltmesi - EN BAŞTA yüklenmeli -->
+    <script src="js/loading-fix.js"></script>
+    
     <!-- Stil dosyaları -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/loading.css">
@@ -49,7 +52,7 @@
     <!-- Status Message -->
     <div class="status-message" id="statusMessage"></div>
 
-    <!-- Enhanced iOS-style Header - Düzeltildi -->
+    <!-- Enhanced User-Friendly Header -->
     <header class="header ios-header">
         <div class="header-branding">
             <div class="logo-container">
@@ -57,9 +60,19 @@
             </div>
             <div class="brand-text">
                 <h1>✨ AR Menü</h1>
-                <h2>Modern AR Restoran Deneyimi</h2>
-                <p>Yemeklerinizi gerçek boyutlarıyla görün!</p>
             </div>
+        </div>
+        <div class="header-actions">
+            <button id="searchBtn" class="header-btn" aria-label="Menüde Ara">
+                <i class="fas fa-search"></i>
+            </button>
+            <button id="favoritesBtn" class="header-btn" aria-label="Favoriler">
+                <i class="fas fa-heart"></i>
+                <span class="notification-badge">0</span>
+            </button>
+            <button id="infoBtn" class="header-btn" aria-label="Bilgi">
+                <i class="fas fa-info-circle"></i>
+            </button>
         </div>
     </header>
 
@@ -76,9 +89,10 @@
             </div>
         </div>
 
-        <!-- Arama kutusu -->
+        <!-- Arama kutusu - Geliştirildi -->
         <div class="search-container">
             <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
                 <input type="text" id="menuSearch" class="search-input" placeholder="Menüde ara..." aria-label="Menüde ara">
             </div>
             <div class="filter-container">
@@ -204,49 +218,53 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
     
-    <!-- Uygulama Scriptleri -->
+    <!-- Uygulama Scriptleri - sıralama düzeltildi -->
+    <script src="js/resolveAssetPath.js"></script>
     <script src="js/popup.js"></script>
-    <script src="models/tutorial.js"></script> <!-- Path düzeltildi: js -> models -->
+    <script src="js/fix-ar-model.js"></script>
     <script src="js/search.js"></script>
+    <script src="models/tutorial.js"></script>
     <script src="js/share.js"></script>
+    <script src="js/fix-share.js"></script> <!-- Paylaşım sorunu için düzeltme dosyası -->
     <script src="js/index.js" defer></script>
+    <script src="js/header.js"></script>
     <script src="js/troubleshoot.js"></script>
 
     <!-- Yükleme ekranı güvenliği -->
     <script>
         // Sayfa tamamen yüklendiğinde yükleme ekranını kapat
         window.addEventListener('load', function() {
-            setTimeout(function() {
+            console.log("Sayfa tam olarak yüklendi, yükleme ekranını kapatmayı deniyoruz...");
+            
+            try {
                 const loadingScreen = document.getElementById('loadingScreen');
-                if (loadingScreen && loadingScreen.style.display !== 'none' && 
-                    loadingScreen.style.opacity !== '0') {
-                    console.warn('Yükleme ekranı kapanmamış, manuel kapatılıyor!');
+                if (loadingScreen) {
+                    loadingScreen.style.opacity = '0';
+                    loadingScreen.style.transition = 'opacity 0.3s ease';
                     
-                    if (window._hideLoadingScreen) {
-                        window._hideLoadingScreen(300);
-                    } else {
-                        loadingScreen.style.opacity = '0';
-                        setTimeout(function() {
-                            loadingScreen.style.display = 'none';
-                        }, 300);
-                    }
+                    setTimeout(function() {
+                        loadingScreen.style.display = 'none';
+                        document.body.style.overflow = '';
+                    }, 300);
+                    
+                    console.log("Yükleme ekranı başarıyla kapatıldı");
                 }
-            }, 3000);
+            } catch (error) {
+                console.error("Yükleme ekranını kapatmaya çalışırken hata:", error);
+            }
         });
         
-        // ACİL DURUM: Son çare kapatma
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                const loadingScreen = document.getElementById('loadingScreen');
-                if (loadingScreen && loadingScreen.style.display !== 'none') {
-                    console.warn('ACİL DURUM: Yükleme ekranı hala açık, zorla kapatılıyor!');
-                    loadingScreen.style.display = 'none'; // Doğrudan gizle
-                }
-            }, 1000);
-        });
+        // Yükleme ekranının kapatılmasını garantile
+        setTimeout(function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen && (loadingScreen.style.display !== 'none')) {
+                console.warn("2 saniye sonra yükleme ekranı hala açık, zorla kapatılıyor!");
+                loadingScreen.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }, 2000);
 
         // Tutorial doğru gösterilsin diye localStorage temizleme seçeneği
-        // Sadece geliştirme aşamasında aktif olmalı
         if (window.location.hash === '#test-tutorial') {
             localStorage.removeItem('ar_tutorial_shown');
             console.log('Tutorial test modu: localStorage temizlendi.');

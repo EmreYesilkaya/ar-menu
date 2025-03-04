@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Modelleri Kontrol Aracı</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #6A5AE0;
+            text-align: center;
+        }
+        .info-box {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .model-item {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .model-name {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .path-list {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .path-item {
+            padding: 5px 0;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: rgba(0, 217, 170, 0.15);
+            color: #00A87D;
+        }
+        .error {
+            background-color: rgba(255, 90, 90, 0.15);
+            color: #D13030;
+        }
+        .pending {
+            background-color: rgba(90, 200, 250, 0.15);
+            color: #0069A2;
+        }
+        .check-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #6A5AE0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .check-button:hover {
+            background-color: #594DC2;
+        }
+    </style>
+</head>
+<body>
+    <h1>AR Modelleri Kontrol Aracı</h1>
+    
+    <div class="info-box">
+        <p>Bu sayfa, AR modellerinin erişilebilirliğini kontrol etmenize yardımcı olur. 
+        Modellerin doğru yollarını bularak AR menü uygulamanızda sorunsuz çalışmalarını sağlayabilirsiniz.</p>
+    </div>
+    
+    <button id="checkAll" class="check-button">Tüm Modelleri Kontrol Et</button>
+    
+    <div id="modelList">
+        <!-- Model sonuçları burada görüntülenecek -->
+    </div>
+    
+    <div id="log" class="info-box" style="margin-top: 20px;">
+        <h3>İşlem Günlüğü</h3>
+        <pre id="logContent" style="white-space: pre-wrap; font-size: 12px; color: #666;"></pre>
+    </div>
+    
+    <script>
+        // Test edilecek modeller
+        const models = [
+            {
+                name: 'Izgara Köfte',
+                paths: [
+                    'models/kofte.glb',
+                    './models/kofte.glb',
+                    '/models/kofte.glb',
+                    '../models/kofte.glb',
+                    'assets/models/kofte.glb',
+                    './assets/models/kofte.glb'
+                ]
+            },
+            {
+                name: 'Karışık Izgara',
+                paths: [
+                    'models/karisik.glb',
+                    './models/karisik.glb',
+                    '/models/karisik.glb',
+                    '../models/karisik.glb',
+                    'assets/models/karisik.glb',
+                    './assets/models/karisik.glb'
+                ]
+            },
+            {
+                name: 'Tavuk Şiş',
+                paths: [
+                    'models/tavuk_sis.glb',
+                    './models/tavuk_sis.glb',
+                    '/models/tavuk_sis.glb',
+                    '../models/tavuk_sis.glb',
+                    'assets/models/tavuk_sis.glb',
+                    './assets/models/tavuk_sis.glb'
+                ]
+            }
+        ];
+        
+        // Log fonksiyonu
+        function log(message) {
+            const logContent = document.getElementById('logContent');
+            const timestamp = new Date().toLocaleTimeString();
+            logContent.textContent += `[${timestamp}] ${message}\n`;
+            console.log(message);
+        }
+        
+        // Model listesini oluştur
+        function createModelList() {
+            const container = document.getElementById('modelList');
+            models.forEach((model, index) => {
+                const div = document.createElement('div');
+                div.className = 'model-item';
+                div.innerHTML = `
+                    <div class="model-name">${model.name}</div>
+                    <div>Test edilecek yollar:</div>
+                    <ul class="path-list">
+                        ${model.paths.map(path => `<li class="path-item">${path}</li>`).join('')}
+                    </ul>
+                    <div class="result pending" id="result-${index}">Test edilmedi</div>
+                    <button class="check-button" onclick="checkModel(${index})">Bu Modeli Kontrol Et</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        // Tek bir modelin yollarını kontrol et
+        async function checkModel(index) {
+            const model = models[index];
+            const resultElement = document.getElementById(`result-${index}`);
+            
+            resultElement.className = 'result pending';
+            resultElement.textContent = 'Kontrol ediliyor...';
+            
+            log(`"${model.name}" modeli için kontrol başlatılıyor...`);
+            
+            // Tüm yolları kontrol et
+            const results = [];
+            for (const path of model.paths) {
+                try {
+                    log(`Yol kontrol ediliyor: ${path}`);
+                    const response = await fetch(path, { method: 'HEAD' });
+                    const result = { 
+                        path, 
+                        success: response.ok, 
+                        status: response.status,
+                        statusText: response.statusText
+                    };
+                    results.push(result);
+                    
+                    if (response.ok) {
+                        log(`✅ BAŞARILI: ${path}`);
+                    } else {
+                        log(`❌ BAŞARISIZ: ${path} - Durum: ${response.status}`);
+                    }
+                } catch (error) {
+                    results.push({ 
+                        path, 
+                        success: false, 
+                        error: error.message
+                    });
+                    log(`❌ HATA: ${path} - ${error.message}`);
+                }
+            }
+            
+            // Başarılı yolları bul
+            const successfulPaths = results.filter(r => r.success).map(r => r.path);
+            
+            // Sonuçları güncelle
+            if (successfulPaths.length > 0) {
+                resultElement.className = 'result success';
+                resultElement.innerHTML = `
+                    <strong>✅ Erişilebilir model bulundu!</strong>
+                    <div>Çalışan yollar:</div>
+                    <ul>
+                        ${successfulPaths.map(path => `<li>${path}</li>`).join('')}
+                    </ul>
+                `;
+                log(`"${model.name}" modeli için ${successfulPaths.length} çalışan yol bulundu`);
+            } else {
+                resultElement.className = 'result error';
+                resultElement.innerHTML = `
+                    <strong>❌ Hiçbir yol çalışmıyor!</strong>
+                    <div>Bu modelin doğru konumda olduğundan emin olun.</div>
+                `;
+                log(`"${model.name}" modeli için hiçbir çalışan yol bulunamadı!`);
+            }
+        }
+        
+        // Tüm modelleri kontrol et
+        async function checkAllModels() {
+            log("Tüm modeller için kontrol başlatılıyor...");
+            
+            for (let i = 0; i < models.length; i++) {
+                await checkModel(i);
+            }
+            
+            log("Tüm modellerin kontrolü tamamlandı");
+        }
+        
+        // Sayfa yüklendiğinde model listesini oluştur
+        document.addEventListener('DOMContentLoaded', () => {
+            createModelList();
+            log("Sayfa hazır. Kontrol işlemini başlatmak için butona tıklayın.");
+        });
+        
+        // Tüm modelleri kontrol et butonuna tıklama olayı
+        document.getElementById('checkAll').addEventListener('click', checkAllModels);
+    </script>
+</body>
+</html>

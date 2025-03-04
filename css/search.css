@@ -1,6 +1,6 @@
 /**
  * AR Menü Arama ve Filtreleme Özellikleri Stilleri
- * Modern ve kullanıcı dostu arama arayüzü
+ * Modern ve kullanıcı dostu arama arayüzü - İyileştirildi
  */
 
 /* Arama kutusu container */
@@ -17,12 +17,24 @@
     display: flex;
     gap: 10px;
     margin-bottom: 10px;
+    position: relative;
+}
+
+/* Arama ikonu */
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    pointer-events: none;
+    transition: color 0.2s ease;
 }
 
 /* Arama input alanı */
 .search-input {
     flex: 1;
-    padding: 12px 15px;
+    padding: 12px 15px 12px 40px; /* Sol tarafta ikon için padding */
     border: 1px solid #eee;
     border-radius: 8px;
     font-size: 1rem;
@@ -33,6 +45,11 @@
     border-color: #6A5AE0;
     outline: none;
     box-shadow: 0 0 0 3px rgba(106, 90, 224, 0.2);
+}
+
+.search-input:focus + .search-icon,
+.search-input.focused + .search-icon {
+    color: #6A5AE0;
 }
 
 /* Filtreleme butonları container */
@@ -66,6 +83,13 @@
     background-color: #594DC2;
 }
 
+/* Arama önizleme */
+.search-preview {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
 /* Sonuç bulunamadı mesajı */
 .no-results {
     text-align: center;
@@ -91,7 +115,12 @@
 @media (max-width: 576px) {
     .search-input {
         font-size: 0.9rem;
-        padding: 10px 12px;
+        padding: 10px 10px 10px 35px;
+    }
+    
+    .search-icon {
+        font-size: 0.9rem;
+        left: 12px;
     }
     
     .filter-btn {
@@ -102,4 +131,34 @@
     .search-container {
         padding: 12px;
     }
+}
+
+/* Tag styling improvements for search */
+.food-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-right: 4px;
+    margin-bottom: 4px;
+}
+
+/* Better styling for active filter buttons */
+.filter-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    box-shadow: 0 2px 6px rgba(106, 90, 224, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Search input focus animation */
+.search-input:focus {
+    animation: pulse-border 1s ease-out;
+}
+
+@keyframes pulse-border {
+    0% { box-shadow: 0 0 0 0 rgba(106, 90, 224, 0.4); }
+    70% { box-shadow: 0 0 0 6px rgba(106, 90, 224, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(106, 90, 224, 0); }
 }

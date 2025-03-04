@@ -1,8 +1,9 @@
 /**
- * AR Menü Eğitim Modalı Stilleri
- * Modern, animasyonlu ve etkileşimli tutorial için CSS
+ * AR Menü Eğitim Modalı Stilleri - Optimizasyon ve Düzeltmeler Eklendi
  * - Telefon, tablet ve masaüstü için ölçeklenebilir tasarım
+ * - Scroll sorunları düzeltildi
  * - Daha akıcı geçişler ve animasyonlar
+ * - Adım yazıları küçültüldü
  */
 
 /* Modal Genel Stiller */
@@ -28,7 +29,7 @@
     overflow: hidden;
     max-width: 800px;
     width: 92%;
-    max-height: 580px; /* Daha kısa içerik alanı - kaydırma olmayacak */
+    max-height: 580px; /* Küçültüldü */
     background-color: var(--card-bg, #fff);
     border-radius: 24px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2); /* Daha güçlü gölge */
@@ -38,18 +39,10 @@
     transform: translateZ(0); /* Hardware acceleration için */
     will-change: transform, opacity; /* Animasyon performansı için */
     opacity: 1;
-    transition: all 0.3s ease;
     margin: 0 auto;
 }
 
-.modal-enter {
-    animation: modalEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-.modal-leave {
-    animation: modalLeave 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
-}
-
+/* Modal animasyonları - Düzeltildi */
 @keyframes modalEnter {
     from {
         opacity: 0;
@@ -72,11 +65,32 @@
     }
 }
 
+.modal-enter {
+    animation: modalEnter 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.modal-leave {
+    animation: modalLeave 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
+}
+
+/* Z-index düzeltmesi */
+#instructionsModal {
+    z-index: 1000; /* En üstte olmasını sağlar */
+}
+
+/* Scroll engelleme düzeltmesi */
+body.modal-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.2rem 1.5rem;
+    padding: 1rem 1.5rem;
     border-bottom: 1px solid rgba(0,0,0,0.08);
     background-color: rgba(255,255,255,0.95);
     backdrop-filter: blur(10px);
@@ -87,7 +101,7 @@
 
 .modal-header h3 {
     font-family: var(--font-headings, sans-serif);
-    font-size: 1.5rem;
+    font-size: 1.4rem; /* Küçültüldü */
     margin: 0;
     color: var(--primary, #6A5AE0);
     display: flex;
@@ -109,6 +123,8 @@
     transition: all 0.2s ease;
     color: var(--text-medium, #5B5D72);
     font-size: 1.2rem;
+    position: relative;
+    z-index: 10; /* Kapatma butonu her zaman üstte */
 }
 
 .close-modal:hover {
@@ -118,10 +134,10 @@
 
 .modal-body {
     flex: 1;
-    overflow: hidden; /* overflow-y: auto yerine overflow: hidden yapıldı */
+    overflow: hidden; /* Scroll olmaması için */
     padding: 0;
-    display: flex;
-    flex-direction: column;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
 }
 
 /* Tutorial İçeriği */
@@ -134,7 +150,7 @@
 
 /* İlerleme Çubuğu */
 .tutorial-progress {
-    padding: 1.2rem 1.5rem 0.5rem;
+    padding: 1rem 1.5rem 0.4rem; /* Küçültüldü */
     background-color: rgba(255,255,255,0.8);
     position: sticky;
     top: 0;
@@ -147,7 +163,7 @@
     height: 4px;
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 4px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem; /* Küçültüldü */
     overflow: hidden;
 }
 
@@ -162,8 +178,8 @@
 .step-indicators {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 0.5rem;
+    gap: 8px; /* Küçültüldü */
+    margin-bottom: 0.3rem; /* Küçültüldü */
 }
 
 .step-dot {
@@ -181,11 +197,11 @@
     box-shadow: 0 0 0 2px rgba(106, 90, 224, 0.3);
 }
 
-/* Slaytlar */
+/* Slaytlar - Scrolling sorunları düzeltildi */
 .tutorial-slides {
     position: relative;
     flex: 1;
-    min-height: 300px;
+    min-height: 280px; /* Küçültüldü */
     overflow: hidden;
 }
 
@@ -194,18 +210,20 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: auto; /* Otomatik yükseklik */
+    min-height: 100%; 
     opacity: 0;
     visibility: hidden;
     transform: translateX(40px);
-    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
     display: flex;
     flex-direction: column;
-    padding: 1rem 0;
-    transition-property: opacity, transform, visibility;
-    transition-duration: 0.35s;
-    transition-timing-function: ease-out;
+    padding: 0.5rem 0; /* Küçültüldü */
     will-change: opacity, transform;
+    -webkit-backface-visibility: hidden; /* Safari sorunlarını düzelt */
+    backface-visibility: hidden;
+    -webkit-transform: translateZ(0) scale(1.0, 1.0);
+    transform: translateZ(0) scale(1.0, 1.0);
 }
 
 .tutorial-slide.active {
@@ -213,12 +231,13 @@
     visibility: visible;
     transform: translateX(0);
     position: relative;
+    z-index: 2;
 }
 
 .slide-content {
     display: flex;
-    gap: 1.5rem;
-    padding: 1rem 1.5rem;
+    gap: 1.2rem; /* Küçültüldü */
+    padding: 0.8rem 1.5rem; /* Küçültüldü */
     align-items: center;
     justify-content: center; /* Merkeze hizalama eklendi */
 }
@@ -229,16 +248,16 @@
 }
 
 .step-icon {
-    width: 80px;
-    height: 80px;
+    width: 70px; /* Küçültüldü */
+    height: 70px; /* Küçültüldü */
     border-radius: 50%;
     background: linear-gradient(135deg, var(--primary-light, #8A7CE8), var(--primary, #6A5AE0));
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
-    box-shadow: 0 10px 20px rgba(106, 90, 224, 0.3);
+    font-size: 1.8rem; /* Küçültüldü */
+    box-shadow: 0 8px 16px rgba(106, 90, 224, 0.25);
     position: relative;
     z-index: 1;
 }
@@ -257,53 +276,54 @@
     filter: blur(8px);
 }
 
-/* Step İçerik Stili */
+/* Step İçerik Stili - Yazılar küçültüldü */
 .step-info {
     flex: 1;
 }
 
 .step-info h3 {
     font-family: var(--font-headings, sans-serif);
-    font-size: 1.3rem; /* 1.5rem'den küçültüldü */
-    margin-bottom: 0.5rem; /* 0.8rem'den azaltıldı */
-    color: var(--primary, #6A5AE0);
+    font-size: 1.1rem; /* Küçültüldü */
+    margin-bottom: 0.4rem; /* Küçültüldü */
+    color: var(--primary-dark, #4A3DBF);
     font-weight: 700;
 }
 
 .step-info p {
-    font-size: 0.9rem; /* 1rem'den küçültüldü */
-    line-height: 1.5; /* 1.6'dan azaltıldü */
+    font-size: 0.85rem; /* Küçültüldü */
+    line-height: 1.4; /* Küçültüldü */
     color: var(--text-medium, #5B5D72);
-    margin-bottom: 0.8rem; /* 1rem'den azaltıldı */
+    margin-bottom: 0.6rem; /* Küçültüldü */
 }
 
 /* Pro İpuçları */
 .pro-tip {
     background-color: rgba(255, 203, 69, 0.15);
-    border-left: 4px solid var(--accent, #FFCB45);
-    padding: 0.6rem; /* 0.8rem'den azaltıldı */
+    border-left: 3px solid var(--accent, #FFCB45);
+    padding: 0.5rem; /* Küçültüldü */
     border-radius: 8px;
-    margin-top: 0.8rem; /* 1rem'den azaltıldı */
+    margin-top: 0.6rem; /* Küçültüldü */
     display: flex;
     align-items: flex-start;
-    gap: 0.6rem; /* 0.8rem'den azaltıldı */
+    gap: 0.5rem; /* Küçültüldü */
+    border: 1px solid rgba(255, 203, 69, 0.3);
 }
 
 .tip-icon {
     color: var(--accent, #FFCB45);
-    font-size: 1.2rem;
-    margin-top: 0.2rem;
+    font-size: 1.1rem; /* Küçültüldü */
+    margin-top: 0.1rem;
 }
 
 .tip-text {
-    font-size: 0.85rem; /* 0.9rem'den küçültüldü */
-    line-height: 1.4; /* 1.5'ten azaltıldı */
+    font-size: 0.8rem; /* Küçültüldü */
+    line-height: 1.3; /* Küçültüldü */
 }
 
 /* Görseller */
 .step-illustration {
     width: 100%;
-    padding: 0.8rem 1.5rem 1.5rem;
+    padding: 0.5rem 1.5rem 1rem; /* Küçültüldü */
     display: flex;
     justify-content: center;
 }
@@ -311,10 +331,10 @@
 .step-illustration img {
     max-width: 100%;
     height: auto;
-    max-height: 220px;
+    max-height: 180px; /* Küçültüldü */
     object-fit: contain;
     border-radius: 16px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); /* Daha zarif gölge */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Daha zarif gölge */
     border: 1px solid rgba(106, 90, 224, 0.1); /* Renkli kenar çizgisi */
 }
 
@@ -322,31 +342,37 @@
 .tutorial-navigation {
     display: flex;
     justify-content: space-between;
-    padding: 1.2rem 1.5rem;
+    padding: 1rem 1.5rem; /* Küçültüldü */
     border-top: 1px solid rgba(0, 0, 0, 0.05);
     background-color: rgba(255,255,255,0.9);
     position: sticky;
     bottom: 0;
     z-index: 3;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
 }
 
 .tutorial-btn {
-    padding: 0.9rem 1.5rem;
+    padding: 0.8rem 1.4rem; /* Küçültüldü */
     border: none;
     border-radius: 50px;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem; /* Küçültüldü */
     cursor: pointer;
     transition: all 0.1s ease; /* Daha hızlı tepki */
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    position: relative;
+    z-index: 6;
+}
+
+/* İleri tuşu - dokunma alanı genişletmesi */
+#tutorialNextBtn {
+    padding: 0.8rem 1.6rem;
+    min-width: 110px;
 }
 
 .tutorial-btn i {
-    font-size: 0.85rem;
+    font-size: 0.8rem; /* Küçültüldü */
 }
 
 .next-btn {
@@ -379,15 +405,13 @@
 }
 
 .next-btn:active {
-    transform: scale(0.97);
     transform: translateY(1px);
     box-shadow: 0 1px 0 rgba(65, 51, 183, 0.9);
 }
 
 .next-btn:hover {
     background-color: var(--primary-dark, #4A3DBF);
-    transform: translateY(-2px);
-    transform: translateY(-3px) translateX(2px);
+    transform: translateY(-2px) translateX(2px);
     box-shadow: 0 5px 0 rgba(65, 51, 183, 0.9);
 }
 
@@ -404,36 +428,9 @@
     z-index: 1;
 }
 
-.back-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    z-index: -1;
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.3s ease-out;
-}
-
-.back-btn:hover::before {
-    transform: scaleX(1);
-    transform-origin: left;
-}
-
-.back-btn:active {
-    transform: scale(0.97);
-}
-
 .back-btn:hover:not(:disabled) {
     background-color: rgba(0,0,0,0.1);
     transform: translateY(-2px) translateX(-2px);
-}
-
-.back-btn:active:not(:disabled) {
-    transform: translateY(0);
 }
 
 .back-btn:disabled {
@@ -445,9 +442,10 @@
     background-color: transparent;
     color: var(--text-medium, #5B5D72);
     border: none;
-    padding: 0.9rem;
+    padding: 0.8rem;
     margin: 0 0.5rem;
     cursor: pointer;
+    font-size: 0.85rem; /* Küçültüldü */
 }
 
 .skip-btn:hover {
@@ -499,40 +497,108 @@
     animation: scan 3s linear infinite;
 }
 
-/* Anlatıcı menü butonu */
-.instruction-button {
-    background-color: var(--primary, #6A5AE0);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    padding: 6px 12px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 8px;
-    margin-bottom: 5px;
-    box-shadow: 0 2px 8px rgba(106, 90, 224, 0.3);
-    transition: all 0.2s ease;
-}
-
-.instruction-button:hover {
-    background-color: var(--primary-dark, #4A3DBF);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(106, 90, 224, 0.4);
-}
-
-.instruction-button:active {
-    transform: translateY(0);
-}
-
-.instruction-button i {
-    font-size: 1rem;
+/* iOS ve Touch tarayıcılarda dokunma alanı iyileştirmesi */
+.tutorial-btn, #closeModalBtn, .step-dot {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* MOBİL UYUMLULUK */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        height: auto; 
+        max-height: 85vh; /* Daha büyük ekran alanı kullan ama scroll olmasın */
+        overflow: hidden; /* Scroll olmaması için */
+    }
+    
+    .tutorial-btn, #tutorialSkipBtn {
+        padding: 0.8rem 1.2rem;
+        min-height: 44px; /* Apple HIG için 44px minimum */
+    }
+    
+    .step-dot {
+        width: 10px;
+        height: 10px;
+        margin: 0 5px;
+    }
+    
+    #closeModalBtn {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .tutorial-slide {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .step-icon {
+        margin: 0 auto 0.8rem;
+        width: 60px;
+        height: 60px;
+        font-size: 1.6rem;
+    }
+    
+    .step-illustration img {
+        max-height: 160px;
+    }
+    
+    .slide-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0.6rem 1rem;
+    }
+}
+
+/* Çok küçük ekranlar (iPhone SE vb) */
+@media (max-width: 380px) {
+    .modal-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .step-info h3 {
+        font-size: 1rem;
+    }
+    
+    .step-info p {
+        font-size: 0.8rem;
+    }
+    
+    .tutorial-navigation {
+        padding: 0.8rem 1rem;
+    }
+    
+    .tutorial-btn {
+        font-size: 0.8rem;
+        padding: 0.7rem 1rem;
+    }
+    
+    .step-illustration img {
+        max-height: 130px;
+    }
+    
+    .step-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+    }
+}
+
+/* Geniş telefonlar ve tabletler için yatay mod optimizasyonu */
+@media (min-width: 600px) and (max-width: 1024px) and (orientation: landscape) {
+    .slide-content {
+        flex-direction: row;
+        text-align: left;
+        align-items: flex-start;
+    }
+    
+    .step-icon {
+        margin: 0;
+    }
+}
+
 /* Responsive Düzenlemeler */
 @media (max-width: 768px) {
     .modal-content {

@@ -24,7 +24,7 @@
     <!-- Stil dosyaları -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/loading.css">
-    <link rel="stylesheet" href="css/tutorial.css">
+    <link rel="stylesheet" href="css/tutorial.css"> <!-- Tek tutorial CSS - fixed.css içeriği buraya taşındı -->
     <link rel="stylesheet" href="css/search.css">
     <link rel="stylesheet" href="css/share.css">
     <link rel="stylesheet" href="css/ios-style.css">
@@ -211,7 +211,7 @@
             </div>
         </section>
 
-        <section id="saladsSection" class="menu-section">
+        <section id="saladsSection" class="menu-section"></section>
             <h2 class="section-title">🥗 Salatalar</h2>
             <div class="menu-items" id="salads">
                 <!-- Menu items will be dynamically populated -->
@@ -306,7 +306,8 @@
     <script src="js/menu-loader.js"></script> <!-- YENİ: Menü yükleme modülü -->
     <script src="js/bottom-nav.js"></script>
     <script src="js/favorites.js"></script> <!-- YENİ: Favoriler modülü -->
-    <script src="js/tutorial.js"></script> <!-- GÜNCELLEME: Konum değiştirildi - models/ yerine js/ klasörü -->
+    <!-- <script src="js/tutorial.js"></script> --> <!-- ESKİ: Bu satırı kaldırdık -->
+    <script src="js/tutorial-improved.js"></script> <!-- YENİ: Geliştirilmiş tutorial sistemi -->
     <script src="js/share.js"></script>
     <script src="js/qr-scanner.js"></script> <!-- QR tarayıcı -->
     <!-- QR test modülü kaldırıldı -->
@@ -363,20 +364,28 @@
             // Tutorial modal düzeltmesi
             const instructionsModal = document.getElementById('instructionsModal');
             if (instructionsModal) {
-                // Modalı kapatma düğmesi
+                // Modalı kapatma düğmesi - TutorialController üzerinden
                 const closeBtn = instructionsModal.querySelector('#closeModalBtn');
                 if (closeBtn) {
                     closeBtn.addEventListener('click', function() {
-                        instructionsModal.style.display = 'none';
-                        document.body.style.overflow = '';
+                        if (window.TutorialController) {
+                            window.TutorialController.close();
+                        } else {
+                            instructionsModal.style.display = 'none';
+                            document.body.style.overflow = '';
+                        }
                     });
                 }
                 
-                // Dışarıya tıklama ile kapatma
+                // Dışarıya tıklama ile kapatma - TutorialController üzerinden
                 instructionsModal.addEventListener('click', function(event) {
                     if (event.target === instructionsModal) {
-                        instructionsModal.style.display = 'none';
-                        document.body.style.overflow = '';
+                        if (window.TutorialController) {
+                            window.TutorialController.close();
+                        } else {
+                            instructionsModal.style.display = 'none';
+                            document.body.style.overflow = '';
+                        }
                     }
                 });
                 

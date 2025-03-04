@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Favoriler butonu işlevi - GÜNCELLENDI: Favoriler bölümüne kaydırma eklendi
+  // Favoriler butonu işlevi - GÜNCELLENDİ
   const favoritesBtn = document.getElementById('favoritesBtn');
   if (favoritesBtn) {
     favoritesBtn.addEventListener('click', function() {
@@ -53,33 +53,43 @@ document.addEventListener('DOMContentLoaded', function() {
         window.navigator.vibrate([30, 20, 30]);
       }
       
-      // Favoriler bölümünü bul
+      // Favoriler bölümüne kaydır
       const favoritesSection = document.getElementById('favoritesSection');
       if (favoritesSection) {
-        // Favoriler sekmesini aktif et
+        // Favoriler bölümünü vurgula
+        favoritesSection.classList.add('highlight-section');
+        
+        // Sekmelerde favoriler sekmesini aktif et
         const menuTabs = document.querySelectorAll('.menu-tab');
         menuTabs.forEach(tab => {
-          if (tab.getAttribute('data-target') === 'favorites') {
+          tab.classList.remove('active');
+          if (tab.getAttribute('href') === '#favoritesSection') {
             tab.classList.add('active');
-          } else {
-            tab.classList.remove('active');
           }
         });
         
-        // Favoriler bölümünü vurgula
-        favoritesSection.classList.add('highlight-section');
+        // Favoriler bölümüne kaydır
+        favoritesSection.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+        
+        // Vurgulamayı kaldır
         setTimeout(() => {
           favoritesSection.classList.remove('highlight-section');
         }, 2000);
         
-        // Favoriler bölümüne kaydır
-        favoritesSection.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
+        // Favori sayısını kontrol et ve uygun mesajı göster
+        const favoriteItems = JSON.parse(localStorage.getItem('favoriteItems')) || [];
+        if (favoriteItems.length === 0) {
+          // Favoriler boşsa mesaj göster
+          window.PopupManager && window.PopupManager.showStatusMessage("Henüz favorilere eklenen bir ürün yok 💔", 2000);
+        } else {
+          // Favoriler varsa bilgi mesajı göster
+          window.PopupManager && window.PopupManager.showStatusMessage(`${favoriteItems.length} favori ürününüz var ❤️`, 2000);
+        }
       } else {
-        // Favoriler bölümü bulunamazsa eski mesajı göster
-        showStatusMessage('Favorileriniz burada gösterilecek', 2000);
+        window.PopupManager && window.PopupManager.showStatusMessage("Favoriler bölümünüz burada gösterilecek", 2000);
       }
     });
   }

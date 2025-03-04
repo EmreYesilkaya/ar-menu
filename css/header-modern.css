@@ -138,6 +138,40 @@
     background-color: rgba(255, 59, 48, 0.08);
 }
 
+/* Theme toggle button for header */
+.header-btn.theme-toggle-btn {
+    background-color: rgba(106, 90, 224, 0.08);
+    overflow: visible;
+}
+
+body.dark-mode .header-btn.theme-toggle-btn {
+    background-color: rgba(255, 201, 69, 0.12);
+}
+
+.header-btn.theme-toggle-btn:hover {
+    background-color: rgba(106, 90, 224, 0.15);
+    transform: translateY(-2px);
+}
+
+body.dark-mode .header-btn.theme-toggle-btn:hover {
+    background-color: rgba(255, 201, 69, 0.2);
+}
+
+.header-btn.theme-toggle-btn:active {
+    transform: translateY(0) scale(0.95);
+    transition: transform 0.1s;
+}
+
+/* Sun icon color */
+.header-btn.theme-toggle-btn .fa-sun {
+    color: #FF9500;
+}
+
+/* Moon icon color in dark mode */
+body.dark-mode .header-btn.theme-toggle-btn .fa-moon {
+    color: #FFD45E;
+}
+
 /* Responsive düzenlemeler */
 @media (max-width: 768px) {
     .header {
@@ -201,4 +235,37 @@ body {
 
 .header-btn:active i {
     transform: scale(0.9);
+}
+
+/* Dark Mode Adaptasyonu */
+body.dark-mode .header {
+    background-color: rgba(42, 43, 72, 0.9);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .header.header-scrolled {
+    background-color: rgba(32, 33, 60, 0.95);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .brand-text h1 {
+    color: #E9EBFF;
+}
+
+body.dark-mode .brand-tagline {
+    color: #B7B9CC;
+}
+
+body.dark-mode .header-btn {
+    color: #B7B9CC;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .header-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+body.dark-mode .header-btn:active {
+    background-color: rgba(255, 255, 255, 0.15);
 }

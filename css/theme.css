@@ -1,0 +1,249 @@
+/**
+ * Tema Değiştirme Özellikleri - Koyu/Açık Mod
+ * - Renk değişkenlerinin temalara göre düzenlenmesi
+ * - Tema geçiş animasyonları
+ */
+
+:root {
+  /* Açık tema (varsayılan) değişkenleri */
+  --primary: #6A5AE0;
+  --primary-light: #8A7CE8;
+  --primary-dark: #4A3DBF;
+  --secondary: #FF7966;
+  --secondary-light: #FF9D90;
+  --secondary-dark: #E55A48;
+  --accent: #FFCB45;
+  --text-dark: #2D2F48;
+  --text-medium: #5B5D72;
+  --text-light: #8A8CA0;
+  --background: #F8F9FE;
+  --card-bg: #FFFFFF;
+  --danger: #FF5A65;
+  --success: #4CD964;
+  --info: #5AC8FA;
+  
+  /* Gölge değişkenleri */
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.12);
+  
+  /* Geçiş animasyonları */
+  --theme-transition: background-color 0.4s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Koyu mod aktivasyonu */
+body.dark-mode {
+  --primary: #7A6EE4;
+  --primary-light: #968FEA;
+  --primary-dark: #5A4ED0;
+  --secondary: #FF8A7A;
+  --secondary-light: #FFA699;
+  --secondary-dark: #E66756;
+  --accent: #FFD45E;
+  --text-dark: #E9EBFF;
+  --text-medium: #B7B9CC;
+  --text-light: #8A8CA0;
+  --background: #1A1B2E;
+  --card-bg: #2D2F48;
+  --danger: #FF6B75;
+  --success: #5DE97C;
+  --info: #68D1FF;
+  
+  /* Koyu mod gölge değişkenleri */
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.3);
+  
+  /* Karanlık mod için scrollbar renkleri */
+  scrollbar-color: var(--primary-light) var(--background) !important;
+}
+
+body.dark-mode::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+body.dark-mode::-webkit-scrollbar-thumb {
+  background-color: var(--primary-light);
+  border-radius: 4px;
+}
+
+body.dark-mode::-webkit-scrollbar-thumb:hover {
+  background-color: var(--primary);
+}
+
+/* Tema değişim animasyonu */
+@keyframes theme-transition-flash {
+  0% { background-color: transparent; }
+  20% { background-color: rgba(255, 255, 255, 0.05); }
+  100% { background-color: transparent; }
+}
+
+body.theme-changed {
+  animation: theme-transition-flash 1s ease-out;
+}
+
+/* Tema değişim animasyonları */
+body {
+  transition: var(--theme-transition);
+}
+
+header, 
+.bottom-nav, 
+.card, 
+.menu-section, 
+.modal-content,
+.menu-item,
+.status-message,
+.alert,
+.search-input,
+.filter-btn,
+.menu-tab {
+  transition: var(--theme-transition);
+}
+
+/* Buton ve ikon geçişleri */
+button, 
+a.btn,
+.header-btn i,
+.menu-tab i,
+.fa, .fas, .far, .fab {
+  transition: var(--theme-transition);
+}
+
+/* Tema geçiş animasyonu ayarları */
+.theme-transition * {
+  transition: none !important;
+}
+
+.theme-transition *, 
+.theme-transition *:before,
+.theme-transition *:after {
+  transition: none !important;
+}
+
+/* Tema değiştirme butonu hareketli animasyon */
+.theme-toggle-icon {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  overflow: hidden;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Güneş/Ay dönüşüm animasyonu */
+.theme-toggle-icon .sun-moon {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Koyu moddaki animasyon */
+body.dark-mode .theme-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Hoverda animasyon */
+.theme-toggle-btn:hover .theme-toggle-icon {
+  transform: rotate(30deg);
+}
+
+body.dark-mode .theme-toggle-btn:hover .theme-toggle-icon {
+  transform: rotate(210deg);
+}
+
+/* Aktif durumda animasyon */
+.theme-toggle-btn:active .theme-toggle-icon {
+  transform: scale(0.8);
+}
+
+body.dark-mode .theme-toggle-btn:active .theme-toggle-icon {
+  transform: scale(0.8) rotate(180deg);
+}
+
+/* Tema değiştirme butonu için gelişmiş animasyonlar */
+.theme-toggle-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Güneş/Ay ikonu için gelişmiş animasyon */
+.theme-toggle-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* İkon geçişi animasyonu */
+.theme-toggle-icon i {
+  position: absolute;
+  font-size: 1.1rem;
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Koyu mod ikonları */
+body:not(.dark-mode) .theme-toggle-icon .fa-moon {
+  opacity: 0;
+  transform: rotate(-45deg) scale(0.3);
+}
+
+body.dark-mode .theme-toggle-icon .fa-sun {
+  opacity: 0;
+  transform: rotate(45deg) scale(0.3);
+}
+
+body.dark-mode .theme-toggle-icon .fa-moon {
+  opacity: 1;
+  transform: scale(1);
+  color: #FFD45E; /* Ay ikonu için sarımsı renk */
+}
+
+/* Hover efektleri */
+.theme-toggle-btn:hover .theme-toggle-icon {
+  transform: rotate(15deg);
+}
+
+body.dark-mode .theme-toggle-btn:hover .theme-toggle-icon {
+  transform: rotate(-15deg);
+}
+
+/* Tıklama animasyonu */
+.theme-toggle-btn:active .theme-toggle-icon {
+  transform: scale(0.8);
+  transition-duration: 0.1s;
+}
+
+/* Tema butonu etrafındaki ışık efekti */
+.theme-toggle-btn::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+body:not(.dark-mode) .theme-toggle-btn::after {
+  background: radial-gradient(circle, rgba(255,201,69,0.4) 0%, rgba(255,201,69,0) 70%);
+}
+
+body.dark-mode .theme-toggle-btn::after {
+  background: radial-gradient(circle, rgba(122,110,228,0.4) 0%, rgba(122,110,228,0) 70%);
+}
+
+.theme-toggle-btn:hover::after {
+  opacity: 1;
+}

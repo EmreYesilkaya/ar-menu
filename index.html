@@ -18,20 +18,24 @@
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://unpkg.com">
     
+    <!-- Tema başlatıcı - sayfa yüklenmeden önce çalışmalı -->
+    <script src="js/theme-init.js"></script>
+    
     <!-- Yükleme ekranı acil durum düzeltmesi - EN BAŞTA yüklenmeli -->
     <script src="js/loading-fix.js"></script>
     
     <!-- Stil dosyaları -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/loading.css">
-    <link rel="stylesheet" href="css/tutorial.css"> <!-- Tek tutorial CSS - fixed.css içeriği buraya taşındı -->
+    <link rel="stylesheet" href="css/tutorial.css">
+    <link rel="stylesheet" href="css/theme.css"> <!-- YENİ: Koyu/Açık tema desteği -->
     <link rel="stylesheet" href="css/search.css">
     <link rel="stylesheet" href="css/share.css">
     <link rel="stylesheet" href="css/ios-style.css">
-    <link rel="stylesheet" href="css/bottom-nav.css"> <!-- YENİ: Bottom nav CSS eklendi -->
-    <link rel="stylesheet" href="css/header-modern.css"> <!-- YENİ: Modern Header CSS eklendi -->
-    <link rel="stylesheet" href="css/menu-tabs.css"> <!-- YENİ: Menü sekmeleri için düzeltme -->
-    <link rel="stylesheet" href="css/modal.css"> <!-- YENİ: Modal düzeltmeleri -->
+    <link rel="stylesheet" href="css/bottom-nav.css">
+    <link rel="stylesheet" href="css/header-modern.css">
+    <link rel="stylesheet" href="css/menu-tabs.css">
+    <link rel="stylesheet" href="css/modal.css">
     
     <!-- Font Awesome ikonu kütüphanesi -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
@@ -68,6 +72,7 @@
             <button id="searchBtn" class="header-btn" aria-label="Menüde Ara">
                 <i class="fas fa-search"></i>
             </button>
+            <!-- Tema değiştirme butonu theme-switcher.js tarafından otomatik eklenecek -->
             <button id="favoritesBtn" class="header-btn heart-btn" aria-label="Favoriler">
                 <i class="fas fa-heart"></i>
                 <span class="notification-badge">0</span>
@@ -113,10 +118,10 @@
         <!-- Yapışkan menü sekmeleri - Sıralaması düzeltildi -->
         <div class="menu-tabs-container">
             <div class="menu-tabs">
-                <a href="#mainDishesSection" class="menu-tab" data-target="mainDishes">
+                <a href="#mainDishesSection" class="menu-tab active" data-target="mainDishes">
                     <span class="tab-emoji">🍳</span> Ana Yemekler
                 </a>
-                <a href="#dessertsSection" class="menu-tab active" data-target="desserts">
+                <a href="#dessertsSection" class="menu-tab" data-target="desserts">
                     <span class="tab-emoji">🍰</span> Tatlılar
                 </a>
                 <a href="#drinksSection" class="menu-tab" data-target="drinks">
@@ -135,7 +140,7 @@
                     <span class="tab-emoji">🥗</span> Salatalar
                 </a>
                 <a href="#favoritesSection" class="menu-tab" data-target="favorites">
-                    <span class="tab-emoji">❤️</span> Favorilerim
+                    <i class="fas fa-heart"></i> Favorilerim
                 </a>
             </div>
         </div>
@@ -211,7 +216,7 @@
             </div>
         </section>
 
-        <section id="saladsSection" class="menu-section"></section>
+        <section id="saladsSection" class="menu-section">
             <h2 class="section-title">🥗 Salatalar</h2>
             <div class="menu-items" id="salads">
                 <!-- Menu items will be dynamically populated -->
@@ -279,42 +284,41 @@
             </div>
         </div>
     </div>
-    
+
     <!-- AR Troubleshooting Status -->
     <div class="ar-troubleshoot-status" id="arTroubleshootStatus" style="display: none;">
         <div class="ar-status-content">
             <div class="ar-status-title">AR Durum Kontrolü</div>
             <div class="ar-status-message" id="arStatusMessage">Kontrol ediliyor...</div>
             <div class="ar-status-actions">
-                <button id="retryARButton">Tekrar Dene</button>
                 <button id="closeARStatusButton">Kapat</button>
+                <button id="retryARButton">Tekrar Dene</button>
             </div>
         </div>
     </div>
     
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     
     <!-- Uygulama Scriptleri - sıralama güncellendi -->
     <script src="js/resolveAssetPath.js"></script>
     <script src="js/popup.js"></script>
-    <script src="js/menu-data.js"></script> <!-- YENİ: Menü veri modülü -->
+    <script src="js/menu-data.js"></script>
     <script src="js/ar-module.js"></script>
     <script src="js/search.js"></script>
-    <script src="js/menu-loader.js"></script> <!-- YENİ: Menü yükleme modülü -->
+    <script src="js/menu-loader.js"></script>
+    <script src="js/theme-switcher.js"></script> <!-- YENİ: Tema değiştirme script'i -->
     <script src="js/bottom-nav.js"></script>
-    <script src="js/favorites.js"></script> <!-- YENİ: Favoriler modülü -->
-    <!-- <script src="js/tutorial.js"></script> --> <!-- ESKİ: Bu satırı kaldırdık -->
-    <script src="js/tutorial-improved.js"></script> <!-- YENİ: Geliştirilmiş tutorial sistemi -->
+    <script src="js/favorites.js"></script>
+    <script src="js/tutorial.js"></script>
     <script src="js/share.js"></script>
-    <script src="js/qr-scanner.js"></script> <!-- QR tarayıcı -->
-    <!-- QR test modülü kaldırıldı -->
+    <script src="js/qr-scanner.js"></script>
     <script src="js/index.js" defer></script>
     <script src="js/header.js"></script>
     <script src="js/troubleshoot.js"></script>
-    <script src="js/scroll-interactions.js"></script> <!-- YENİ: Kaydırma etkileşimleri için script -->
+    <script src="js/scroll-interactions.js"></script>
 
     <!-- Yükleme ekranı güvenliği -->
     <script>
@@ -331,8 +335,7 @@
                     setTimeout(function() {
                         loadingScreen.style.display = 'none';
                         document.body.style.overflow = '';
-                    }, 300);
-                    
+                    }, 300);   
                     console.log("Yükleme ekranı başarıyla kapatıldı");
                 }
             } catch (error) {
@@ -364,28 +367,20 @@
             // Tutorial modal düzeltmesi
             const instructionsModal = document.getElementById('instructionsModal');
             if (instructionsModal) {
-                // Modalı kapatma düğmesi - TutorialController üzerinden
+                // Modalı kapatma düğmesi
                 const closeBtn = instructionsModal.querySelector('#closeModalBtn');
                 if (closeBtn) {
                     closeBtn.addEventListener('click', function() {
-                        if (window.TutorialController) {
-                            window.TutorialController.close();
-                        } else {
-                            instructionsModal.style.display = 'none';
-                            document.body.style.overflow = '';
-                        }
+                        instructionsModal.style.display = 'none';
+                        document.body.style.overflow = '';
                     });
                 }
                 
-                // Dışarıya tıklama ile kapatma - TutorialController üzerinden
+                // Dışarıya tıklama ile kapatma
                 instructionsModal.addEventListener('click', function(event) {
                     if (event.target === instructionsModal) {
-                        if (window.TutorialController) {
-                            window.TutorialController.close();
-                        } else {
-                            instructionsModal.style.display = 'none';
-                            document.body.style.overflow = '';
-                        }
+                        instructionsModal.style.display = 'none';
+                        document.body.style.overflow = '';
                     }
                 });
                 

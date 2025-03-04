@@ -1,0 +1,27 @@
+/* Favoriler sekmesi için özel stil */
+.menu-tab[data-target="favorites"] {
+    color: #FF5A65; /* Favori kalp rengi */
+    border-color: rgba(255, 90, 101, 0.3);
+}
+
+.menu-tab[data-target="favorites"].active {
+    background-color: #FF5A65; /* Aktifken farklı renk */
+    color: white;
+}
+
+.menu-tab[data-target="favorites"] i.fas.fa-heart {
+    color: inherit;
+}
+
+.menu-tab[data-target="favorites"]:hover:not(.active) {
+    background-color: rgba(255, 90, 101, 0.1);
+}
+
+/* Dark mode hover düzeltmesi */
+body.dark-mode .menu-tab:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .menu-tab[data-target="favorites"]:hover:not(.active) {
+    background-color: rgba(255, 90, 101, 0.2);
+}

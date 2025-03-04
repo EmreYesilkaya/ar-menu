@@ -191,54 +191,67 @@ function initAfterDOMLoaded() {
     }
 }
 
-// Yükleme ekranını gizle - daha güvenli bir fonksiyon
+// Yükleme ekranını gizle - PopupManager kullanılarak güncellendi
 function hideLoadingScreen() {
-    if (loadingScreen) {
-        loadingScreen.style.display = 'none';
-        document.body.style.overflow = '';
-        console.log("Yükleme ekranı kapatıldı");
+    if (window.PopupManager) {
+        window.PopupManager.hideLoading();
     } else {
-        console.warn("loadingScreen elementi bulunamadı");
+        if (loadingScreen) {
+            loadingScreen.style.display = 'none';
+            document.body.style.overflow = '';
+            console.log("Yükleme ekranı kapatıldı");
+        } else {
+            console.warn("loadingScreen elementi bulunamadı");
+        }
     }
 }
 
-// Yükleme hatası göster
+// Yükleme hatası göster - PopupManager kullanılarak güncellendi
 function showLoadingError(message) {
-    // Yükleme ekranını değiştir
-    if (loadingScreen) {
-        // Spinner'ı durdur
-        const spinner = loadingScreen.querySelector('.spinner');
-        if (spinner) spinner.style.display = 'none';
-        
-        // Emoji'yi değiştir
-        const emoji = loadingScreen.querySelector('.loading-emoji');
-        if (emoji) emoji.innerHTML = '⚠️';
-        
-        // Mesajı güncelle
-        const text = loadingScreen.querySelector('.loading-text');
-        if (text) text.textContent = message;
-        
-        // Yeniden dene butonu ekle
-        const reloadBtn = document.createElement('button');
-        reloadBtn.textContent = "Sayfayı Yenile";
-        reloadBtn.style.padding = "10px 20px";
-        reloadBtn.style.marginTop = "20px";
-        reloadBtn.style.backgroundColor = "var(--primary)";
-        reloadBtn.style.color = "white";
-        reloadBtn.style.border = "none";
-        reloadBtn.style.borderRadius = "8px";
-        reloadBtn.style.cursor = "pointer";
-        reloadBtn.onclick = () => window.location.reload();
-        
-        loadingScreen.appendChild(reloadBtn);
+    if (window.PopupManager) {
+        window.PopupManager.showLoadingError(message);
     } else {
-        // Yükleme ekranı yoksa alert göster
-        alert(message);
+        // Eski yöntem için kod korundu
+        if (loadingScreen) {
+            const spinner = loadingScreen.querySelector('.spinner');
+            if (spinner) spinner.style.display = 'none';
+            
+            const emoji = loadingScreen.querySelector('.loading-emoji');
+            if (emoji) emoji.innerHTML = '⚠️';
+            
+            const text = loadingScreen.querySelector('.loading-text');
+            if (text) text.textContent = message;
+            
+            const reloadBtn = document.createElement('button');
+            reloadBtn.textContent = "Sayfayı Yenile";
+            reloadBtn.style.padding = "10px 20px";
+            reloadBtn.style.marginTop = "20px";
+            reloadBtn.style.backgroundColor = "var(--primary)";
+            reloadBtn.style.color = "white";
+            reloadBtn.style.border = "none";
+            reloadBtn.style.borderRadius = "8px";
+            reloadBtn.style.cursor = "pointer";
+            reloadBtn.onclick = () => window.location.reload();
+            
+            loadingScreen.appendChild(reloadBtn);
+        } else {
+            alert(message);
+        }
     }
 }
 
-// Show/hide loading screen with improved UX
+// Show/hide loading screen - PopupManager kullanılarak güncellendi
 function showLoading(show, message = "Yükleniyor...") {
+    if (window.PopupManager) {
+        if (show) {
+            window.PopupManager.showLoading(message);
+        } else {
+            window.PopupManager.hideLoading();
+        }
+        return;
+    }
+    
+    // Eski yöntem için kod korundu
     if (!loadingScreen) {
         console.warn("Loading screen elementi bulunamadı");
         return;
@@ -251,7 +264,6 @@ function showLoading(show, message = "Yükleniyor...") {
         textElement.textContent = message;
     }
     
-    // Make sure body doesn't scroll while loading
     if (show) {
         document.body.style.overflow = 'hidden';
     } else {
@@ -728,9 +740,14 @@ function closeARSession() {
     }
 }
 
-// Enhanced status message with icons based on message type
+// Enhanced status message - PopupManager kullanılarak güncellendi
 function showStatusMessage(message, duration = 3000) {
-    // Determine message type for appropriate icon and styling
+    if (window.PopupManager) {
+        window.PopupManager.showStatusMessage(message, duration);
+        return;
+    }
+    
+    // Eski yöntem için kod korundu
     let icon = 'ℹ️';
     let className = 'info';
     

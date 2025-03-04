@@ -1,0 +1,163 @@
+/**
+ * AR Menü Paylaşım Özellikleri Stilleri
+ * Sosyal medya paylaşımı için modern arayüz
+ */
+
+/* Paylaşım modal arkaplanı */
+.ar-share-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Paylaşım modal içeriği */
+.ar-share-content {
+    background-color: white;
+    border-radius: 16px;
+    max-width: 90%;
+    width: 500px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+/* Modal header */
+.ar-share-content .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.ar-share-content .modal-header h3 {
+    margin: 0;
+    color: #333;
+    font-weight: 600;
+}
+
+.ar-share-content .close-modal {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777;
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.ar-share-content .close-modal:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* Paylaşım önizleme */
+.share-preview {
+    position: relative;
+}
+
+.share-image {
+    width: 100%;
+    display: block;
+}
+
+.share-overlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.share-branding {
+    font-weight: bold;
+    color: #6A5AE0;
+}
+
+/* Paylaşım açıklaması */
+.share-description {
+    padding: 15px 20px;
+}
+
+/* Paylaşım butonları */
+.share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.share-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 100px;
+    transition: all 0.2s;
+}
+
+.share-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.share-btn:active {
+    transform: translateY(0);
+}
+
+.whatsapp {
+    background-color: #25D366;
+}
+
+.instagram {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.download {
+    background-color: #6A5AE0;
+}
+
+/* Paylaşım butonu animasyonu */
+@keyframes pulse-share {
+    0% { box-shadow: 0 0 0 0 rgba(106, 90, 224, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(106, 90, 224, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(106, 90, 224, 0); }
+}
+
+/* Mobil uyumluluk */
+@media (max-width: 576px) {
+    .ar-share-content {
+        width: 95%;
+    }
+    
+    .share-buttons {
+        flex-direction: column;
+    }
+    
+    .share-btn {
+        width: 100%;
+    }
+}

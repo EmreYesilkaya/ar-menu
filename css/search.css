@@ -1,0 +1,105 @@
+/**
+ * AR Menü Arama ve Filtreleme Özellikleri Stilleri
+ * Modern ve kullanıcı dostu arama arayüzü
+ */
+
+/* Arama kutusu container */
+.search-container {
+    padding: 15px;
+    background-color: #fff;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Arama kutusu flex container */
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* Arama input alanı */
+.search-input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.search-input:focus {
+    border-color: #6A5AE0;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(106, 90, 224, 0.2);
+}
+
+/* Filtreleme butonları container */
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Filtreleme butonları */
+.filter-btn {
+    padding: 8px 12px;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-btn.active {
+    background-color: #6A5AE0;
+    color: white;
+}
+
+.filter-btn:hover {
+    background-color: #e5e5e5;
+}
+
+.filter-btn.active:hover {
+    background-color: #594DC2;
+}
+
+/* Sonuç bulunamadı mesajı */
+.no-results {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.no-results-emoji {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.no-results-title {
+    color: #5B5D72;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.no-results-message {
+    color: #8A8C9D;
+}
+
+/* Mobil uyumluluk */
+@media (max-width: 576px) {
+    .search-input {
+        font-size: 0.9rem;
+        padding: 10px 12px;
+    }
+    
+    .filter-btn {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+    
+    .search-container {
+        padding: 12px;
+    }
+}

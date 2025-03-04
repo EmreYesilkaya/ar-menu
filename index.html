@@ -4,22 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AR Menü - Modern Restoran Deneyimi</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- iOS için meta etiketleri ekle -->
+    
+    <!-- Başlangıç scripti - hemen yükleme ekranını gösterir -->
+    <script src="js/init.js"></script>
+    
+    <!-- CSS Dosyaları - Doğru klasör yapısıyla -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/tutorial.css">
+    <link rel="stylesheet" href="css/loading.css">
+    <link rel="stylesheet" href="css/search.css">
+    <link rel="stylesheet" href="css/share.css">
+    
+    <!-- iOS için meta etiketleri -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
+    <!-- Font Awesome ikonu kütüphanesi -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-    <!-- Model viewer'ı mobile-ar sürümü ile değiştirelim -->
+    
+    <!-- Model viewer kütüphanesi -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer-usdz-ios-support.js"></script>
-    <!-- Temel model viewer kütüphanesi -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+    <!-- Eksik meta tag'leri -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="theme-color" content="#6A5AE0"> 
+    <meta name="apple-mobile-web-app-title" content="AR Menü">
+
+    <!-- Preconnect ve DNS prefetch ile daha hızlı yükleme -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://unpkg.com">
 </head>
 <body>
     <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
+    <div class="loading-screen" id="loadingScreen" style="display: flex;">
         <div class="loading-emoji">🍽️</div>
-        <div class="spinner"></div>
+        <div class="spinner-container">
+            <div class="spinner"></div>
+        </div>
         <p class="loading-text">AR Menü Yükleniyor...</p>
     </div>
 
@@ -39,11 +63,26 @@
             <div class="alert-emoji">👋</div>
             <div>
                 <strong>AR Deneyimi için:</strong> Yemek görsellerine tıklayın ve kameranızı düz bir yüzeye doğrultun. 
-                <a href="#" id="showInstructionsBtn" style="color: var(--primary); font-weight: 600;">Detaylı bilgi</a>
+                <button id="showInstructionsBtn" class="instruction-button">
+                    <i class="fas fa-question-circle"></i> Nasıl Kullanılır?
+                </button>
             </div>
         </div>
 
-        <!-- Yapışkan menü sekmeleri - margin ve padding eklendi -->
+        <!-- Arama kutusu -->
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="menuSearch" class="search-input" placeholder="Menüde ara..." aria-label="Menüde ara">
+            </div>
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="all">Tümü</button>
+                <button class="filter-btn" data-filter="popular">🔥 Popüler</button>
+                <button class="filter-btn" data-filter="vegan">🥗 Vegan</button>
+                <button class="filter-btn" data-filter="spicy">🌶️ Acılı</button>
+            </div>
+        </div>
+
+        <!-- Yapışkan menü sekmeleri -->
         <div class="menu-tabs-container">
             <div class="menu-tabs">
                 <a href="#mainDishesSection" class="menu-tab active" data-target="mainDishes">
@@ -61,7 +100,7 @@
             </div>
         </div>
 
-        <!-- AR Container - Geliştirilmiş hata mesajları -->
+        <!-- AR Container -->
         <div class="ar-container" id="arContainer" style="display: none;">
             <canvas id="ar-canvas"></canvas>
             <div id="model-error" style="display: none; color: #ff5a5a; background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; max-width: 80%;">
@@ -83,123 +122,37 @@
                 <button class="control-btn" id="rotateLeftBtn"><i class="fas fa-undo"></i></button>
                 <button class="control-btn" id="resetBtn"><i class="fas fa-sync"></i></button>
                 <button class="control-btn" id="rotateRightBtn"><i class="fas fa-redo"></i></button>
+                <button class="control-btn" id="shareArBtn"><i class="fas fa-share-alt"></i></button>
                 <button class="control-btn" id="closeArBtn"><i class="fas fa-times"></i></button>
             </div>
         </div>
 
-        <!-- Menü Bölümleri - artık hepsi görünür olacak -->
+        <!-- Menü Bölümleri -->
         <section id="mainDishesSection" class="menu-section">
             <h2 class="section-title">🍳 Ana Yemekler</h2>
             <div class="menu-items" id="mainDishes">
-                <!-- Menu items will be dynamically populated, showing example format -->
-                <div class="menu-item">
-                    <img src="/api/placeholder/220/140" alt="Köfte" class="menu-item-img">
-                    <div class="menu-item-info">
-                        <div>
-                            <span class="food-tag tag-popular">🔥 Popüler</span>
-                        </div>
-                        <h3 class="menu-item-title">Izgara Köfte</h3>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>4.5</span>
-                            <span class="rating-count">(124)</span>
-                        </div>
-                        <p class="menu-item-price">₺80 <span style="font-size: 1.2rem;">💰</span></p>
-                        <div class="menu-item-ar">
-                            <i class="fas fa-cube"></i> AR'da Gör
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="menu-item">
-                    <img src="/api/placeholder/220/140" alt="Tavuk" class="menu-item-img">
-                    <div class="menu-item-info">
-                        <div>
-                            <span class="food-tag tag-spicy">🌶️ Acılı</span>
-                        </div>
-                        <h3 class="menu-item-title">Baharatlı Tavuk</h3>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span>4.0</span>
-                            <span class="rating-count">(86)</span>
-                        </div>
-                        <p class="menu-item-price">₺70 <span style="font-size: 1.2rem;">💰</span></p>
-                        <div class="menu-item-ar">
-                            <i class="fas fa-cube"></i> AR'da Gör
-                        </div>
-                    </div>
-                </div>
+                <!-- Menu items will be dynamically populated -->
             </div>
         </section>
 
         <section id="dessertsSection" class="menu-section">
             <h2 class="section-title">🍰 Tatlılar</h2>
             <div class="menu-items" id="desserts">
-                <!-- Example dessert item -->
-                <div class="menu-item">
-                    <img src="/api/placeholder/220/140" alt="Künefe" class="menu-item-img">
-                    <div class="menu-item-info">
-                        <div>
-                            <span class="food-tag tag-popular">🔥 Popüler</span>
-                        </div>
-                        <h3 class="menu-item-title">Künefe</h3>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>5.0</span>
-                            <span class="rating-count">(210)</span>
-                        </div>
-                        <p class="menu-item-price">₺65 <span style="font-size: 1.2rem;">💰</span></p>
-                        <div class="menu-item-ar">
-                            <i class="fas fa-cube"></i> AR'da Gör
-                        </div>
-                    </div>
-                </div>
+                <!-- Menu items will be dynamically populated -->
             </div>
         </section>
 
         <section id="drinksSection" class="menu-section">
             <h2 class="section-title">🍹 İçecekler</h2>
             <div class="menu-items" id="drinks">
-                <!-- Example drink item -->
-                <div class="menu-item">
-                    <img src="/api/placeholder/220/140" alt="Ayran" class="menu-item-img">
-                    <div class="menu-item-info">
-                        <h3 class="menu-item-title">Ayran</h3>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span>4.2</span>
-                            <span class="rating-count">(92)</span>
-                        </div>
-                        <p class="menu-item-price">₺15 <span style="font-size: 1.2rem;">💰</span></p>
-                        <div class="menu-item-ar">
-                            <i class="fas fa-cube"></i> AR'da Gör
-                        </div>
-                    </div>
-                </div>
+                <!-- Menu items will be dynamically populated -->
             </div>
         </section>
         
-        <!-- Popüler Bölümü - HTML yapı hatası düzeltildi -->
         <section id="popularSection" class="menu-section">
             <h2 class="section-title">🔥 Popüler Seçimler</h2>
             <div class="menu-items" id="popularItems">
-                <!-- Popüler ürünler JavaScript ile doldurulacak -->
+                <!-- Menu items will be dynamically populated -->
             </div>
         </section>
         
@@ -218,38 +171,11 @@
     <div class="modal" id="instructionsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>📱 AR Nasıl Kullanılır?</h3>
+                <h3>📱 AR Deneyimi Eğitimi</h3>
                 <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
-                <div class="instruction-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <p>İstediğiniz yemeğin görseline tıklayın ve "AR'da Gör" seçeneğini seçin.</p>
-                        <img src="https://placehold.co/400x200/eee/999?text=Adim%201" alt="Step 1" class="step-image">
-                    </div>
-                </div>
-                <div class="instruction-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <p>Kamera izinlerini kabul edin. AR deneyimi için kamera erişimine ihtiyaç vardır.</p>
-                        <img src="https://placehold.co/400x200/eee/999?text=Adim%202" alt="Step 2" class="step-image">
-                    </div>
-                </div>
-                <div class="instruction-step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <p>Kameranızı düz bir yüzeye doğrultun. Sistem otomatik olarak yüzeyi algılayacaktır.</p>
-                        <img src="https://placehold.co/400x200/eee/999?text=Adim%203" alt="Step 3" class="step-image">
-                    </div>
-                </div>
-                <div class="instruction-step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <p>Ekrana dokunarak 3D modeli yerleştirin. Modeli döndürmek için kontrol düğmelerini kullanabilirsiniz.</p>
-                        <img src="https://placehold.co/400x200/eee/999?text=Adim%204" alt="Step 4" class="step-image">
-                    </div>
-                </div>
+                <!-- Tutorial içeriği tutorial.js tarafından doldurulacak -->
             </div>
         </div>
     </div>
@@ -271,181 +197,46 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
     
-    <!-- Ana uygulama kodu -->
-    <script src="index.js" defer></script>
-    
-    <!-- Sorun giderme kodu -->
-    <script src="troubleshoot.js"></script>
-    
-    <!-- iOS için özel AR desteği kontrolü -->
-    <script>
-        // Safari'de AR Quick Look desteğini test et ve kullanıcıya bildir
-        document.addEventListener('DOMContentLoaded', function() {
-            // iOS Safari'de QR desteği var mı kontrol et
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-            
-            if (isIOS) {
-                // AR Quick Look desteği var mı kontrol et
-                const a = document.createElement('a');
-                const hasARSupport = a.relList && a.relList.supports && a.relList.supports('ar');
-                
-                console.log("iOS AR Quick Look Desteği:", hasARSupport);
-                
-                // AR desteği yok veya Safari değilse uyarı göster
-                if (!hasARSupport || !isSafari) {
-                    const arInstructions = document.getElementById('arInstructions');
-                    if (arInstructions) {
-                        arInstructions.className = 'alert alert-warning';
-                        arInstructions.innerHTML = '<div class="alert-emoji">⚠️</div><div><strong>AR Uyarı:</strong> En iyi AR deneyimi için Safari tarayıcısını kullanmanız önerilir.</div>';
-                    }
-                }
-            }
-        });
-    </script>
+    <!-- Uygulama Scriptleri -->
+    <script src="js/popup.js"></script>
+    <script src="js/tutorial.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/share.js"></script>
+    <script src="js/index.js" defer></script>
+    <script src="js/troubleshoot.js"></script>
 
-    <!-- Dosya yolu doğrulama ve hata ayıklama -->
+    <!-- Yükleme ekranı güvenliği -->
     <script>
-        // Dosya yolunu kontrol etmek için özel işlev
-        function checkModelExists(url) {
-            console.log(`Model kontrolü: ${url}`);
-            
-            // Göreli URL'yi tam URL'ye çevir
-            const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-            const absoluteUrl = new URL(url, baseUrl).href;
-            
-            console.log(`Tam URL: ${absoluteUrl}`);
-            
-            return fetch(url, { 
-                method: 'HEAD',
-                cache: 'no-store',
-                headers: {
-                    'Cache-Control': 'no-cache'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log(`✅ Model bulundu: ${url}`);
-                    return true;
-                } else {
-                    console.error(`❌ Model bulunamadı: ${url} (HTTP ${response.status})`);
-                    return false;
-                }
-            })
-            .catch(error => {
-                console.error(`❌ Ağ hatası: ${url}`, error);
-                return false;
-            });
-        }
-
-        // CORS sorunu tespit et
-        document.addEventListener('DOMContentLoaded', function() {
-            // Sayfa file:// ile mi açıldı kontrol et
-            if (window.location.protocol === 'file:') {
-                console.warn("⚠️ Sayfayı file:// protokolüyle açtınız. Bu durum 3D modellerin yüklenmesini engelleyebilir.");
-                console.warn("⚠️ Çözüm için: Projeyi bir web sunucusu üzerinde çalıştırın (örn. VS Code Live Server)");
-                
-                const corsWarning = document.createElement('div');
-                corsWarning.style.backgroundColor = '#fff3cd';
-                corsWarning.style.color = '#856404';
-                corsWarning.style.padding = '15px';
-                corsWarning.style.margin = '15px 0';
-                corsWarning.style.borderRadius = '8px';
-                corsWarning.style.borderLeft = '5px solid #ffeeba';
-                corsWarning.innerHTML = `
-                    <strong>⚠️ 3D Model Erişim Sorunu</strong>
-                    <p>Tarayıcı dosya erişim kısıtlamaları nedeniyle modeller yüklenemiyor olabilir.</p>
-                    <p><strong>Çözüm:</strong> Projeyi bir web sunucusu üzerinde çalıştırın (örn. VS Code Live Server).</p>
-                `;
-                
-                // Uyarıyı sayfanın üst kısmına ekle
-                const mainContainer = document.querySelector('.main-container');
-                if (mainContainer) {
-                    mainContainer.insertBefore(corsWarning, mainContainer.firstChild);
-                }
-            }
-            
-            // Test et: Modeller doğru konumda mı?
-            console.log("Model dosya yolları kontrol ediliyor...");
-            const testPaths = [
-                './models/kofte.glb',
-                'models/kofte.glb',
-                '../models/kofte.glb',
-                './assets/models/kofte.glb'
-            ];
-            
-            Promise.all(testPaths.map(checkModelExists)).then(results => {
-                const workingPaths = testPaths.filter((_, i) => results[i]);
-                if (workingPaths.length > 0) {
-                    console.log("✅ Çalışan model yolları:", workingPaths);
-                } else {
-                    console.error("❌ Hiçbir model yolu çalışmıyor. Lütfen models klasörünüzü kontrol edin.");
-                }
-            });
-        });
-    </script>
-
-    <!-- Model yükleme hatalarını göstermek için eklenen script -->
-    <script>
-        // GLB modelleri yüklenemediğinde gösterilecek hata işleyicisi
-        document.addEventListener('DOMContentLoaded', function() {
-            // model-viewer hatalarını takip et
-            document.body.addEventListener('error', function(event) {
-                const target = event.target;
-                if (target.tagName === 'MODEL-VIEWER') {
-                    console.error('Model-viewer hatası:', event);
-                    document.getElementById('model-error').style.display = 'block';
+        // Sayfa tamamen yüklendiğinde yükleme ekranını kapat
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loadingScreen = document.getElementById('loadingScreen');
+                if (loadingScreen && loadingScreen.style.display !== 'none' && 
+                    loadingScreen.style.opacity !== '0') {
+                    console.warn('Yükleme ekranı kapanmamış, manuel kapatılıyor!');
                     
-                    // Model hatasının detaylarını göster
-                    const modelErrorDetails = document.getElementById('model-error-details');
-                    if (modelErrorDetails) {
-                        const src = target.getAttribute('src');
-                        modelErrorDetails.textContent = `Yüklenemedi: ${src || 'belirtilmemiş yol'}`;
+                    if (window._hideLoadingScreen) {
+                        window._hideLoadingScreen(300);
+                    } else {
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(function() {
+                            loadingScreen.style.display = 'none';
+                        }, 300);
                     }
                 }
-            }, true);
+            }, 3000);
         });
-    </script>
-
-    <!-- Yukarı çıkma butonu - script etiketi düzeltildi -->
-    <script>
-        // createBackToTopButton fonksiyonu eksikse tanımlayalım
-        if (typeof createBackToTopButton !== 'function') {
-            function createBackToTopButton() {
-                const backToTopButton = document.getElementById('backToTop');
-                if (backToTopButton) {
-                    // Buton zaten var, sadece event listener ekleyelim
-                    backToTopButton.addEventListener('click', () => {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    });
-                } else {
-                    // Buton yoksa oluştur ve ekle
-                    const newButton = document.createElement('div');
-                    newButton.id = 'backToTop';
-                    newButton.className = 'back-to-top';
-                    newButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
-                    newButton.addEventListener('click', () => {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    });
-                    document.body.appendChild(newButton);
+        
+        // ACİL DURUM: Son çare kapatma
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loadingScreen = document.getElementById('loadingScreen');
+                if (loadingScreen && loadingScreen.style.display !== 'none') {
+                    console.warn('ACİL DURUM: Yükleme ekranı hala açık, zorla kapatılıyor!');
+                    loadingScreen.style.display = 'none'; // Doğrudan gizle
                 }
-                
-                // Scroll event listener'ı kontrol et ve ekle
-                const handleScrollExists = window.addEventListener('scroll', () => {
-                    const btn = document.getElementById('backToTop');
-                    if (btn) {
-                        if (window.scrollY > 300) {
-                            btn.classList.add('visible');
-                        } else {
-                            btn.classList.remove('visible');
-                        }
-                    }
-                });
-            }
-            
-            // Sayfa yüklendiğinde çalıştır
-            document.addEventListener('DOMContentLoaded', createBackToTopButton);
-        }
+            }, 1000);
+        });
     </script>
 </body>
 </html>

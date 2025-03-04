@@ -29,6 +29,9 @@
     <link rel="stylesheet" href="css/share.css">
     <link rel="stylesheet" href="css/ios-style.css">
     <link rel="stylesheet" href="css/bottom-nav.css"> <!-- YENİ: Bottom nav CSS eklendi -->
+    <link rel="stylesheet" href="css/header-modern.css"> <!-- YENİ: Modern Header CSS eklendi -->
+    <link rel="stylesheet" href="css/menu-tabs.css"> <!-- YENİ: Menü sekmeleri için düzeltme -->
+    <link rel="stylesheet" href="css/modal.css"> <!-- YENİ: Modal düzeltmeleri -->
     
     <!-- Font Awesome ikonu kütüphanesi -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
@@ -53,21 +56,19 @@
     <!-- Status Message -->
     <div class="status-message" id="statusMessage"></div>
 
-    <!-- Enhanced User-Friendly Header -->
+    <!-- Enhanced User-Friendly Header - iOS Temalı -->
     <header class="header ios-header">
         <div class="header-branding">
-            <div class="logo-container">
-                <img src="https://placehold.co/120/40" alt="Restaurant Logo" class="logo">
-            </div>
             <div class="brand-text">
-                <h1>✨ AR Menü</h1>
+                <h1><span>AR</span> Menü</h1>
+                <p class="brand-tagline">Modern Restoran</p>
             </div>
         </div>
         <div class="header-actions">
             <button id="searchBtn" class="header-btn" aria-label="Menüde Ara">
                 <i class="fas fa-search"></i>
             </button>
-            <button id="favoritesBtn" class="header-btn" aria-label="Favoriler">
+            <button id="favoritesBtn" class="header-btn heart-btn" aria-label="Favoriler">
                 <i class="fas fa-heart"></i>
                 <span class="notification-badge">0</span>
             </button>
@@ -233,10 +234,10 @@
         </button>
     </div>
 
-    <!-- Yukarı Çık Butonu -->
-    <div id="backToTop" class="back-to-top">
+    <!-- Yukarı Çık Butonu - Güncellenmiş hali -->
+    <button id="backToTop" class="back-to-top" aria-label="Sayfanın başına dön">
         <i class="fas fa-arrow-up"></i>
-    </div>
+    </button>
 
     <!-- Alt Gezinme Çubuğu - AR düğmesi güncellendi -->
     <nav class="bottom-nav">
@@ -302,13 +303,14 @@
     <script src="js/menu-loader.js"></script> <!-- YENİ: Menü yükleme modülü -->
     <script src="js/bottom-nav.js"></script>
     <script src="js/favorites.js"></script> <!-- YENİ: Favoriler modülü -->
-    <script src="models/tutorial.js"></script>
+    <script src="js/tutorial.js"></script> <!-- GÜNCELLEME: Konum değiştirildi - models/ yerine js/ klasörü -->
     <script src="js/share.js"></script>
     <script src="js/qr-scanner.js"></script> <!-- QR tarayıcı -->
     <!-- QR test modülü kaldırıldı -->
     <script src="js/index.js" defer></script>
     <script src="js/header.js"></script>
     <script src="js/troubleshoot.js"></script>
+    <script src="js/scroll-interactions.js"></script> <!-- YENİ: Kaydırma etkileşimleri için script -->
 
     <!-- Yükleme ekranı güvenliği -->
     <script>
@@ -349,6 +351,45 @@
             localStorage.removeItem('ar_tutorial_shown');
             console.log('Tutorial test modu: localStorage temizlendi.');
         }
+    </script>
+
+    <!-- Sayfanın en alt kısmına mobil modalde düzeltmeler için -->
+    <script>
+        // Modalları mobil cihazlarda düzgün çalıştıracak kod
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tutorial modal düzeltmesi
+            const instructionsModal = document.getElementById('instructionsModal');
+            if (instructionsModal) {
+                // Modalı kapatma düğmesi
+                const closeBtn = instructionsModal.querySelector('#closeModalBtn');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function() {
+                        instructionsModal.style.display = 'none';
+                        document.body.style.overflow = '';
+                    });
+                }
+                
+                // Dışarıya tıklama ile kapatma
+                instructionsModal.addEventListener('click', function(event) {
+                    if (event.target === instructionsModal) {
+                        instructionsModal.style.display = 'none';
+                        document.body.style.overflow = '';
+                    }
+                });
+                
+                // Eğer mobil bir cihazsa modal içeriğinin scroll edilebilmesi için
+                if (window.innerWidth <= 768) {
+                    const modalContent = instructionsModal.querySelector('.modal-content');
+                    if (modalContent) {
+                        modalContent.addEventListener('touchstart', function(e) {
+                            if (e.target.closest('.modal-body')) {
+                                e.stopPropagation();
+                            }
+                        });
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>

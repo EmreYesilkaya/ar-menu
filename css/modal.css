@@ -168,3 +168,167 @@
 .no-results-message {
     color: #8A8C9D;
 }
+
+/**
+ * Modal ve Tutorial Stillerini Düzeltme
+ */
+
+/* Modal temel stilleri */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.modal-content {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: modalFadeIn 0.3s;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Modal içerik bölümleri */
+.modal-header {
+    padding: 20px 20px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #f0f0f0;
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 5;
+    border-radius: 20px 20px 0 0;
+}
+
+.modal-header h3 {
+    font-size: 1.4rem;
+    color: var(--primary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-body {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Mobil için scroll düzeltmesi */
+@media (max-width: 768px) {
+    .modal-content {
+        max-height: 85vh;
+    }
+    
+    .modal-body {
+        max-height: calc(85vh - 70px); /* header yüksekliğini çıkarıyoruz */
+        padding: 15px;
+    }
+    
+    .modal-header {
+        padding: 15px 15px 10px;
+    }
+    
+    .modal-header h3 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Kapatma butonu */
+.close-modal {
+    background: none;
+    border: none;
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-medium);
+    transition: all 0.2s ease;
+}
+
+.close-modal:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--text-dark);
+}
+
+/* Tutorial adımları için stil düzeltmeleri */
+.instruction-step {
+    display: flex;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.step-number {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 3px 5px rgba(106, 90, 224, 0.2);
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+}
+
+.step-content p {
+    margin-bottom: 10px;
+    color: var(--text-medium);
+    line-height: 1.5;
+}
+
+.step-image {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 480px) {
+    .instruction-step {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .step-number {
+        margin-bottom: 5px;
+    }
+}

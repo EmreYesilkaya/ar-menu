@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Favoriler butonu işlevi
+  // Favoriler butonu işlevi - GÜNCELLENDI: Favoriler bölümüne kaydırma eklendi
   const favoritesBtn = document.getElementById('favoritesBtn');
   if (favoritesBtn) {
     favoritesBtn.addEventListener('click', function() {
@@ -53,10 +53,34 @@ document.addEventListener('DOMContentLoaded', function() {
         window.navigator.vibrate([30, 20, 30]);
       }
       
-      showStatusMessage('Favorileriniz burada gösterilecek', 2000);
-      
-      // Gelecekte favoriler modal'ını açabilir
-      // openFavoritesModal();
+      // Favoriler bölümünü bul
+      const favoritesSection = document.getElementById('favoritesSection');
+      if (favoritesSection) {
+        // Favoriler sekmesini aktif et
+        const menuTabs = document.querySelectorAll('.menu-tab');
+        menuTabs.forEach(tab => {
+          if (tab.getAttribute('data-target') === 'favorites') {
+            tab.classList.add('active');
+          } else {
+            tab.classList.remove('active');
+          }
+        });
+        
+        // Favoriler bölümünü vurgula
+        favoritesSection.classList.add('highlight-section');
+        setTimeout(() => {
+          favoritesSection.classList.remove('highlight-section');
+        }, 2000);
+        
+        // Favoriler bölümüne kaydır
+        favoritesSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      } else {
+        // Favoriler bölümü bulunamazsa eski mesajı göster
+        showStatusMessage('Favorileriniz burada gösterilecek', 2000);
+      }
     });
   }
   

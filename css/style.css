@@ -36,7 +36,7 @@ body {
     overflow-x: hidden;
     line-height: 1.5;
     min-height: 100vh;
-    padding-top: 70px; /* Header yüksekliğine göre güncellendi */
+    padding-top: 130px; /* Increased to accommodate both header and menu tabs */
 }
 
 /* Header styling - completely redesigned for better user experience */
@@ -444,24 +444,19 @@ body {
     transition: var(--transition);
     position: relative;
     overflow: hidden;
-    scroll-margin-top: 120px; /* Yapışkan başlık için düzeltildi */
+    scroll-margin-top: 80px; /* Updated to account for fixed header and tabs */
     scroll-snap-align: start;
 }
 
-.menu-section:hover {
-    box-shadow: var(--shadow-lg);
-}
-
-/* Redesigned menu tabs with indicators */
+/* Redesigned menu tabs with indicators - UPDATED FOR STATIC POSITION */
 .menu-tabs-container {
-    position: sticky;
-    top: 70px; /* Header yüksekliğine göre güncellendi */
+    position: static; /* Changed from fixed to static */
+    width: 100%;
     background-color: var(--background);
-    padding: 0.8rem 0.5rem;
-    margin-bottom: 1rem; /* Azaltıldı */
-    z-index: 90;
+    padding: 1.2rem 0.5rem 0.8rem;
+    margin-bottom: 1.5rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 0 0 16px 16px;
+    border-radius: 16px;
     overflow-x: auto;
 }
 
@@ -2164,50 +2159,15 @@ body {
 
 /* Menu section ID'leri için ek düzenleme - kaydırma için */
 .menu-section {
-    scroll-margin-top: 180px; /* Sayfa başlığı ve sekmeler için alan bırakır */
+    scroll-margin-top: 80px; /* Sayfa başlığı ve sekmeler için alan bırakır */
     scroll-snap-align: start; /* Kaydırma için snap noktaları eklendi */
     padding-top: 2rem; /* Üstte biraz daha boşluk bırak */
-}
-
-/* Yapışkan menü sekmeleri - hep üstte kalır */
-.menu-tabs-container {
-    position: sticky;
-    top: 80px;
-    background-color: var(--background);
-    padding: 0.8rem 0;
-    margin-bottom: 1.5rem;
-    z-index: 90;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 0 0 16px 16px;
-}
-
-/* Menü başlıklarına belirgin bir arka plan ekle */
-.section-title {
-    position: relative;
-    padding: 0.8rem 0;
-    font-family: var(--font-headings);
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 1.5rem;
-    border-bottom: 2px solid rgba(106, 90, 224, 0.1);
-}
-
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 80px;
-    height: 4px;
-    background: var(--primary);
-    border-radius: 2px;
 }
 
 /* Yumuşak kaydırma animasyonu */
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 180px; /* Yeni eklendi - kaydırma pozisyonunu ayarlamak için */
+    scroll-padding-top: 80px; /* Yeni eklendi - kaydırma pozisyonunu ayarlamak için */
 }
 
 /* Firefox specific styles for scrollbar */

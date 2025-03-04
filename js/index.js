@@ -444,6 +444,7 @@ function handleScroll() {
         }
     }
     
+    // Menü sekmeleri sabit olduğu için kaydırmada güncelleme yapmak gerekir
     // Performans için throttle mekanizması
     if (!handleScroll.ticking) {
         window.requestAnimationFrame(() => {
@@ -453,12 +454,16 @@ function handleScroll() {
         handleScroll.ticking = true;
     }
 }
-handleScroll.ticking = false;
 
-// Kaydırma pozisyonuna göre aktif sekmeleri güncelle
+// Kaydırma pozisyonuna göre aktif sekmeleri güncelle - Fixed tabs için düzeltildi
 function updateActiveTabOnScroll() {
     const sections = document.querySelectorAll('.menu-section');
     const menuTabs = document.querySelectorAll('.menu-tab');
+    
+    // Sabit menü sekmelerinin yüksekliğini hesaba katmak için offset değeri
+    const menuTabsHeight = document.querySelector('.menu-tabs-container')?.offsetHeight || 0;
+    const headerHeight = 70; // Header yüksekliği
+    const totalOffset = headerHeight + menuTabsHeight;
     
     // Viewport yüksekliği
     const viewportHeight = window.innerHeight;
@@ -489,9 +494,10 @@ function updateActiveTabOnScroll() {
         // Negatif değer olmamalı
         visibleHeight = Math.max(0, visibleHeight);
         
-        // Bölümün başlangıcı viewport'ta görünüyorsa daha fazla ağırlık ver
-        const isHeaderVisible = (sectionTop >= viewportTop && sectionTop <= viewportBottom);
-        const headerBonus = isHeaderVisible ? viewportHeight * 0.2 : 0;
+        // Fixed header ve tabs'a göre pozisyonu düzenleyen ek hesaplamalar
+        const adjustedSectionTop = sectionTop - totalOffset;
+        const isSectionTopVisible = (adjustedSectionTop >= 0 && adjustedSectionTop <= viewportHeight);
+        const headerBonus = isSectionTopVisible ? viewportHeight * 0.3 : 0;
         
         // Görünürlük yüzdesi (bölüm başlangıcına bonus ekle)
         const visiblePercentage = (visibleHeight + headerBonus) / sectionHeight;

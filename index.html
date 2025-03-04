@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Menü - Modern Restoran Deneyimi</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- iOS için meta etiketleri ekle -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Model viewer'ı mobile-ar sürümü ile değiştirelim -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer-usdz-ios-support.js"></script>
+    <!-- Temel model viewer kütüphanesi -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-emoji">🍽️</div>
+        <div class="spinner"></div>
+        <p class="loading-text">AR Menü Yükleniyor...</p>
+    </div>
+
+    <!-- Status Message -->
+    <div class="status-message" id="statusMessage"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>✨ AR Menü</h1>
+        <img src="https://placehold.co/120/40" alt="Restaurant Logo" class="logo">
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- AR Instructions -->
+        <div class="alert alert-info" id="arInstructions">
+            <div class="alert-emoji">👋</div>
+            <div>
+                <strong>AR Deneyimi için:</strong> Yemek görsellerine tıklayın ve kameranızı düz bir yüzeye doğrultun. 
+                <a href="#" id="showInstructionsBtn" style="color: var(--primary); font-weight: 600;">Detaylı bilgi</a>
+            </div>
+        </div>
+
+        <!-- Yapışkan menü sekmeleri - margin ve padding eklendi -->
+        <div class="menu-tabs-container">
+            <div class="menu-tabs">
+                <a href="#mainDishesSection" class="menu-tab active" data-target="mainDishes">
+                    <span class="tab-emoji">🍳</span> Ana Yemekler
+                </a>
+                <a href="#dessertsSection" class="menu-tab" data-target="desserts">
+                    <span class="tab-emoji">🍰</span> Tatlılar
+                </a>
+                <a href="#drinksSection" class="menu-tab" data-target="drinks">
+                    <span class="tab-emoji">🍹</span> İçecekler
+                </a>
+                <a href="#popularSection" class="menu-tab" data-target="popular">
+                    <span class="tab-emoji">🔥</span> Popüler
+                </a>
+            </div>
+        </div>
+
+        <!-- AR Container -->
+        <div class="ar-container" id="arContainer" style="display: none;">
+            <canvas id="ar-canvas"></canvas>
+            <div class="controls">
+                <button class="control-btn" id="rotateLeftBtn"><i class="fas fa-undo"></i></button>
+                <button class="control-btn" id="resetBtn"><i class="fas fa-sync"></i></button>
+                <button class="control-btn" id="rotateRightBtn"><i class="fas fa-redo"></i></button>
+                <button class="control-btn" id="closeArBtn"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+
+        <!-- Menü Bölümleri - artık hepsi görünür olacak -->
+        <section id="mainDishesSection" class="menu-section">
+            <h2 class="section-title">🍳 Ana Yemekler</h2>
+            <div class="menu-items" id="mainDishes">
+                <!-- Menu items will be dynamically populated, showing example format -->
+                <div class="menu-item">
+                    <img src="/api/placeholder/220/140" alt="Köfte" class="menu-item-img">
+                    <div class="menu-item-info">
+                        <div>
+                            <span class="food-tag tag-popular">🔥 Popüler</span>
+                        </div>
+                        <h3 class="menu-item-title">Izgara Köfte</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.5</span>
+                            <span class="rating-count">(124)</span>
+                        </div>
+                        <p class="menu-item-price">₺80 <span style="font-size: 1.2rem;">💰</span></p>
+                        <div class="menu-item-ar">
+                            <i class="fas fa-cube"></i> AR'da Gör
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <img src="/api/placeholder/220/140" alt="Tavuk" class="menu-item-img">
+                    <div class="menu-item-info">
+                        <div>
+                            <span class="food-tag tag-spicy">🌶️ Acılı</span>
+                        </div>
+                        <h3 class="menu-item-title">Baharatlı Tavuk</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>4.0</span>
+                            <span class="rating-count">(86)</span>
+                        </div>
+                        <p class="menu-item-price">₺70 <span style="font-size: 1.2rem;">💰</span></p>
+                        <div class="menu-item-ar">
+                            <i class="fas fa-cube"></i> AR'da Gör
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dessertsSection" class="menu-section">
+            <h2 class="section-title">🍰 Tatlılar</h2>
+            <div class="menu-items" id="desserts">
+                <!-- Example dessert item -->
+                <div class="menu-item">
+                    <img src="/api/placeholder/220/140" alt="Künefe" class="menu-item-img">
+                    <div class="menu-item-info">
+                        <div>
+                            <span class="food-tag tag-popular">🔥 Popüler</span>
+                        </div>
+                        <h3 class="menu-item-title">Künefe</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>5.0</span>
+                            <span class="rating-count">(210)</span>
+                        </div>
+                        <p class="menu-item-price">₺65 <span style="font-size: 1.2rem;">💰</span></p>
+                        <div class="menu-item-ar">
+                            <i class="fas fa-cube"></i> AR'da Gör
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="drinksSection" class="menu-section">
+            <h2 class="section-title">🍹 İçecekler</h2>
+            <div class="menu-items" id="drinks">
+                <!-- Example drink item -->
+                <div class="menu-item">
+                    <img src="/api/placeholder/220/140" alt="Ayran" class="menu-item-img">
+                    <div class="menu-item-info">
+                        <h3 class="menu-item-title">Ayran</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>4.2</span>
+                            <span class="rating-count">(92)</span>
+                        </div>
+                        <p class="menu-item-price">₺15 <span style="font-size: 1.2rem;">💰</span></p>
+                        <div class="menu-item-ar">
+                            <i class="fas fa-cube"></i> AR'da Gör
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="popularSection" class="menu-section">
+            <h2 class="section-title">🔥 Popüler Seçimler</h2>
+            <div class="menu-items" id="popularItems">
+                <!-- Popüler ürünler JavaScript ile doldurulacak -->
+            </div>
+        </section>
+        
+        <!-- Call to Action Button -->
+        <button class="cta-button">
+            <i class="fas fa-utensils"></i> Sipariş Ver
+        </button>
+    </div>
+
+    <!-- Yukarı Çık Butonu -->
+    <div id="backToTop" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- AR Instructions Modal -->
+    <div class="modal" id="instructionsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📱 AR Nasıl Kullanılır?</h3>
+                <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="instruction-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <p>İstediğiniz yemeğin görseline tıklayın ve "AR'da Gör" seçeneğini seçin.</p>
+                        <img src="https://placehold.co/400x200/eee/999?text=Adim%201" alt="Step 1" class="step-image">
+                    </div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <p>Kamera izinlerini kabul edin. AR deneyimi için kamera erişimine ihtiyaç vardır.</p>
+                        <img src="https://placehold.co/400x200/eee/999?text=Adim%202" alt="Step 2" class="step-image">
+                    </div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <p>Kameranızı düz bir yüzeye doğrultun. Sistem otomatik olarak yüzeyi algılayacaktır.</p>
+                        <img src="https://placehold.co/400x200/eee/999?text=Adim%203" alt="Step 3" class="step-image">
+                    </div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <p>Ekrana dokunarak 3D modeli yerleştirin. Modeli döndürmek için kontrol düğmelerini kullanabilirsiniz.</p>
+                        <img src="https://placehold.co/400x200/eee/999?text=Adim%204" alt="Step 4" class="step-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- AR Troubleshooting Status -->
+    <div class="ar-troubleshoot-status" id="arTroubleshootStatus" style="display: none;">
+        <div class="ar-status-content">
+            <div class="ar-status-title">AR Durum Kontrolü</div>
+            <div class="ar-status-message" id="arStatusMessage">Kontrol ediliyor...</div>
+            <div class="ar-status-actions">
+                <button id="retryARButton">Tekrar Dene</button>
+                <button id="closeARStatusButton">Kapat</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+    
+    <!-- Ana uygulama kodu -->
+    <script src="index.js" defer></script>
+    
+    <!-- Sorun giderme kodu -->
+    <script src="troubleshoot.js"></script>
+    
+    <!-- iOS için özel AR desteği kontrolü -->
+    <script>
+        // Safari'de AR Quick Look desteğini test et ve kullanıcıya bildir
+        document.addEventListener('DOMContentLoaded', function() {
+            // iOS Safari'de QR desteği var mı kontrol et
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+            
+            if (isIOS) {
+                // AR Quick Look desteği var mı kontrol et
+                const a = document.createElement('a');
+                const hasARSupport = a.relList && a.relList.supports && a.relList.supports('ar');
+                
+                console.log("iOS AR Quick Look Desteği:", hasARSupport);
+                
+                // AR desteği yok veya Safari değilse uyarı göster
+                if (!hasARSupport || !isSafari) {
+                    const arInstructions = document.getElementById('arInstructions');
+                    if (arInstructions) {
+                        arInstructions.className = 'alert alert-warning';
+                        arInstructions.innerHTML = '<div class="alert-emoji">⚠️</div><div><strong>AR Uyarı:</strong> En iyi AR deneyimi için Safari tarayıcısını kullanmanız önerilir.</div>';
+                    }
+                }
+            }
+        });
+    </script>
+
+    <!-- Hata ayıklama için konsol çıktısını göstermek üzere script ekleyin -->
+    <script>
+        // Tarayıcı konsolunu kontrol eden kod
+        window.addEventListener('error', function(e) {
+            // Hata mesajını göster
+            const errorDiv = document.createElement('div');
+            errorDiv.style.position = 'fixed';
+            errorDiv.style.bottom = '10px';
+            errorDiv.style.left = '10px';
+            errorDiv.style.backgroundColor = 'rgba(255, 0, 0, 0.7)';
+            errorDiv.style.color = 'white';
+            errorDiv.style.padding = '10px';
+            errorDiv.style.borderRadius = '5px';
+            errorDiv.style.zIndex = '9999';
+            errorDiv.style.maxWidth = '90%';
+            errorDiv.style.fontSize = '12px';
+            errorDiv.textContent = `Hata: ${e.message} (${e.filename}, satır:${e.lineno})`;
+            document.body.appendChild(errorDiv);
+            
+            // 5 saniye sonra kaldır
+            setTimeout(() => {
+                if (document.body.contains(errorDiv)) {
+                    document.body.removeChild(errorDiv);
+                }
+            }, 5000);
+            
+            // Yükleme ekranını gizle hata durumunda
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen && loadingScreen.style.display !== 'none') {
+                loadingScreen.style.display = 'none';
+            }
+        });
+        
+        // Script dosyalarının yüklenip yüklenmediğini kontrol et
+        window.addEventListener('load', function() {
+            // Kritik JavaScript kütüphanelerini kontrol et
+            if (!window.THREE) {
+                console.error("THREE.js kütüphanesi yüklenemedi!");
+                alert("3D kütüphaneleri yüklenemedi. Sayfayı yenileyin veya internet bağlantınızı kontrol edin.");
+            }
+        });
+    </script>
+</body>
+</html>

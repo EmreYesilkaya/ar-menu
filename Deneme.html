@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Menü - Modern Restoran Deneyimi</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <style>
+        :root {
+            --primary: #6A5AE0;
+            --primary-light: #9087E5;
+            --primary-dark: #4E42AA;
+            --secondary: #FF7966;
+            --accent: #FFC44D;
+            --text-dark: #2E2E48;
+            --text-medium: #6B6B80;
+            --text-light: #AEAEBF;
+            --background: #F9F9FB;
+            --card-bg: #FFFFFF;
+            --danger: #FF5A5A;
+            --success: #00D9AA;
+            --info: #5AC8FA;
+            --border-radius: 16px;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+            overflow-x: hidden; /* Fazla parantez kaldırıldı *//* Fazla parantez kaldırıldı *//* Fazla parantez kaldırıldı */
+            line-height: 1.5;
+        }
+
+        .header {
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow-sm);
+            padding: 1.2rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo {
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        .main-container {
+            margin-top: 80px;
+            padding: 1.2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .ar-container {
+            width: 100%;
+            height: 65vh;
+            background-color: #f2f2f7;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        #ar-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .control-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .control-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .control-btn#closeArBtn {
+            background-color: var(--danger);
+        }
+
+        .menu-section {
+            background-color: var (--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.8rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+        
+        .menu-section:hover {
+            box-shadow: var(--shadow-md);;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .menu-item {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var (--shadow-md);
+        }
+
+        .menu-item-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+
+        .menu-item-info {
+            padding: 1rem;
+        }
+
+        .menu-item-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
+            color: var(--text-dark);
+        }
+
+        .menu-item-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .menu-item-ar {
+            background-color: var(--primary-light);
+            padding: 0.6rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: white;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .menu-item-ar:hover {
+            background-color: var(--primary);
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--card-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            position: relative;
+        }
+
+        .spinner:before,
+        .spinner:after {
+            content: "";
+            display: block;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border: 4px solid transparent;
+        }
+
+        .spinner:before {
+            border-top-color: var(--primary);
+            border-left-color: var(--primary);
+            animation: spinner 1s cubic-bezier(0.42, 0.61, 0.58, 0.41) infinite;
+        }
+
+        .spinner:after {
+            border-bottom-color: var(--secondary);
+            border-right-color: var(--secondary);
+            animation: spinner 1s cubic-bezier(0.42, 0.61, 0.58, 0.41) infinite reverse;
+        }
+
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .loading-emoji {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .status-message {
+            background-color: var(--card-bg);
+            padding: 1.2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            position: fixed;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            width: 90%;
+            max-width: 350px;
+            display: none;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 196, 77, 0.15);
+            border: 1px solid rgba(255, 196, 77, 0.3);
+            color: #9C6500;
+        }
+
+        .alert-info {
+            background-color: rgba(90, 200, 250, 0.15);
+            border: 1px solid rgba(90, 200, 250, 0.3);
+            color: #0069A2;
+        }
+
+        .alert-emoji {
+            font-size: 1.5rem;
+        }
+
+        /* AR instructions modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 500;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 1.8rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .close-modal:hover {
+            background-color: rgba(0,0,0,0.05);
+            color: var(--text-dark);
+        }
+
+        .instruction-step {
+            display: flex;
+            margin-bottom: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background-color: var(--primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(106, 90, 224, 0.3);
+        }
+
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-content p {
+            margin-bottom: 0.8rem;
+            color: var(--text-medium);
+        }
+
+        .step-image {
+            width: 100%;
+            border-radius: 16px;
+            margin-top: 0.8rem;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Food tags */
+        .food-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tag-vegan {
+            background-color: rgba(0, 217, 170, 0.15);
+            color: #00A87D;
+        }
+        
+        .tag-spicy {
+            background-color: rgba(255, 90, 90, 0.15);
+            color: #D13030;
+        }
+        
+        .tag-popular {
+            background-color: rgba(255, 196, 77, 0.15);
+            color: #C58400;
+        }
+
+        /* Tab navigation for menu sections */
+        .menu-tabs {
+            display: flex;
+            overflow-x: auto;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            padding: 0.3rem;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .menu-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .menu-tab {
+            white-space: nowrap;
+            padding: 0.8rem 1.2rem;
+            background-color: var(--card-bg);
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var (--text-medium);
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .menu-tab.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(106, 90, 224, 0.3);
+        }
+        
+        .tab-emoji {
+            font-size: 1.2rem;
+        }
+
+        /* Ratings and reviews */
+        .rating {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+            color: var(--text-medium);
+            font-size: 0.9rem;
+        }
+        
+        .rating i {
+            color: var(--accent);
+            margin-right: 0.2rem;
+        }
+        
+        .rating-count {
+            margin-left: 0.5rem;
+            color: var(--text-light);
+        }
+
+        /* Call to action button */
+        .cta-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 100px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 2rem auto;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(106, 90, 224, 0.3);
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(106, 90, 224, 0.4);
+        }
+        
+        .cta-button:active {
+            transform: translateY(0);
+        }
+
+        @media (min-width: 768px) {
+            .menu-items {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+
+            .ar-container {
+                height: 70vh;
+            }
+            
+            .main-container {
+                padding: 1.5rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-emoji">🍽️</div>
+        <div class="spinner"></div>
+        <p class="loading-text">AR Menü Yükleniyor...</p>
+    </div>
+
+    <!-- Status Message -->
+    <div class="status-message" id="statusMessage"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>✨ AR Menü</h1>
+        <img src="/api/placeholder/120/40" alt="Restaurant Logo" class="logo">
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- AR Instructions -->
+        <div class="alert alert-info" id="arInstructions">
+            <div class="alert-emoji">👋</div>
+            <div>
+                <strong>AR Deneyimi için:</strong> Yemek görsellerine tıklayın ve kameranızı düz bir yüzeye doğrultun. 
+                <a href="#" id="showInstructionsBtn" style="color: var(--primary); font-weight: 600;">Detaylı bilgi</a>
+            </div>
+        </div>
+
+        <!-- Menu Tabs -->
+        <div class="menu-tabs">
+            <div class="menu-tab active" data-target="mainDishes">
+                <span class="tab-emoji">🍳</span> Ana Yemekler
+            </div>
+            <div class="menu-tab" data-target="desserts">
+                <span class="tab-emoji">🍰</span> Tatlılar
+            </div>
+            <div class="menu-tab" data-target="drinks">
+                <span class="tab-emoji">🍹</span> İçecekler
+            </div>
+            <div class="menu-tab" data-target="popular">
+                <span class="tab-emoji">🔥</span> Popüler
+            </div>
+        </div>
+
+        <!-- AR Container -->
+        <div class="ar-container" id="arContainer" style="display: none;">
+            <canvas id="ar-canvas"></canvas>
+            <div class="controls">
+                <button class="control-btn" id="rotateLeftBtn"><i class="fas fa-undo"></i></button>
+                <button class="control-btn" id="resetBtn"><i class="fas fa-sync"></i></button>
+                <button class="control-btn" id="rotateRightBtn"><i class="fas fa-redo"></i></button>
+                <button class="control-btn" id="closeArBtn"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+
+        <!-- Menu Sections -->
+        <div class="menu-section">
+            <h2 class="section-title">🍳 Ana Yemekler</h2>
+            <div class="menu-items" id="mainDishes">
+                <!-- Menu items will be dynamically populated, showing example format -->
+                <div class="menu-item">
+                    <img src="/api/placeholder/220/140" alt="Köfte" class="menu-item-img">
+                    <div class="menu-item-info">
+                        <div>
+                            <span class="food-tag tag-popular">🔥 Popüler</span>
+                        </div>
+                        <h3 class="menu-item-title">Izgara Köfte</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.5</span>
+                            <span class="rating-count">(124)</span>
+                        </div>
+                        <p class="menu-item-price">₺80 <span style="font-size: 1.2rem;">💰</span></p>
+                        <div class="menu-item-ar">
+                            <i class="fas fa-cube"></i> AR'da Gör
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <img src="/api/placeholder/220/140" alt="Tavuk" class="menu-item-img">
+                    <div class="menu-item-info">
+                        <div>
+                            <span class="food-tag tag-spicy">🌶️ Acılı</span>
+                        </div>
+                        <h3 class="menu-item-title">Baharatlı Tavuk</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>4.0</span>
+                            <span class="rating-count">(86)</span>
+                        </div>
+                        <p class="menu-item-price">₺70 <span style="font-size: 1.2rem;">💰</span></p>
+                        <div class="menu-item-ar">
+                            <i class="fas fa-cube"></i> AR'da Gör
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h2 class="section-title">🍰 Tatlılar</h2>
+            <div class="menu-items" id="desserts">
+                <!-- Example dessert item -->
+                <div class="menu-item">
+                    <img src="/api/placeholder/220/140" alt="Künefe" class="menu-item-img">
+                    <div class="menu-item-info">
+                        <div>
+                            <span class="food-tag tag-popular">🔥 Popüler</span>
+                        </div>
+                        <h3 class="menu-item-title">Künefe</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>5.0</span>
+                            <span class="rating-count">(210)</span>
+                        </div>
+                        <p class="menu-item-price">₺65 <span style="font-size: 1.2rem;">💰</span></p>
+                        <div class="menu-item-ar">
+                            <i class="fas fa-cube"></i> AR'da Gör
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h2 class="section-title">🍹 İçecekler</h2>
+            <div class="menu-items" id="drinks">
+                <!-- Example drink item -->
+                <div class="menu-item">
+                    <img src="/api/placeholder/220/140" alt="Ayran" class="menu-item-img">
+                    <div class="menu-item-info">
+                        <h3 class="menu-item-title">Ayran</h3>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>4.2</span>
+                            <span class="rating-count">(92)</span>
+                        </div>
+                        <p class="menu-item-price">₺15 <span style="font-size: 1.2rem;">💰</span></p>
+                        <div class="menu-item-ar">
+                            <i class="fas fa-cube"></i> AR'da Gör
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Call to Action Button -->
+        <button class="cta-button">
+            <i class="fas fa-utensils"></i> Sipariş Ver
+        </button>
+    </div>
+
+    <!-- AR Instructions Modal -->
+    <div class="modal" id="instructionsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📱 AR Nasıl Kullanılır?</h3>
+                <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="instruction-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <p>İstediğiniz yemeğin görseline tıklayın ve "AR'da Gör" seçeneğini seçin.</p>
+                        <img src="https://placehold.co/400x200/eee/999?text=Adim%201" alt="Step 1" class="step-image">
+                    </div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <p>Kamera izinlerini kabul edin. AR deneyimi için kamera erişimine ihtiyaç vardır.</p>
+                        <img src="https://placehold.co/400x200/eee/999?text=Adim%202" alt="Step 2" class="step-image">
+                    </div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <p>Kameranızı düz bir yüzeye doğrultun. Sistem otomatik olarak yüzeyi algılayacaktır.</p>
+                        <img src="https://placehold.co/400x200/eee/999?text=Adim%203" alt="Step 3" class="step-image">
+                    </div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <p>Ekrana dokunarak 3D modeli yerleştirin. Modeli döndürmek için kontrol düğmelerini kullanabilirsiniz.</p>
+                        <img src="https://placehold.co/400x200/eee/999?text=Adim%204" alt="Step 4" class="step-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+    <script>
+        // DOM Elements
+        const loadingScreen = document.getElementById('loadingScreen');
+        const statusMessage = document.getElementById('statusMessage');
+        const arContainer = document.getElementById('arContainer');
+        const arCanvas = document.getElementById('ar-canvas');
+        const mainDishesContainer = document.getElementById('mainDishes');
+        const dessertsContainer = document.getElementById('desserts');
+        const drinksContainer = document.getElementById('drinks');
+        const showInstructionsBtn = document.getElementById('showInstructionsBtn');
+        const instructionsModal = document.getElementById('instructionsModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const rotateLeftBtn = document.getElementById('rotateLeftBtn');
+        const rotateRightBtn = document.getElementById('rotateRightBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const closeArBtn = document.getElementById('closeArBtn');
+
+        // Global variables
+        let scene, camera, renderer;
+        let currentModel = null;
+        let xrSession = null;
+        let hitTestSource = null;
+        let hitTestSourceRequested = false;
+        let reticle;
+        let isModelPlaced = false;
+        let modelRotationY = 0;
+        let arSupport = 'none'; // 'webxr', 'quicklook', 'none'
+        
+        // Improved function to check what AR technology is supported
+        function checkARSupport() {
+            // Detect iOS devices more reliably
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+            
+            console.log('Device detection:', { isIOS, isSafari, userAgent: navigator.userAgent });
+            
+            // For iOS devices, prioritize AR Quick Look
+            if (isIOS) {
+                console.log('iOS device detected, using AR Quick Look');
+                arSupport = 'quicklook';
+                return Promise.resolve('quicklook');
+            }
+            
+            // Check for WebXR support
+            if (navigator.xr && 'isSessionSupported' in navigator.xr) {
+                return navigator.xr.isSessionSupported('immersive-ar')
+                    .then(supported => {
+                        if (supported) {
+                            arSupport = 'webxr';
+                            return 'webxr';
+                        } else {
+                            arSupport = 'none';
+                            return 'none';
+                        }
+                    })
+                    .catch(() => {
+                        arSupport = 'none';
+                        return 'none';
+                    });
+            } else {
+                arSupport = 'none';
+                return Promise.resolve('none');
+            }
+        }
+
+        // Menu data - Replace with your actual data or fetch from API
+        const menuData = {
+            mainDishes: [
+                { 
+                  id: 1, 
+                  name: 'Izgara Köfte', 
+                  price: '120 TL', 
+                  image: './assets/dishes/kofte.jpg', 
+                  modelPath: './assets/models/kofte.glb',
+                  // For iOS AR QuickLook
+                  usdz: './assets/models/kofte.usdz'
+                },
+                { 
+                  id: 2, 
+                  name: 'Karışık Izgara', 
+                  price: '180 TL', 
+                  image: './assets/dishes/karisik.jpg', 
+                  modelPath: './assets/models/karisik.glb',
+                  usdz: './assets/models/karisik.usdz'
+                },
+                { 
+                  id: 3, 
+                  name: 'Tavuk Şiş', 
+                  price: '140 TL', 
+                  image: 'https://placehold.co/220x140/e8e0d5/333?text=Tavuk+Şiş', 
+                  modelPath: './assets/models/tavuk_sis.glb',
+                  usdz: './assets/models/tavuk_sis.usdz'
+                }
+            ],
+            desserts: [
+                {
+                  id: 4,
+                  name: 'Künefe',
+                  price: '65 TL',
+                  image: 'https://placehold.co/220x140/e8e0d5/333?text=Künefe',
+                  modelPath: './assets/models/kunefe.glb',
+                  usdz: './assets/models/kunefe.usdz'
+                },
+                {
+                  id: 5,
+                  name: 'Baklava',
+                  price: '75 TL',
+                  image: 'https://placehold.co/220x140/e8e0d5/333?text=Baklava',
+                  modelPath: './assets/models/baklava.glb',
+                  usdz: './assets/models/baklava.usdz'
+                }
+            ],
+            drinks: [
+                {
+                  id: 6,
+                  name: 'Ayran',
+                  price: '15 TL',
+                  image: 'https://placehold.co/220x140/e8e0d5/333?text=Ayran',
+                  modelPath: './assets/models/ayran.glb',
+                  usdz: './assets/models/ayran.usdz'
+                },
+                {
+                  id: 7,
+                  name: 'Türk Kahvesi',
+                  price: '30 TL',
+                  image: 'https://placehold.co/220x140/e8e0d5/333?text=Türk+Kahvesi',
+                  modelPath: './assets/models/kahve.glb',
+                  usdz: './assets/models/kahve.usdz'
+                }
+            ]
+        };
+
+        // Initialize the application
+        function init() {
+            checkARSupport().then(support => {
+                console.log('AR Support detected:', support);
+                loadMenuItems();
+                setupEventListeners();
+                
+                // Hide loading screen after everything is initialized
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 1500);
+            });
+        }
+
+        // Load menu items
+        function loadMenuItems() {
+            // Load main dishes
+            menuData.mainDishes.forEach(dish => {
+                const dishElement = createMenuItemElement(dish);
+                mainDishesContainer.appendChild(dishElement);
+            });
+
+            // Load desserts
+            menuData.desserts.forEach(dessert => {
+                const dessertElement = createMenuItemElement(dessert);
+                dessertsContainer.appendChild(dessertElement);
+            });
+
+            // Load drinks
+            menuData.drinks.forEach(drink => {
+                const drinkElement = createMenuItemElement(drink);
+                drinksContainer.appendChild(drinkElement);
+            });
+        }
+
+        // Create menu item element
+        function createMenuItemElement(item) {
+            const menuItem = document.createElement('div');
+            menuItem.className = 'menu-item';
+            menuItem.innerHTML = `
+                <img src="${item.image}" alt="${item.name}" class="menu-item-img" 
+                     onerror="this.src='https://placehold.co/220x140/eee/999?text=${encodeURIComponent(item.name)}'">
+                <div class="menu-item-info">
+                    <div class="menu-item-title">${item.name}</div>
+                    <div class="menu-item-price">${item.price}</div>
+                    <div class="menu-item-ar">
+                        <i class="fas fa-cube"></i> AR'da Gör
+                    </div>
+                </div>
+            `;
+            
+            // Add click event to open AR view based on detected support
+            const arButton = menuItem.querySelector('.menu-item-ar');
+            arButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                if (arSupport === 'quicklook' && item.usdz) {
+                    initQuickLook(item);
+                } else if (arSupport === 'webxr') {
+                    initWebXR(item);
+                } else {
+                    // Fallback to model-viewer
+                    initModelViewer(item);
+                }
+            });
+            
+            return menuItem;
+        }
+
+        // Initialize AR with model-viewer (works on most browsers including iOS)
+        function initModelViewer(item) {
+            showLoading(true, "Model görüntüleyici hazırlanıyor...");
+            
+            // Create the model-viewer element if it doesn't exist
+            let modelViewer = document.querySelector('model-viewer');
+            if (!modelViewer) {
+                modelViewer = document.createElement('model-viewer');
+                modelViewer.setAttribute('id', 'ar-model-viewer');
+                modelViewer.setAttribute('ar', '');
+                modelViewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
+                modelViewer.setAttribute('camera-controls', '');
+                modelViewer.setAttribute('auto-rotate', '');
+                modelViewer.setAttribute('shadow-intensity', '1');
+                modelViewer.setAttribute('touch-action', 'pan-y');
+                modelViewer.style.width = '100%';
+                modelViewer.style.height = '100%';
+                
+                // Clear and add model-viewer to AR container
+                arContainer.innerHTML = '';
+                arContainer.appendChild(modelViewer);
+            }
+            
+            // Set the source of model-viewer
+            modelViewer.setAttribute('src', item.modelPath);
+            if (item.usdz) {
+                modelViewer.setAttribute('ios-src', item.usdz);
+            }
+            
+            // Show AR container
+            arContainer.style.display = 'block';
+            showLoading(false);
+            
+            showStatusMessage("Modeli görüntülemek için AR butonuna tıklayın.", 5000);
+        }
+
+        // Improved AR Quick Look for iOS
+        function initQuickLook(item) {
+            console.log('Starting AR Quick Look for iOS with item:', item);
+            
+            if (!item.usdz) {
+                showStatusMessage("Bu ürün için AR modeli bulunamadı.");
+                return;
+            }
+            
+            showStatusMessage("AR Quick Look başlatılıyor...", 2000);
+            
+            // Create a temporary anchor element
+            const anchor = document.createElement('a');
+            anchor.setAttribute('rel', 'ar');
+            anchor.setAttribute('href', item.usdz);
+            
+            // Add additional iOS Quick Look attributes
+            const img = document.createElement('img');
+            img.src = item.image;
+            anchor.appendChild(img);
+            
+            // iOS 13+ AR Quick Look
+            if (item.name) {
+                const dataTitle = document.createAttribute('data-ar-title');
+                dataTitle.value = item.name;
+                anchor.setAttributeNode(dataTitle);
+            }
+            
+            // Debug logging
+            console.log('Created AR Quick Look anchor with href:', anchor.getAttribute('href'));
+            
+            // Add to body, click, and remove
+            document.body.appendChild(anchor);
+            anchor.click();
+            
+            setTimeout(() => {
+                document.body.removeChild(anchor);
+            }, 1000);
+        }
+
+        // Initialize WebXR (original implementation, renamed)
+        function initWebXR(menuItem) {
+            showLoading(true, "AR başlatılıyor...");
+            
+            // Check if WebXR is supported
+            if (!navigator.xr) {
+                // Fall back to model-viewer
+                initModelViewer(menuItem);
+                return;
+            }
+            
+            try {
+                // Set up Three.js scene
+                setupThreeJsScene();
+                
+                // Request AR session
+                navigator.xr.requestSession('immersive-ar', {
+                    requiredFeatures: ['hit-test', 'dom-overlay'],
+                    domOverlay: { root: document.getElementById('arContainer') }
+                }).then(session => {
+                    xrSession = session;
+                    
+                    // Set up XR session
+                    setupXRSession(xrSession);
+
+                    // Load the 3D model
+                    loadModel(menuItem.modelPath);
+                    
+                    // Show AR container
+                    arContainer.style.display = 'block';
+                }).catch(error => {
+                    console.error('Error requesting AR session:', error);
+                    // Fall back to model-viewer
+                    initModelViewer(menuItem);
+                });
+            } catch (error) {
+                console.error('Error initializing WebXR:', error);
+                // Fall back to model-viewer
+                initModelViewer(menuItem);
+            }
+        }
+
+        // Set up Three.js scene
+        function setupThreeJsScene() {
+            // Create scene
+            scene = new THREE.Scene();
+
+            // Create camera
+            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
+
+            // Create renderer
+            renderer = new THREE.WebGLRenderer({
+                canvas: arCanvas,
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.xr.enabled = true;
+
+            // Create lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(0, 5, 0);
+            scene.add(directionalLight);
+
+            // Create reticle for placement
+            reticle = new THREE.Mesh(
+                new THREE.RingGeometry(0.15, 0.2, 32),
+                new THREE.MeshBasicMaterial({
+                    color: 0xff6b35,
+                    transparent: true,
+                    opacity: 0.8
+                })
+            );
+            reticle.rotation.x = -Math.PI / 2;
+            reticle.visible = false;
+            scene.add(reticle);
+        }
+
+        // Set up XR session
+        function setupXRSession(session) {
+            // Set up reference space
+            session.requestReferenceSpace('local').then((referenceSpace) => {
+                session.requestHitTestSource({ space: referenceSpace }).then((source) => {
+                    hitTestSource = source;
+                });
+            });
+            
+            // Set up renderer with XR session
+            renderer.xr.setReferenceSpaceType('local');
+            renderer.xr.setSession(session);
+            
+            // Set up animation loop
+            session.requestAnimationFrame(onXRFrame);
+            
+            // Event listeners for session
+            session.addEventListener('end', () => {
+                hitTestSourceRequested = false;
+                hitTestSource = null;
+                closeARSession();
+            });
+            
+            // Tap to place model
+            arCanvas.addEventListener('touchstart', placeModel);
+            
+            showLoading(false);
+        }
+
+        // Load 3D model
+        function loadModel(modelPath) {
+            const loader = new THREE.GLTFLoader();
+            const dracoLoader = new THREE.DRACOLoader();
+            dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/');
+            loader.setDRACOLoader(dracoLoader);
+            
+            loader.load(
+                modelPath,
+                (gltf) => {
+                    currentModel = gltf.scene;
+                    
+                    // Scale and position model
+                    currentModel.scale.set(0.5, 0.5, 0.5);
+                    
+                    // Hide model initially until placed
+                    currentModel.visible = false;
+                    scene.add(currentModel);
+                    
+                    showStatusMessage("Modeli yerleştirmek için düz bir yüzeye kameranızı doğrultun ve ekrana dokunun.");
+                },
+                (progress) => {
+                    const percentComplete = Math.round((progress.loaded / progress.total) * 100);
+                    showLoading(true, `Model yükleniyor: ${percentComplete}%`);
+                },
+                (error) => {
+                    console.error('Error loading model:', error);
+                    showStatusMessage("Model yüklenirken bir hata oluştu. Lütfen tekrar deneyin.");
+                    showLoading(false);
+                }
+            );
+        }
+
+        // Place model on tap
+        function placeModel() {
+            if (!isModelPlaced && currentModel && reticle.visible) {
+                // Set model position to reticle position
+                currentModel.position.setFromMatrixPosition(reticle.matrix);
+                currentModel.visible = true;
+                isModelPlaced = true;
+                
+                // Hide reticle after placement
+                reticle.visible = false;
+                
+                showStatusMessage("Model yerleştirildi! Döndürmek için kontrolleri kullanabilirsiniz.");
+            }
+        }
+
+        // XR animation frame
+        function onXRFrame(time, frame) {
+            if (!xrSession) return;
+            
+            // Request next frame
+            xrSession.requestAnimationFrame(onXRFrame);
+            
+            // Get viewer pose
+            const referenceSpace = renderer.xr.getReferenceSpace();
+            const viewerPose = frame.getViewerPose(referenceSpace);
+            
+            if (viewerPose) {
+                // Handle hit test
+                if (!isModelPlaced && hitTestSource) {
+                    const hitTestResults = frame.getHitTestResults(hitTestSource);
+                    
+                    if (hitTestResults.length > 0) {
+                        const hit = hitTestResults[0];
+                        const hitPose = hit.getPose(referenceSpace);
+                        
+                        reticle.visible = true;
+                        reticle.matrix.fromArray(hitPose.transform.matrix);
+                    } else {
+                        reticle.visible = false;
+                    }
+                }
+                
+                // Render the scene
+                renderer.render(scene, camera);
+            }
+        }
+
+        // Close AR session
+        function closeARSession() {
+            if (xrSession) {
+                xrSession.end().then(() => {
+                    xrSession = null;
+                    
+                    // Clean up
+                    if (currentModel) {
+                        scene.remove(currentModel);
+                        currentModel = null;
+                    }
+                    
+                    isModelPlaced = false;
+                    arContainer.style.display = 'none';
+                });
+            }
+        }
+
+        // Show/hide loading screen
+        function showLoading(show, message = "Yükleniyor...") {
+            loadingScreen.style.display = show ? 'flex' : 'none';
+            loadingScreen.querySelector('p').textContent = message;
+        }
+
+        // Show status message
+        function showStatusMessage(message, duration = 3000) {
+            statusMessage.innerHTML = `<div class="alert alert-info"><div class="alert-emoji">ℹ️</div><div>${message}</div></div>`;
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, duration);
+        }
+
+        // Check browser compatibility on startup
+        function checkCompatibility() {
+            const arInstructions = document.getElementById('arInstructions');
+            
+            checkARSupport().then(support => {
+                console.log('AR compatibility check result:', support);
+                
+                if (support === 'none') {
+                    arInstructions.className = 'alert alert-warning';
+                    arInstructions.innerHTML = '<div class="alert-emoji">⚠️</div><div><strong>Uyarı:</strong> Cihazınızda tam AR desteği bulunamadı. Basit 3D görüntüleme kullanılacak.</div>';
+                } else if (support === 'quicklook') {
+                    arInstructions.innerHTML = '<div class="alert-emoji">📱</div><div><strong>iOS AR Destekleniyor:</strong> Yemek görsellerine tıklayarak AR Quick Look ile görebilirsiniz. <a href="#" id="showInstructionsBtn" style="color: var(--primary); font-weight: 600;">Detaylı bilgi</a></div>';
+                    
+                    // Reattach event listener as we changed the HTML
+                    document.getElementById('showInstructionsBtn').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        instructionsModal.style.display = 'flex';
+                    });
+                } else if (support === 'webxr') {
+                    arInstructions.innerHTML = '<div class="alert-emoji">📱</div><div><strong>AR Destekleniyor:</strong> Yemek görsellerine tıklayarak AR deneyimini başlatabilirsiniz. <a href="#" id="showInstructionsBtn" style="color: var(--primary); font-weight: 600;">Detaylı bilgi</a></div>';
+                    
+                    // Reattach event listener as we changed the HTML
+                    document.getElementById('showInstructionsBtn').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        instructionsModal.style.display = 'flex';
+                    });
+                }
+            });
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (camera && renderer) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        });
+
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            checkCompatibility();
+            init();
+        });
+
+        // Close AR view for WebXR or model-viewer
+        function closeARView() {
+            if (arSupport === 'webxr' && xrSession) {
+                closeARSession();
+            } else {
+                // For model-viewer
+                arContainer.style.display = 'none';
+            }
+        }
+
+        // Update the closeArBtn event listener in setupEventListeners()
+        function setupEventListeners() {
+            // Show instructions modal
+            showInstructionsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                instructionsModal.style.display = 'flex';
+            });
+            
+            // Close instructions modal
+            closeModalBtn.addEventListener('click', () => {
+                instructionsModal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside
+            instructionsModal.addEventListener('click', (e) => {
+                if (e.target === instructionsModal) {
+                    instructionsModal.style.display = 'none';
+                }
+            });
+            
+            // AR control buttons
+            rotateLeftBtn.addEventListener('click', () => {
+                if (currentModel) {
+                    modelRotationY -= Math.PI / 8;
+                    currentModel.rotation.y = modelRotationY;
+                }
+            });
+            
+            rotateRightBtn.addEventListener('click', () => {
+                if (currentModel) {
+                    modelRotationY += Math.PI / 8;
+                    currentModel.rotation.y = modelRotationY;
+                }
+            });
+
+            resetBtn.addEventListener('click', () => {
+                if (currentModel) {
+                    modelRotationY = 0;
+                    currentModel.rotation.y = 0;
+                    currentModel.position.set(0, 0, 0);
+                    isModelPlaced = false;
+                }
+            });
+
+            closeArBtn.addEventListener('click', () => {
+                closeARView();
+            });
+        }
+    </script>
+</body>
+</html>

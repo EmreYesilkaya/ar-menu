@@ -61,9 +61,24 @@
             </div>
         </div>
 
-        <!-- AR Container -->
+        <!-- AR Container - Geliştirilmiş hata mesajları -->
         <div class="ar-container" id="arContainer" style="display: none;">
             <canvas id="ar-canvas"></canvas>
+            <div id="model-error" style="display: none; color: #ff5a5a; background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; max-width: 80%;">
+                <h3 style="margin-bottom: 10px;">Model Yüklenemedi</h3>
+                <p>GLB modeli bulunamadı veya yüklenemedi.</p>
+                <p id="model-error-details" style="font-size: 0.8em; margin: 10px 0; color: #666; font-family: monospace; word-break: break-all;"></p>
+                <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee;">
+                    <h4 style="margin-bottom: 8px;">Çözüm Önerileri:</h4>
+                    <ul style="text-align: left; font-size: 0.9em; padding-left: 20px;">
+                        <li>Modelin doğru klasörde olduğundan emin olun (models/modelin_adi.glb)</li>
+                        <li>Model dosya adının doğru yazıldığını kontrol edin</li>
+                        <li>Model formatının GLB (küçük harflerle) olduğunu doğrulayın</li>
+                        <li>Tarayıcınızı güncelleyin veya farklı bir tarayıcı deneyin</li>
+                    </ul>
+                </div>
+                <button onclick="closeARView()" style="background: var(--primary); color: white; border: none; border-radius: 8px; padding: 8px 16px; margin-top: 15px; cursor: pointer;">Kapat</button>
+            </div>
             <div class="controls">
                 <button class="control-btn" id="rotateLeftBtn"><i class="fas fa-undo"></i></button>
                 <button class="control-btn" id="resetBtn"><i class="fas fa-sync"></i></button>
@@ -180,6 +195,7 @@
             </div>
         </section>
         
+        <!-- Popüler Bölümü - HTML yapı hatası düzeltildi -->
         <section id="popularSection" class="menu-section">
             <h2 class="section-title">🔥 Popüler Seçimler</h2>
             <div class="menu-items" id="popularItems">
@@ -288,47 +304,148 @@
         });
     </script>
 
-    <!-- Hata ayıklama için konsol çıktısını göstermek üzere script ekleyin -->
+    <!-- Dosya yolu doğrulama ve hata ayıklama -->
     <script>
-        // Tarayıcı konsolunu kontrol eden kod
-        window.addEventListener('error', function(e) {
-            // Hata mesajını göster
-            const errorDiv = document.createElement('div');
-            errorDiv.style.position = 'fixed';
-            errorDiv.style.bottom = '10px';
-            errorDiv.style.left = '10px';
-            errorDiv.style.backgroundColor = 'rgba(255, 0, 0, 0.7)';
-            errorDiv.style.color = 'white';
-            errorDiv.style.padding = '10px';
-            errorDiv.style.borderRadius = '5px';
-            errorDiv.style.zIndex = '9999';
-            errorDiv.style.maxWidth = '90%';
-            errorDiv.style.fontSize = '12px';
-            errorDiv.textContent = `Hata: ${e.message} (${e.filename}, satır:${e.lineno})`;
-            document.body.appendChild(errorDiv);
+        // Dosya yolunu kontrol etmek için özel işlev
+        function checkModelExists(url) {
+            console.log(`Model kontrolü: ${url}`);
             
-            // 5 saniye sonra kaldır
-            setTimeout(() => {
-                if (document.body.contains(errorDiv)) {
-                    document.body.removeChild(errorDiv);
+            // Göreli URL'yi tam URL'ye çevir
+            const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+            const absoluteUrl = new URL(url, baseUrl).href;
+            
+            console.log(`Tam URL: ${absoluteUrl}`);
+            
+            return fetch(url, { 
+                method: 'HEAD',
+                cache: 'no-store',
+                headers: {
+                    'Cache-Control': 'no-cache'
                 }
-            }, 5000);
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log(`✅ Model bulundu: ${url}`);
+                    return true;
+                } else {
+                    console.error(`❌ Model bulunamadı: ${url} (HTTP ${response.status})`);
+                    return false;
+                }
+            })
+            .catch(error => {
+                console.error(`❌ Ağ hatası: ${url}`, error);
+                return false;
+            });
+        }
+
+        // CORS sorunu tespit et
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sayfa file:// ile mi açıldı kontrol et
+            if (window.location.protocol === 'file:') {
+                console.warn("⚠️ Sayfayı file:// protokolüyle açtınız. Bu durum 3D modellerin yüklenmesini engelleyebilir.");
+                console.warn("⚠️ Çözüm için: Projeyi bir web sunucusu üzerinde çalıştırın (örn. VS Code Live Server)");
+                
+                const corsWarning = document.createElement('div');
+                corsWarning.style.backgroundColor = '#fff3cd';
+                corsWarning.style.color = '#856404';
+                corsWarning.style.padding = '15px';
+                corsWarning.style.margin = '15px 0';
+                corsWarning.style.borderRadius = '8px';
+                corsWarning.style.borderLeft = '5px solid #ffeeba';
+                corsWarning.innerHTML = `
+                    <strong>⚠️ 3D Model Erişim Sorunu</strong>
+                    <p>Tarayıcı dosya erişim kısıtlamaları nedeniyle modeller yüklenemiyor olabilir.</p>
+                    <p><strong>Çözüm:</strong> Projeyi bir web sunucusu üzerinde çalıştırın (örn. VS Code Live Server).</p>
+                `;
+                
+                // Uyarıyı sayfanın üst kısmına ekle
+                const mainContainer = document.querySelector('.main-container');
+                if (mainContainer) {
+                    mainContainer.insertBefore(corsWarning, mainContainer.firstChild);
+                }
+            }
             
-            // Yükleme ekranını gizle hata durumunda
-            const loadingScreen = document.getElementById('loadingScreen');
-            if (loadingScreen && loadingScreen.style.display !== 'none') {
-                loadingScreen.style.display = 'none';
-            }
+            // Test et: Modeller doğru konumda mı?
+            console.log("Model dosya yolları kontrol ediliyor...");
+            const testPaths = [
+                './models/kofte.glb',
+                'models/kofte.glb',
+                '../models/kofte.glb',
+                './assets/models/kofte.glb'
+            ];
+            
+            Promise.all(testPaths.map(checkModelExists)).then(results => {
+                const workingPaths = testPaths.filter((_, i) => results[i]);
+                if (workingPaths.length > 0) {
+                    console.log("✅ Çalışan model yolları:", workingPaths);
+                } else {
+                    console.error("❌ Hiçbir model yolu çalışmıyor. Lütfen models klasörünüzü kontrol edin.");
+                }
+            });
         });
-        
-        // Script dosyalarının yüklenip yüklenmediğini kontrol et
-        window.addEventListener('load', function() {
-            // Kritik JavaScript kütüphanelerini kontrol et
-            if (!window.THREE) {
-                console.error("THREE.js kütüphanesi yüklenemedi!");
-                alert("3D kütüphaneleri yüklenemedi. Sayfayı yenileyin veya internet bağlantınızı kontrol edin.");
-            }
+    </script>
+
+    <!-- Model yükleme hatalarını göstermek için eklenen script -->
+    <script>
+        // GLB modelleri yüklenemediğinde gösterilecek hata işleyicisi
+        document.addEventListener('DOMContentLoaded', function() {
+            // model-viewer hatalarını takip et
+            document.body.addEventListener('error', function(event) {
+                const target = event.target;
+                if (target.tagName === 'MODEL-VIEWER') {
+                    console.error('Model-viewer hatası:', event);
+                    document.getElementById('model-error').style.display = 'block';
+                    
+                    // Model hatasının detaylarını göster
+                    const modelErrorDetails = document.getElementById('model-error-details');
+                    if (modelErrorDetails) {
+                        const src = target.getAttribute('src');
+                        modelErrorDetails.textContent = `Yüklenemedi: ${src || 'belirtilmemiş yol'}`;
+                    }
+                }
+            }, true);
         });
+    </script>
+
+    <!-- Yukarı çıkma butonu - script etiketi düzeltildi -->
+    <script>
+        // createBackToTopButton fonksiyonu eksikse tanımlayalım
+        if (typeof createBackToTopButton !== 'function') {
+            function createBackToTopButton() {
+                const backToTopButton = document.getElementById('backToTop');
+                if (backToTopButton) {
+                    // Buton zaten var, sadece event listener ekleyelim
+                    backToTopButton.addEventListener('click', () => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                } else {
+                    // Buton yoksa oluştur ve ekle
+                    const newButton = document.createElement('div');
+                    newButton.id = 'backToTop';
+                    newButton.className = 'back-to-top';
+                    newButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
+                    newButton.addEventListener('click', () => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                    document.body.appendChild(newButton);
+                }
+                
+                // Scroll event listener'ı kontrol et ve ekle
+                const handleScrollExists = window.addEventListener('scroll', () => {
+                    const btn = document.getElementById('backToTop');
+                    if (btn) {
+                        if (window.scrollY > 300) {
+                            btn.classList.add('visible');
+                        } else {
+                            btn.classList.remove('visible');
+                        }
+                    }
+                });
+            }
+            
+            // Sayfa yüklendiğinde çalıştır
+            document.addEventListener('DOMContentLoaded', createBackToTopButton);
+        }
     </script>
 </body>
 </html>

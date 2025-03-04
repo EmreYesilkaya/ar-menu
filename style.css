@@ -154,6 +154,34 @@ body {
     pointer-events: none;
 }
 
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+}
+
+.filter-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    background-color: var(--background);
+    border: 1px solid rgba(0,0,0,0.08);
+    color: var(--text-medium);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.filter-btn.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.filter-btn:hover:not(.active) {
+    background-color: rgba(0,0,0,0.05);
+}
+
 .filter-icon {
     position: absolute;
     right: 1.2rem;
@@ -437,6 +465,85 @@ body {
     transform: translateY(-2px);
 }
 
+/* Favori butonu stillendirme */
+.favorite-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: var(--text-light);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    z-index: 10;
+    padding: 0;
+}
+
+.favorite-btn:hover, .favorite-btn:focus {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-md);
+}
+
+.favorite-btn i.fas {
+    color: var(--danger);
+}
+
+/* Favoriler boş durumu */
+.no-favorites {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-medium);
+}
+
+.no-favorites-emoji {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.no-favorites-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.no-favorites-message {
+    color: var(--text-medium);
+    font-size: 0.9rem;
+}
+
+/* Sonuç bulunamadı mesajı */
+.no-results {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-medium);
+}
+
+.no-results-emoji {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.no-results-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.no-results-message {
+    font-size: 0.9rem;
+    color: var(--text-medium);
+}
+
 .loading-screen {
     position: fixed;
     top: 0;
@@ -595,6 +702,7 @@ body {
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     z-index: 500;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
@@ -701,6 +809,7 @@ body {
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 500;
+    box-shadow: var(--shadow-sm);
 }
 
 .tag-vegan {
@@ -820,7 +929,7 @@ body {
     .menu-items {
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     }
-
+    
     .ar-container {
         height: 70vh;
     }
@@ -1079,6 +1188,7 @@ body {
 
 .no-results-message {
     font-size: 0.9rem;
+    color: var(--text-medium);
 }
 
 /* Button to scroll back to top */
@@ -1192,4 +1302,104 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
     background-color: var(--primary);
+}
+
+/* Paylaşım modal'ı için stiller */
+.ar-share-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ar-share-content {
+    display: block;
+    width: 100%;
+}
+
+.share-preview {
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+}
+
+.share-image {
+    display: block;
+    width: 100%;
+}
+
+.share-overlay {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.share-description {
+    padding: 1.5rem;
+}
+
+.share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.share-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.share-btn.download {
+    background-color: var(--primary);
+    color: white;
+}
+
+.share-btn.instagram {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    color: white;
+}
+
+.share-btn.whatsapp {
+    background-color: #25D366;
+    color: white;
+}
+
+.share-btn:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+#shareArBtn {
+    background-color: var(--accent);
+    color: white;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }

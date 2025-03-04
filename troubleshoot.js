@@ -177,3 +177,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Global fonksiyon - konsol üzerinden çağırmak için
 window.testAR = ARTroubleshooter;
+
+/**
+ * Sorun giderme yardımcısı - AR Menü projesi için
+ * Bu dosya, genel sorunların teşhis ve çözümü için işlevler sağlar
+ */
+
+// Konsola stil ile mesaj yazma yardımcısı
+function logStyled(message, style = 'color: #333; font-weight: bold;') {
+    console.log(`%c${message}`, style);
+}
+
+// Hata ayıklama bilgilerini konsola yazdır
+logStyled('==== AR MENÜ SORUN GİDERME BAŞLATILIYOR ====', 'color: #6A5AE0; font-size: 14px; font-weight: bold;');
+console.log('Tarayıcı:', navigator.userAgent);
+console.log('Protokol:', window.location.protocol);
+console.log('URL:', window.location.href);
+
+// Dosya yollarını kontrol etme işlevi
+function checkModelPaths() {
+    // Olası model klasörleri
+    const testPaths = [
+        './models/kofte.glb',
+        'models/kofte.glb',
+        '/models/kofte.glb',
+        '../models/kofte.glb',
+        './assets/models/kofte.glb',
+        'assets/models/kofte.glb'
+    ];
+    
+    logStyled('Model Yolları Kontrol Ediliyor...', 'color: #2e86de; font-weight: bold;');
+    
+    // Her yolu kontrol et
+    const tests = testPaths.map(path => {
+        return fetch(path, { method: 'HEAD', cache: 'no-store' })
+            .then(response => {
+                const status = response.ok ? '✅ BULUNDU' : `❌ HATA (${response.status})`;
+                console.log(`${status}: ${path}`);
+                return { path, ok: response.ok };
+            })
+            .catch(err => {
+                console.log(`❌ ERİŞİM HATASI: ${path} - ${err.message}`);
+                return { path, ok: false };
+            });
+    });
+    
+    // Sonuçları topla ve değerlendir
+    Promise.all(tests).then(results => {
+        const workingPaths = results.filter(r => r.ok).map(r => r.path);
+        
+        if (workingPaths.length > 0) {
+            logStyled(`✅ ÇALIŞAN YOLLAR BULUNDU: ${workingPaths.join(', ')}`, 'color: green; font-weight: bold;');
+            
+            // Seçilen dosya yolunu JavaScript koduna nasıl uygulayacağını göster
+            console.log('Öneri: index.js dosyasında menuData nesnesindeki modelPath değerlerini şu şekilde güncelleyin:');
+            console.log(`modelPath: '${workingPaths[0]}'.replace('kofte.glb', 'model_adi.glb')`);
+        } else {
+            logStyled('❌ HİÇBİR MODEL YOLU ÇALIŞMIYOR!', 'color: red; font-weight: bold;');
+            console.log('Çözüm Önerileri:');
+            console.log('1. models/ klasörünün projede mevcut olduğundan emin olun');
+            console.log('2. GLB dosyalarının bu klasörde olduğunu kontrol edin');
+            console.log('3. Dosya adlarının doğru olduğunu ve küçük harfle yazıldığını kontrol edin (.glb, .GLB değil)');
+            console.log('4. Projeyi bir web sunucusunda çalıştırın (file:// protokolü CORS hatalarına neden olabilir)');
+        }
+    });
+}
+
+// AR desteğini tespit etme işlevi
+function detectARCapabilities() {
+    logStyled('AR Yetenekleri Kontrol Ediliyor...', 'color: #2e86de; font-weight: bold;');
+}

@@ -62,33 +62,43 @@ function checkARSupport() {
     }
 }
 
-// Menu data - Replace with your actual data or fetch from API
+// Dosya yollarını bulma ve doğrulama için yardımcı fonksiyon
+function resolveAssetPath(relativePath) {
+    // Tarayıcıda tam URL'yi oluştur
+    const basePath = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+    const fullPath = new URL(relativePath, basePath).href;
+    
+    console.log(`Asset yolu dönüştürüldü: ${relativePath} => ${fullPath}`);
+    return relativePath; // Göreceli yol döndür, fetch kendisi taban URL ekleyecektir
+}
+
+// Menu data - Dosya yolları düzenlendi ve kesinleştirildi
 const menuData = {
     mainDishes: [
         { 
           id: 1, 
           name: 'Izgara Köfte', 
           price: '120 TL', 
-          image: './assets/dishes/kofte.jpg', 
-          modelPath: './models/glb/kofte.glb',
-          // For iOS AR QuickLook - yolun tam ve doğru olduğundan emin olun
-          usdz: './models/usdz/kofte.usdz'
+          image: 'https://placehold.co/220x140/e8e0d5/333?text=Köfte', 
+          // Projenin kök klasörüne göre doğru yollar
+          modelPath: './models/kofte.glb',  
+          usdz: './models/kofte.usdz'
         },
         { 
           id: 2, 
           name: 'Karışık Izgara', 
           price: '180 TL', 
-          image: './assets/dishes/karisik.jpg', 
-          modelPath: './models/glb/karisik.glb',
-          usdz: './models/usdz/karisik.usdz'
+          image: 'https://placehold.co/220x140/e8e0d5/333?text=Karışık', 
+          modelPath: './models/karisik.glb', 
+          usdz: './models/karisik.usdz'
         },
         { 
           id: 3, 
           name: 'Tavuk Şiş', 
           price: '140 TL', 
           image: 'https://placehold.co/220x140/e8e0d5/333?text=Tavuk+Şiş', 
-          modelPath: './assets/models/tavuk_sis.glb',
-          usdz: './assets/models/tavuk_sis.usdz'
+          modelPath: './models/tavuk_sis.glb',
+          usdz: './models/tavuk_sis.usdz'
         }
     ],
     desserts: [
@@ -306,52 +316,96 @@ function createMenuItemElement(item) {
     return menuItem;
 }
 
-// Initialize AR with model-viewer (works on most browsers including iOS)
+// Initialize AR with model-viewer (works on most browsers including iOS) - Tamamen iyileştirildi
 function initModelViewer(item) {
     showLoading(true, "3D Model yükleniyor...");
     
-    // Create the model-viewer element if it doesn't exist
-    let modelViewer = document.querySelector('model-viewer');
-    if (!modelViewer) {
-        modelViewer = document.createElement('model-viewer');
-        modelViewer.setAttribute('id', 'ar-model-viewer');
-        modelViewer.setAttribute('ar', '');
-        modelViewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
-        modelViewer.setAttribute('camera-controls', '');
-        modelViewer.setAttribute('auto-rotate', '');
-        modelViewer.setAttribute('shadow-intensity', '1');
-        modelViewer.setAttribute('touch-action', 'pan-y');
-        modelViewer.style.width = '100%';
-        modelViewer.style.height = '100%';
-        
-        // Add AR prompt message for better UX
-        modelViewer.setAttribute('ar-status', 'not-presenting');
-        
-        // Listen for AR events for better user feedback
-        modelViewer.addEventListener('ar-status', (event) => {
-            if (event.detail.status === 'session-started') {
-                showStatusMessage('AR deneyimi başlatıldı! Modeli yerleştirmek için ekrana dokunun.', 3000);
-            } else if (event.detail.status === 'not-presenting') {
-                console.log('AR session ended or not started');
+    // Dosya yolunu doğrulama ve hata ayıklama için resolveAssetPath kullan
+    const modelPath = resolveAssetPath(item.modelPath); 
+    
+    console.log("Model yolu kontrol ediliyor:", modelPath);
+    console.log("Tüm proje dizini:", window.location.href);
+    
+    // Model yüklemeden önce dosya varlığını kontrol et
+    fetch(modelPath, { method: 'HEAD' })
+        .then(response => {
+            if (!response.ok) {
+                console.error(`Model dosyası bulunamadı: HTTP ${response.status} ${response.statusText}`);
+                throw new Error(`Model dosyası bulunamadı: ${modelPath} (HTTP ${response.status})`);
             }
+            console.log("Model dosyası mevcut, model-viewer oluşturuluyor...");
+            
+            // Model mevcut, model-viewer oluştur
+            let modelViewer = document.querySelector('model-viewer');
+            if (!modelViewer) {
+                modelViewer = document.createElement('model-viewer');
+                modelViewer.setAttribute('id', 'ar-model-viewer');
+                modelViewer.setAttribute('camera-controls', '');
+                modelViewer.setAttribute('auto-rotate', '');
+                modelViewer.setAttribute('shadow-intensity', '1');
+                modelViewer.setAttribute('ar', ''); 
+                modelViewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
+                modelViewer.setAttribute('ar-scale', 'auto');
+                modelViewer.setAttribute('touch-action', 'pan-y');
+                modelViewer.style.width = '100%';
+                modelViewer.style.height = '100%';
+                modelViewer.style.backgroundColor = '#f2f2f7';
+                
+                // Çıkış butonu ekle
+                const exitButton = document.createElement('button');
+                exitButton.slot = 'exit-button';
+                exitButton.textContent = 'Kapat ×';
+                exitButton.style.backgroundColor = 'var(--danger)';
+                exitButton.style.color = 'white';
+                exitButton.style.borderRadius = '8px';
+                exitButton.style.border = 'none';
+                exitButton.style.padding = '8px 12px';
+                exitButton.style.position = 'absolute';
+                exitButton.style.top = '10px';
+                exitButton.style.right = '10px';
+                exitButton.style.zIndex = '100';
+                exitButton.onclick = closeARView;
+                modelViewer.appendChild(exitButton);
+                
+                // Hata izleme
+                modelViewer.addEventListener('error', (error) => {
+                    console.error('Model-viewer yükleme hatası:', error);
+                    document.getElementById('model-error').style.display = 'block';
+                    document.getElementById('model-error-details').textContent = 
+                        `Tam dosya yolu: ${modelPath}\nHata: ${error.target.error || 'Bilinmeyen hata'}`;
+                    
+                    showStatusMessage("Model yüklenemedi: " + modelPath, 5000);
+                });
+                
+                // Yükleme izleme
+                modelViewer.addEventListener('load', () => {
+                    console.log('Model başarıyla yüklendi');
+                    showStatusMessage("Model yüklendi! 3D modeli döndürmek için sürükleyin.", 3000);
+                    document.getElementById('model-error').style.display = 'none';
+                });
+                
+                // Clear and add model-viewer to AR container
+                arContainer.innerHTML = '';
+                arContainer.appendChild(modelViewer);
+            }
+            
+            // Set the source of model-viewer
+            modelViewer.setAttribute('src', modelPath);
+            if (item.usdz) {
+                modelViewer.setAttribute('ios-src', resolveAssetPath(item.usdz));
+            }
+            
+            // Show AR container
+            arContainer.style.display = 'block';
+            showLoading(false);
+        })
+        .catch(error => {
+            console.error("Model dosyası kontrolü hatası:", error);
+            showStatusMessage("Model dosyası yüklenemedi: " + error.message, 5000);
+            document.getElementById('model-error').style.display = 'block';
+            document.getElementById('model-error-details').textContent = `Tam hata: ${error.message}\nDosya yolu: ${modelPath}`;
+            showLoading(false);
         });
-        
-        // Clear and add model-viewer to AR container
-        arContainer.innerHTML = '';
-        arContainer.appendChild(modelViewer);
-    }
-    
-    // Set the source of model-viewer
-    modelViewer.setAttribute('src', item.modelPath);
-    if (item.usdz) {
-        modelViewer.setAttribute('ios-src', item.usdz);
-    }
-    
-    // Show AR container
-    arContainer.style.display = 'block';
-    showLoading(false);
-    
-    showStatusMessage("AR'ı başlatmak için ekranın altındaki AR butonuna tıklayın", 5000);
 }
 
 // Improved AR Quick Look for iOS - completely revised for better iOS compatibility

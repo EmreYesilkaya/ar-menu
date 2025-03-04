@@ -252,10 +252,18 @@ function addFavoritesTab() {
     });
 }
 
-// Favoriler bölümünü güncelle - scroll işlemi ekleyerek
+// Favoriler bölümünü güncelle ve görünür yap
 function updateFavoritesSection(scrollToSection = false) {
+    const favoritesSection = document.getElementById('favoritesSection');
     const favoritesContainer = document.getElementById('favoriteItems');
-    if (!favoritesContainer) return;
+    
+    if (!favoritesSection || !favoritesContainer) {
+        console.error('Favoriler bölümü HTML elementleri bulunamadı!');
+        return;
+    }
+    
+    // Favoriler bölümünü görünür yap (eğer gizliyse)
+    favoritesSection.style.display = 'block';
     
     // Favorileri local storage'dan al
     let favorites = JSON.parse(localStorage.getItem('arMenuFavorites')) || [];
@@ -315,10 +323,19 @@ function updateFavoritesSection(scrollToSection = false) {
     
     // Scroll işlemi gerekli ise favoriler bölümüne kaydır
     if (scrollToSection) {
-        const favoritesSection = document.getElementById('favoritesSection');
-        if (favoritesSection) {
+        // Önce bölümün görünür olduğundan emin olalım
+        favoritesSection.style.display = 'block';
+        
+        // Ardından bölüme kaydıralım ve bölümü vurgulayalım
+        setTimeout(() => {
             favoritesSection.scrollIntoView({ behavior: 'smooth' });
-        }
+            
+            // Vurgu animasyonu ekle
+            favoritesSection.classList.add('highlight-section');
+            setTimeout(() => {
+                favoritesSection.classList.remove('highlight-section');
+            }, 2000);
+        }, 100);
     }
 }
 

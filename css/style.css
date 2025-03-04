@@ -734,6 +734,24 @@ body {
     animation: highlight-section 2s ease-out;
 }
 
+/* Favoriler bölümü için özel stiller */
+#favoritesSection {
+    border: 2px dashed rgba(106, 90, 224, 0.2);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+}
+
+#favoritesSection:hover {
+    border-color: rgba(106, 90, 224, 0.4);
+}
+
+#favoritesSection .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 /* Sonuç bulunamadı mesajı */
 .no-results {
     text-align: center;

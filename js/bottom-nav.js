@@ -95,19 +95,24 @@ document.addEventListener('DOMContentLoaded', function() {
             // Doğrudan favoriler bölümüne git
             const favoritesSection = document.getElementById('favoritesSection');
             if (favoritesSection) {
-                // Favoriler bölümünü görünür yap ve sayfayı kaydır
-                favoritesSection.scrollIntoView({ behavior: 'smooth' });
+                // Favoriler sekmesini görünür yap
+                favoritesSection.style.display = 'block';
                 
-                // Favoriler bölümünü güncelle
-                if (window.updateFavoritesSection) {
-                    window.updateFavoritesSection();
-                }
-                
-                // Vurgu animasyonu ekle (isteğe bağlı)
-                favoritesSection.classList.add('highlight-section');
+                // Sayfayı favoriler bölümüne kaydir
                 setTimeout(() => {
-                    favoritesSection.classList.remove('highlight-section');
-                }, 2000);
+                    favoritesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Favoriler bölümünü güncelle
+                    if (window.updateFavoritesSection) {
+                        window.updateFavoritesSection(false); // scroll parametresi false, çünkü zaten kaydırıyoruz
+                    }
+                    
+                    // Vurgu animasyonu ekle
+                    favoritesSection.classList.add('highlight-section');
+                    setTimeout(() => {
+                        favoritesSection.classList.remove('highlight-section');
+                    }, 2000);
+                }, 100);
             } else {
                 console.error('Favoriler bölümü (favoritesSection) bulunamadı!');
                 // Bildirim göster

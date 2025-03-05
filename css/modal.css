@@ -1,334 +1,606 @@
 /**
- * Modal ve Paylaşım Komponentleri Stil Dosyası
+ * Modal Bileşenleri
+ * Daha ferah, modern ve erişilebilir modal tasarımları
  */
 
-/* Arama kutusu stilleri */
-.search-container {
-    padding: 15px;
-    background-color: #fff;
-    margin-bottom: 15px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.search-box {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.search-input {
-    flex: 1;
-    padding: 12px 15px;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    font-size: 1rem;
-}
-
-.search-input:focus {
-    border-color: #6A5AE0;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(106, 90, 224, 0.2);
-}
-
-.filter-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.filter-btn {
-    padding: 8px 12px;
-    background-color: #f5f5f5;
-    border: none;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.filter-btn.active {
-    background-color: #6A5AE0;
-    color: white;
-}
-
-.filter-btn:hover {
-    background-color: #e5e5e5;
-}
-
-.filter-btn.active:hover {
-    background-color: #594DC2;
-}
-
-/* Paylaşım modal stilleri */
-.ar-share-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.ar-share-content {
-    background-color: white;
-    border-radius: 16px;
-    max-width: 90%;
-    width: 500px;
-    overflow: hidden;
-}
-
-.share-preview {
-    position: relative;
-}
-
-.share-image {
-    width: 100%;
-    display: block;
-}
-
-.share-overlay {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 5px 10px;
-    border-radius: 20px;
-}
-
-.share-branding {
-    font-weight: bold;
-    color: #6A5AE0;
-}
-
-.share-description {
-    padding: 15px;
-}
-
-.share-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.share-btn {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    min-width: 100px;
-    transition: transform 0.2s;
-}
-
-.share-btn:hover {
-    transform: translateY(-3px);
-}
-
-.whatsapp {
-    background-color: #25D366;
-}
-
-.instagram {
-    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-}
-
-.download {
-    background-color: #6A5AE0;
-}
-
-/* Sonuç bulunamadı mesajı için stil */
-.no-results {
-    text-align: center;
-    padding: 30px 20px;
-}
-
-.no-results-emoji {
-    font-size: 2rem;
-    margin-bottom: 10px;
-}
-
-.no-results-title {
-    color: #5B5D72;
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.no-results-message {
-    color: #8A8C9D;
-}
-
-/**
- * Modal ve Tutorial Stillerini Düzeltme
- */
-
-/* Modal temel stilleri */
+/* Modal temel konteyner */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s step-end;
     padding: 20px;
-    box-sizing: border-box;
 }
 
+/* Görünür modal */
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0s;
+}
+
+/* Modal içerik konteyner */
 .modal-content {
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    width: 100%;
-    max-width: 600px;
+    background-color: var(--card-bg);
+    width: 92%;
+    max-width: 500px;
     max-height: 90vh;
-    overflow-y: auto;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     position: relative;
-    animation: modalFadeIn 0.3s;
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.4s ease;
 }
 
-@keyframes modalFadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
+/* Aktif modal içeriği */
+.modal.active .modal-content {
+    opacity: 1;
+    transform: scale(1) translateY(0);
 }
 
-/* Modal içerik bölümleri */
+/* Modal başlık bölümü */
 .modal-header {
-    padding: 20px 20px 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #f0f0f0;
-    position: sticky;
-    top: 0;
-    background-color: #fff;
-    z-index: 5;
-    border-radius: 20px 20px 0 0;
+    padding: 20px 25px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    position: relative;
 }
 
+/* Modal başlığı */
 .modal-header h3 {
+    font-weight: 700;
     font-size: 1.4rem;
-    color: var(--primary);
     margin: 0;
+    color: var(--text-dark);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 }
 
-.modal-body {
-    padding: 20px;
-    overflow-y: auto;
-}
-
-/* Mobil için scroll düzeltmesi */
-@media (max-width: 768px) {
-    .modal-content {
-        max-height: 85vh;
-    }
-    
-    .modal-body {
-        max-height: calc(85vh - 70px); /* header yüksekliğini çıkarıyoruz */
-        padding: 15px;
-    }
-    
-    .modal-header {
-        padding: 15px 15px 10px;
-    }
-    
-    .modal-header h3 {
-        font-size: 1.2rem;
-    }
-}
-
-/* Kapatma butonu */
+/* Modal kapatma butonu */
 .close-modal {
-    background: none;
+    background: transparent;
     border: none;
-    padding: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
+    color: var(--text-medium);
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    color: var(--text-medium);
+    border-radius: 50%;
     transition: all 0.2s ease;
+    padding: 0;
 }
 
 .close-modal:hover {
     background-color: rgba(0, 0, 0, 0.05);
     color: var(--text-dark);
+    transform: rotate(90deg);
 }
 
-/* Tutorial adımları için stil düzeltmeleri */
-.instruction-step {
+.close-modal:active {
+    transform: rotate(90deg) scale(0.95);
+}
+
+/* Modal içerik alanı */
+.modal-body {
+    padding: 20px 25px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(90vh - 80px); /* Header'ı hesaba kat */
+}
+
+/* Modal alt bölümü */
+.modal-footer {
+    padding: 20px 25px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
     display: flex;
-    margin-bottom: 20px;
+    justify-content: flex-end;
     gap: 15px;
 }
 
-.step-number {
-    flex-shrink: 0;
-    width: 32px;
-    height: 32px;
-    background-color: var(--primary);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Modal butonları */
+.modal-btn {
+    padding: 12px 22px;
+    border-radius: 14px;
     font-weight: 600;
-    font-size: 0.9rem;
-    box-shadow: 0 3px 5px rgba(106, 90, 224, 0.2);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
 }
 
-.step-content {
-    flex: 1;
+.modal-btn-secondary {
+    background-color: var(--background);
+    color: var(--text-medium);
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.step-content h4 {
-    margin-top: 0;
-    margin-bottom: 8px;
+.modal-btn-secondary:hover {
+    background-color: rgba(0, 0, 0, 0.03);
     color: var(--text-dark);
 }
 
-.step-content p {
-    margin-bottom: 10px;
-    color: var(--text-medium);
-    line-height: 1.5;
+.modal-btn-primary {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(106, 90, 224, 0.2);
 }
 
-.step-image {
-    width: 100%;
+.modal-btn-primary:hover {
+    background-color: var(--primary-dark);
+    box-shadow: 0 6px 16px rgba(106, 90, 224, 0.3);
+    transform: translateY(-2px);
+}
+
+.modal-btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Modal varyantları */
+.modal-sm .modal-content {
+    max-width: 400px;
+}
+
+.modal-lg .modal-content {
+    max-width: 800px;
+}
+
+/* Modal scroll çubukları */
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    margin-top: 10px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Modal overlay animasyonu */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.modal.fade-in {
+    animation: fadeIn 0.3s forwards;
+}
+
+.modal.fade-out {
+    animation: fadeOut 0.3s forwards;
+}
+
+/* Modal içerik animasyonları */
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(30px); opacity: 0; }
+}
+
+.modal.active .modal-content {
+    animation: slideUp 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+.modal.closing .modal-content {
+    animation: slideDown 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+/* Detaylı görünüm modu */
+.modal-detail-view .modal-body {
+    padding: 0;
+}
+
+.modal-detail-view .detail-header {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.modal-detail-view .detail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modal-detail-view .detail-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    padding: 20px;
+    color: white;
+}
+
+.modal-detail-view .detail-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.modal-detail-view .detail-meta {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.modal-detail-view .detail-content {
+    padding: 25px;
+}
+
+.modal-detail-view .detail-description {
+    margin-bottom: 20px;
+    line-height: 1.7;
+}
+
+.modal-detail-view .detail-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.modal-detail-view .action-btn {
+    padding: 12px 25px;
+    border-radius: 14px;
+    font-weight: 600;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(106, 90, 224, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-detail-view .action-btn:hover {
+    background-color: var(--primary-dark);
+    box-shadow: 0 6px 16px rgba(106, 90, 224, 0.35);
+    transform: translateY(-2px);
+}
+
+.modal-detail-view .action-btn:active {
+    transform: translateY(0);
+}
+
+/* Özel türde modaller için ek stiller */
+.info-modal .modal-header {
+    background-color: rgba(46, 196, 182, 0.1);
+    border-bottom-color: rgba(46, 196, 182, 0.2);
+}
+
+.info-modal .modal-header h3 {
+    color: #2EC4B6;
+}
+
+.warning-modal .modal-header {
+    background-color: rgba(255, 183, 3, 0.1);
+    border-bottom-color: rgba(255, 183, 3, 0.2);
+}
+
+.warning-modal .modal-header h3 {
+    color: #FFB703;
+}
+
+.error-modal .modal-header {
+    background-color: rgba(255, 85, 85, 0.1);
+    border-bottom-color: rgba(255, 85, 85, 0.2);
+}
+
+.error-modal .modal-header h3 {
+    color: #FF5555;
+}
+
+.success-modal .modal-header {
+    background-color: rgba(0, 219, 154, 0.1);
+    border-bottom-color: rgba(0, 219, 154, 0.2);
+}
+
+.success-modal .modal-header h3 {
+    color: #00DB9A;
+}
+
+/* Mobil cihazlar için optimizasyon */
+@media (max-width: 768px) {
+    .modal {
+        padding: 15px;
+    }
+    
+    .modal-content {
+        width: 100%;
+        border-radius: 20px;
+    }
+    
+    .modal-header {
+        padding: 15px 20px;
+    }
+    
+    .modal-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .close-modal {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+    
+    .modal-body {
+        padding: 15px 20px;
+    }
+    
+    .modal-footer {
+        padding: 15px 20px;
+    }
+    
+    .modal-btn {
+        padding: 10px 18px;
+        font-size: 0.95rem;
+        border-radius: 12px;
+    }
+    
+    .modal-detail-view .detail-header {
+        height: 180px;
+    }
+    
+    .modal-detail-view .detail-title {
+        font-size: 1.5rem;
+    }
+    
+    .modal-detail-view .detail-content {
+        padding: 20px;
+    }
 }
 
 @media (max-width: 480px) {
-    .instruction-step {
+    .modal {
+        padding: 10px;
+    }
+    
+    .modal-content {
+        border-radius: 18px;
+    }
+    
+    .modal-header {
+        padding: 12px 15px;
+    }
+    
+    .modal-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .close-modal {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+    
+    .modal-body {
+        padding: 12px 15px;
+    }
+    
+    .modal-footer {
+        padding: 12px 15px;
+        flex-wrap: wrap;
+    }
+    
+    .modal-btn {
+        flex: 1;
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .modal-detail-view .detail-header {
+        height: 160px;
+    }
+    
+    .modal-detail-view .detail-title {
+        font-size: 1.4rem;
+    }
+    
+    .modal-detail-view .detail-content {
+        padding: 15px;
+    }
+    
+    .modal-detail-view .detail-actions {
         flex-direction: column;
         gap: 10px;
     }
     
-    .step-number {
-        margin-bottom: 5px;
+    .modal-detail-view .action-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Dark Mode Uyarlamaları */
+body.dark-mode .modal-content {
+    background-color: var(--card-bg);
+}
+
+body.dark-mode .modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .modal-footer {
+    border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .modal-header h3 {
+    color: var(--text-light);
+}
+
+body.dark-mode .close-modal {
+    color: var(--text-medium);
+}
+
+body.dark-mode .close-modal:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-light);
+}
+
+body.dark-mode .modal-btn-secondary {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: var(--text-medium);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .modal-btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+}
+
+body.dark-mode .modal-body::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .modal-body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Scroll düzeltme eklentisi - modal kapandıktan sonra */
+.scroll-fix {
+    overflow: auto !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+/* Kategoriler modalı için özel stil */
+.categories-modal .modal-content {
+    max-height: 80vh;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 5px 5px 10px;
+}
+
+.category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 10px;
+    background-color: var(--background);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.category-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(106, 90, 224, 0.2);
+    background-color: var(--primary-light);
+}
+
+.category-item:hover .category-icon,
+.category-item:hover .category-name {
+    color: white;
+}
+
+.category-icon {
+    font-size: 2.2rem;
+    color: var(--primary);
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.category-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 480px) {
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .category-icon {
+        font-size: 2rem;
+    }
+    
+    .category-name {
+        font-size: 0.9rem;
+    }
+}
+
+/* Dark mode kategoriler modalı */
+body.dark-mode .category-item {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .category-name {
+    color: var(--text-light);
+}
+
+body.dark-mode .category-icon {
+    color: var(--primary-light);
+}
+
+body.dark-mode .category-item:hover {
+    background-color: var(--primary);
+}
+
+body.dark-mode .category-item:hover .category-icon,
+body.dark-mode .category-item:hover .category-name {
+    color: white;
+}
+
+/* iOS özel düzeltmeleri */
+@supports (-webkit-touch-callout: none) {
+    /* iOS'ta güvenli alan için ekstra padding */
+    .modal-content {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    
+    .modal-footer {
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
     }
 }

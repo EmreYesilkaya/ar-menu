@@ -1,0 +1,60 @@
+/**
+ * Bölüm Başlıkları için Stil
+ * HTML yapısına tam uyumlu, basitleştirilmiş düzen
+ */
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 40px 0 30px;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    line-height: 1.3;
+}
+
+/* Emoji ikonu için stil */
+.section-title .emoji {
+    font-size: 2.2rem;
+    margin-right: 5px;
+}
+
+/* Metin kısmı için stil */
+.section-title .title-text {
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* Alt çizgi */
+.section-title .title-text::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+/* Dark Mode uyumluluğu */
+body.dark-mode .section-title {
+    color: var(--text-light);
+}
+
+body.dark-mode .section-title .title-text::after {
+    background: var(--primary-light);
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1.8rem;
+        margin: 35px 0 25px;
+    }
+    
+    .section-title .emoji {
+        font-size: 2rem;
+    }
+}

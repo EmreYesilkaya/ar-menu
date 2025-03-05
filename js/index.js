@@ -401,48 +401,15 @@ function setupEventListeners() {
         });
     });
     
-    // Yukarı çık butonu oluştur ve ekle
-    createBackToTopButton();
+    // NOT: Yukarı çık butonu kodları kaldırıldı - scroll-interactions.js ile yönetiliyor
     
     // Sayfa kaydırma olayını dinle
     window.addEventListener('scroll', handleScroll);
 }
 
-// Yukarı çık butonu oluştur
-function createBackToTopButton() {
-    // Eğer buton zaten varsa, tekrar oluşturma
-    if (document.getElementById('backToTop')) return;
-    
-    // Yukarı çık butonu oluştur
-    const backToTopBtn = document.createElement('div');
-    backToTopBtn.id = 'backToTop';
-    backToTopBtn.className = 'back-to-top';
-    backToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-    
-    // HTML'e ekle
-    document.body.appendChild(backToTopBtn);
-    
-    // Tıklama olayı
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-}
-
 // Sayfa kaydırıldığında çalışacak işlev
 function handleScroll() {
-    const backToTopButton = document.getElementById('backToTop');
-    
-    // 300px'den fazla aşağı kaydırıldığında yukarı çıkma butonunu göster
-    if (backToTopButton) {
-        if (window.scrollY > 300) {
-            backToTopButton.classList.add('visible');
-        } else {
-            backToTopButton.classList.remove('visible');
-        }
-    }
+    // NOT: Back to top butonu işlemleri scroll-interactions.js tarafından yönetiliyor
     
     // Menü sekmeleri sabit olduğu için kaydırmada güncelleme yapmak gerekir
     // Performans için throttle mekanizması

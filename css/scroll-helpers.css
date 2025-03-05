@@ -1,0 +1,59 @@
+/**
+ * Scroll Sorunları için Yardımcı Stiller
+ */
+
+/* Temel scroll davranışını düzenleme */
+html, body {
+    scroll-behavior: auto !important; /* smooth yerine auto kullanarak sorunları önle */
+    overscroll-behavior: none; /* Bounce efektini önle */
+}
+
+/* iOS için scroll düzeltmesi */
+html.ios, body.ios {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Modal ve panel durumlarında body kilitleme */
+body.scroll-locked {
+    overflow: hidden !important; /* !important ile diğer stilleri eziyoruz */
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* Modal kapandıktan sonra overflow'u düzeltme */
+body.scroll-fix-needed {
+    overflow: auto !important;
+    position: static !important;
+    height: auto !important;
+    width: auto !important;
+    top: auto !important;
+    left: auto !important;
+}
+
+/* Ekstra güvenlik önlemleri - CSS ile ek scroll düzeltmeleri */
+.scroll-ready {
+    overflow: auto !important;
+}
+
+.scroll-ready * {
+    pointer-events: auto !important;
+}
+
+/* Kategoriler modalı için ek düzeltme */
+#categoriesModal {
+    overflow-y: auto; /* Kategoriler modalının scroll edilebilmesi */
+    pointer-events: auto;
+}
+
+/* Modal kapatıldıktan sonra scroll autofix */
+@keyframes enableScroll {
+    to { overflow: auto; }
+}
+
+body.modal-closing {
+    animation: enableScroll 0s forwards;
+}

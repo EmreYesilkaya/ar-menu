@@ -1,0 +1,134 @@
+/**
+ * AR Restoran - Responsive Düzenlemeler
+ * Tüm ekran boyutları için media sorguları
+ */
+
+/* Tablet ve büyük telefonlar (768px'den küçük) */
+@media (max-width: 768px) {
+    body {
+        padding-top: 55px;
+    }
+    
+    /* Header düzenlemeleri */
+    .header {
+        padding: 0 1rem;
+        height: 60px;
+    }
+    
+    .header.header-scrolled {
+        height: 55px;
+    }
+    
+    .logo {
+        height: 36px;
+    }
+    
+    .brand-text h1 {
+        font-size: 1.4rem;
+    }
+    
+    .header-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1.1rem;
+    }
+
+    /* Back to top butonu düzenlemeleri */
+    .back-to-top {
+        width: 45px;
+        height: 45px;
+        right: 15px;
+        bottom: 75px;
+        font-size: 1.1rem;
+    }
+    
+    /* Instruction button */
+    .instruction-button {
+        padding: 7px 14px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Küçük telefonlar (480px'den küçük) */
+@media (max-width: 480px) {
+    .header {
+        padding: 0 0.8rem;
+        height: 55px;
+    }
+    
+    .header-branding {
+        gap: 10px;
+    }
+    
+    .logo {
+        height: 34px;
+    }
+    
+    .brand-text h1 {
+        font-size: 1.3rem;
+    }
+    
+    .header-btn {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .notification-badge {
+        width: 16px;
+        height: 16px;
+        font-size: 0.65rem;
+    }
+
+    /* Back to top butonu düzenlemeleri */
+    .back-to-top {
+        width: 40px;
+        height: 40px;
+        right: 10px;
+        bottom: 70px;
+    }
+    
+    .back-to-top i {
+        font-size: 1.1rem;
+    }
+    
+    /* Instruction button */
+    .instruction-button {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        margin-top: 8px;
+    }
+    
+    .instruction-button i {
+        font-size: 0.9rem;
+    }
+}
+
+/* Çok küçük ekranlar (360px'den küçük) */
+@media (max-width: 360px) {
+    .back-to-top {
+        right: 10px;
+        bottom: 70px;
+        width: 38px;
+        height: 38px;
+        opacity: 0.8; /* Daha şeffaf */
+    }
+    
+    .back-to-top i {
+        font-size: 1rem;
+    }
+}
+
+/* Yatay mod düzenlemeleri */
+@media (max-height: 450px) and (orientation: landscape) {
+    .back-to-top {
+        bottom: 15px;
+        right: 15px;
+    }
+}
+
+/* Tablet ve geniş ekranlar için ortalı görünüm */
+@media (min-width: 768px) {
+    .back-to-top {
+        right: calc(50% - 250px - 20px); /* Bottom nav genişliğine göre konumlandır */
+    }
+}

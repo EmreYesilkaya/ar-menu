@@ -1,0 +1,62 @@
+/**
+ * Scroll Düzeltmeleri için CSS
+ * Kategoriler modalı ve scroll davranışını düzeltir
+ */
+
+/* Modal dışına tıklamayı engelleyen overlay */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    display: none;
+}
+
+/* Modal kapanınca scrollu hemen düzelt */
+.modal-content.closing {
+    transform: translateY(20px) !important;
+    opacity: 0 !important;
+}
+
+/* Kategoriler paneli stillerini düzelt */
+.categories-panel {
+    z-index: 95;
+}
+
+/* Kategoriler modalı için ek düzeltme */
+#categoriesModal {
+    z-index: 100;
+}
+
+/* Scroll davranışı için düzeltme */
+html.smoothscroll-disabled,
+body.smoothscroll-disabled {
+    scroll-behavior: auto !important;
+}
+
+/* iOS için düzeltmeler */
+@supports (-webkit-touch-callout: none) {
+    body {
+        /* iOS için dokunarak kaydırma */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* iOS'ta modal ve paneller için bottom padding */
+    .categories-panel, 
+    #categoriesModal .modal-content {
+        padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+}
+
+/* Scroll düzeltme geçişi animasyonu */
+@keyframes fix-scroll {
+    from { overflow: hidden; }
+    to { overflow: auto; }
+}
+
+.scroll-fixing {
+    animation: fix-scroll 0.1s forwards;
+}

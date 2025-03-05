@@ -24,18 +24,31 @@
     <!-- Yükleme ekranı acil durum düzeltmesi - EN BAŞTA yüklenmeli -->
     <script src="js/loading-fix.js"></script>
     
+    <!-- ACİL SCROLL DÜZELTME - TÜM SCRİPTLERDEN ÖNCE YÜKLENİR -->
+    <script src="js/scroll-emergency-fix.js"></script>
+    
     <!-- Stil dosyaları -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/loading.css">
     <link rel="stylesheet" href="css/tutorial.css">
     <link rel="stylesheet" href="css/theme.css"> <!-- YENİ: Koyu/Açık tema desteği -->
-    <link rel="stylesheet" href="css/search.css">
+    <link rel="stylesheet" href="css/search-simplify.css"> <!-- Basitleştirilmiş arama stili -->
     <link rel="stylesheet" href="css/share.css">
     <link rel="stylesheet" href="css/ios-style.css">
     <link rel="stylesheet" href="css/bottom-nav.css">
     <link rel="stylesheet" href="css/header-modern.css">
     <link rel="stylesheet" href="css/menu-tabs.css">
     <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/profile.css"> <!-- YENİ: Profil paneli stillerini ekleyelim -->
+    <link rel="stylesheet" href="css/components/tags.css"> <!-- YENİ: Etiketler bileşeni için özel stil -->
+    <link rel="stylesheet" href="css/filter-animations.css"> <!-- Filtreleme animasyonları -->
+    <link rel="stylesheet" href="css/filter-empty.css"> <!-- YENİ: Boş filtre mesajları için stil -->
+    <link rel="stylesheet" href="css/ar-styles.css"> <!-- YENİ: AR deneyimi için stiller -->
+    <link rel="stylesheet" href="css/alert-styles.css"> <!-- YENİ: Alert mesajları için stiller -->
+    
+    <!-- Tutorial düzeltmeleri - Önemli, önce yüklensin -->
+    <link rel="stylesheet" href="css/tutorial-fix.css">
+    <script src="js/tutorial-fix.js"></script>
     
     <!-- Font Awesome ikonu kütüphanesi -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
@@ -90,28 +103,94 @@
             <div class="alert-emoji">👋</div>
             <div>
                 <strong>AR Deneyimi için:</strong> Yemek görsellerine tıklayın ve kameranızı düz bir yüzeye doğrultun. 
-                <button id="showInstructionsBtn" class="instruction-button">
+                <button id="showInstructionsBtn" class="instruction-button" style="color: white; font-weight: 600; background-color: var(--primary); border: none; cursor: pointer; padding: 6px 12px; border-radius: 50px; display: inline-flex; align-items: center; gap: 5px; margin-left: 8px; font-size: 0.9rem; box-shadow: 0 2px 8px rgba(106, 90, 224, 0.25); transition: all 0.2s ease;">
                     <i class="fas fa-question-circle"></i> Nasıl Kullanılır?
                 </button>
             </div>
         </div>
 
-        <!-- Arama kutusu - Etiketler güncellendi -->
+        <!-- Geliştirilmiş Arama kutusu ve Filtreler - Çok daha sade tasarım -->
         <div class="search-container">
             <div class="search-box">
                 <i class="fas fa-search search-icon"></i>
                 <input type="text" id="menuSearch" class="search-input" placeholder="Menüde ara..." aria-label="Menüde ara">
+                <!-- Arama temizleme butonu JS ile eklenecek -->
             </div>
-            <div class="filter-container">
-                <button class="filter-btn active" data-filter="all">Tümü</button>
-                <button class="filter-btn" data-filter="popular">🔥 Popüler</button>
-                <button class="filter-btn" data-filter="vegan">🌱 Vegan</button>
-                <button class="filter-btn" data-filter="vegetarian">🥕 Vejetaryen</button>
-                <button class="filter-btn" data-filter="meat">🥩 Et</button>
-                <button class="filter-btn" data-filter="chicken">🍗 Tavuk</button>
-                <button class="filter-btn" data-filter="spicy">🌶️ Acılı</button>
-                <button class="filter-btn" data-filter="fresh">✨ Taze</button>
-                <button class="filter-btn" data-filter="hot">🔥 Sıcak</button>
+            
+            <div class="filter-section">
+                <div class="filter-header">
+                    <h4 class="filter-title">Filtreler</h4>
+                    <button id="showMoreFilters" class="filter-expand-btn">
+                        <span>Daha Fazla</span>
+                        <i class="fas fa-sliders-h"></i>
+                    </button>
+                </div>
+                
+                <div class="filter-wrapper">
+                    <div class="filter-container">
+                        <!-- Popüler filtreler (her zaman görünür) -->
+                        <button class="filter-btn active" data-filter="all">Tümü</button>
+                        <button class="filter-btn" data-filter="popular">Popüler</button>
+                        <button class="filter-btn" data-filter="vegan">Vegan</button>
+                        <button class="filter-btn" data-filter="meat">Et</button>
+                        <button class="filter-btn" data-filter="chicken">Tavuk</button>
+                        <button class="filter-btn" data-filter="breakfast">Kahvaltı</button>
+                        <button class="filter-btn" data-filter="dessert">Tatlı</button>
+                    </div>
+                    <div class="filter-scroll-hint"></div>
+                </div>
+            </div>
+            
+            <!-- Genişletilebilir filtre bölümü (Düzeltilmiş) -->
+            <div id="expandedFilters" class="expanded-filters">
+                <div class="filter-groups">
+                    <div class="filter-group">
+                        <div class="filter-group-title">Diyet Tercihleri</div>
+                        <div class="filter-group-items">
+                            <button class="filter-btn" data-filter="vegetarian">Vejetaryen</button>
+                            <button class="filter-btn" data-filter="gluten-free">Glutensiz</button>
+                            <button class="filter-btn" data-filter="dairy-free">Sütsüz</button>
+                            <button class="filter-btn" data-filter="low-carb">Düşük Karb</button>
+                            <button class="filter-btn" data-filter="high-protein">Proteinli</button>
+                            <button class="filter-btn" data-filter="keto">Keto</button>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <div class="filter-group-title">Lezzetler</div>
+                        <div class="filter-group-items">
+                            <button class="filter-btn" data-filter="spicy">Acılı</button>
+                            <button class="filter-btn" data-filter="sweet">Tatlı</button>
+                            <button class="filter-btn" data-filter="sour">Ekşi</button>
+                            <button class="filter-btn" data-filter="savory">Tuzlu</button>
+                            <button class="filter-btn" data-filter="hot">Sıcak</button>
+                            <button class="filter-btn" data-filter="cold">Soğuk</button>
+                            <button class="filter-btn" data-filter="refreshing">Ferahlatıcı</button>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <div class="filter-group-title">İçerikler</div>
+                        <div class="filter-group-items">
+                            <button class="filter-btn" data-filter="cheese">Peynir</button>
+                            <button class="filter-btn" data-filter="eggs">Yumurta</button>
+                            <button class="filter-btn" data-filter="seafood">Deniz Ürünleri</button>
+                            <button class="filter-btn" data-filter="nuts">Kuruyemiş</button>
+                            <button class="filter-btn" data-filter="fresh">Taze</button>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <div class="filter-group-title">Özellikler</div>
+                        <div class="filter-group-items">
+                            <button class="filter-btn" data-filter="cultural">Kültürel</button>
+                            <button class="filter-btn" data-filter="sharing">Paylaşımlık</button>
+                            <button class="filter-btn" data-filter="caffeine">Kafeinli</button>
+                            <button class="filter-btn" data-filter="handcrafted">El Yapımı</button>
+                            <button class="filter-btn" data-filter="healthy">Sağlıklı</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -172,30 +251,42 @@
             </div>
         </div>
 
-        <!-- Menü Bölümleri - Açılış kapanış etiketleri düzeltildi -->
+        <!-- Menü Bölümlerindeki Başlıkları Düzenleyelim -->
         <section id="mainDishesSection" class="menu-section">
-            <h2 class="section-title">🍳 Ana Yemekler</h2>
+            <h2 class="section-title">
+                <span class="emoji">🍳</span>
+                <span class="title-text">Ana Yemekler</span>
+            </h2>
             <div class="menu-items" id="mainDishes">
                 <!-- Menu items will be dynamically populated -->
             </div>
         </section>
 
         <section id="dessertsSection" class="menu-section">
-            <h2 class="section-title">🍰 Tatlılar</h2>
+            <h2 class="section-title">
+                <span class="emoji">🍰</span>
+                <span class="title-text">Tatlılar</span>
+            </h2>
             <div class="menu-items" id="desserts">
                 <!-- Menu items will be dynamically populated -->
             </div>
         </section>
         
         <section id="drinksSection" class="menu-section">
-            <h2 class="section-title">🍹 İçecekler</h2>
+            <h2 class="section-title">
+                <span class="emoji">🍹</span>
+                <span class="title-text">İçecekler</span>
+            </h2>
             <div class="menu-items" id="drinks">
                 <!-- Menu items will be dynamically populated -->
             </div>
         </section>
         
         <section id="popularSection" class="menu-section">
-            <h2 class="section-title">🔥 Popüler Seçimler</h2>
+            <h2 class="section-title">
+                <span class="emoji">🔥</span>
+                <span class="title-text">Popüler Seçimler</span>
+            </h2>
             <div class="menu-items" id="popularItems">
                 <!-- Menu items will be dynamically populated -->
             </div>
@@ -203,21 +294,30 @@
         
         <!-- Yeni kategori bölümleri -->
         <section id="breakfastSection" class="menu-section">
-            <h2 class="section-title">☕ Kahvaltı</h2>
+            <h2 class="section-title">
+                <span class="emoji">☕</span>
+                <span class="title-text">Kahvaltı</span>
+            </h2>
             <div class="menu-items" id="breakfast">
                 <!-- Menu items will be dynamically populated -->
             </div>
         </section>
 
         <section id="soupsSection" class="menu-section">
-            <h2 class="section-title">🍲 Çorbalar</h2>
+            <h2 class="section-title">
+                <span class="emoji">🍲</span>
+                <span class="title-text">Çorbalar</span>
+            </h2>
             <div class="menu-items" id="soups">
                 <!-- Menu items will be dynamically populated -->
             </div>
         </section>
 
         <section id="saladsSection" class="menu-section">
-            <h2 class="section-title">🥗 Salatalar</h2>
+            <h2 class="section-title">
+                <span class="emoji">🥗</span>
+                <span class="title-text">Salatalar</span>
+            </h2>
             <div class="menu-items" id="salads">
                 <!-- Menu items will be dynamically populated -->
             </div>
@@ -237,7 +337,7 @@
         </section>
         
         <!-- Call to Action Button - favoriler bölümünden sonra -->
-        <button class="cta-button" style="margin-bottom: 100px;">
+        <button class="cta-button" style="margin-bottom: 60px;">
             <i class="fas fa-utensils"></i> Sipariş Ver
         </button>
     </div>
@@ -247,7 +347,7 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- Alt Gezinme Çubuğu - AR düğmesi güncellendi -->
+    <!-- Alt Gezinme Çubuğu - Kategoriler bölümü yeniden eklendi -->
     <nav class="bottom-nav">
         <a href="#" class="bottom-nav-item active" data-action="home">
             <div class="bottom-nav-icon"><i class="fas fa-home"></i></div>
@@ -306,10 +406,14 @@
     <script src="js/resolveAssetPath.js"></script>
     <script src="js/popup.js"></script>
     <script src="js/menu-data.js"></script>
-    <script src="js/ar-module.js"></script>
+    <script src="js/menu-renderer.js"></script>
+    <script src="js/emoji-tags.js"></script>
+    <script src="js/tag-handler.js"></script>
+    <script src="js/filter-system-minimal.js"></script> <!-- YENİ: Minimal filtreleme sistemi -->
+    <script src="js/filter-touch.js"></script> <!-- Dokunmatik ekran desteği -->
     <script src="js/search.js"></script>
     <script src="js/menu-loader.js"></script>
-    <script src="js/theme-switcher.js"></script> <!-- YENİ: Tema değiştirme script'i -->
+    <script src="js/theme-switcher.js"></script>
     <script src="js/bottom-nav.js"></script>
     <script src="js/favorites.js"></script>
     <script src="js/tutorial.js"></script>
@@ -319,6 +423,10 @@
     <script src="js/header.js"></script>
     <script src="js/troubleshoot.js"></script>
     <script src="js/scroll-interactions.js"></script>
+    <script src="js/bottom-nav-fix.js"></script>
+    <script src="js/modal-fix.js"></script>
+    <script src="js/profile-panel.js"></script>
+    <script src="js/debug.js"></script> <!-- YENİ: Debug araçları -->
 
     <!-- Yükleme ekranı güvenliği -->
     <script>
@@ -358,6 +466,34 @@
             localStorage.removeItem('ar_tutorial_shown');
             console.log('Tutorial test modu: localStorage temizlendi.');
         }
+
+        // Nasıl kullanılır butonu için hover efekti
+        document.addEventListener('DOMContentLoaded', function() {
+            const instructionsBtn = document.getElementById('showInstructionsBtn');
+            if (instructionsBtn) {
+                instructionsBtn.addEventListener('mouseover', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 4px 12px rgba(106, 90, 224, 0.35)';
+                    this.style.backgroundColor = 'var(--primary-dark)';
+                });
+                
+                instructionsBtn.addEventListener('mouseout', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 2px 8px rgba(106, 90, 224, 0.25)';
+                    this.style.backgroundColor = 'var(--primary)';
+                });
+                
+                instructionsBtn.addEventListener('mousedown', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 1px 4px rgba(106, 90, 224, 0.2)';
+                });
+                
+                instructionsBtn.addEventListener('mouseup', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 4px 12px rgba(106, 90, 224, 0.35)';
+                });
+            }
+        });
     </script>
 
     <!-- Sayfanın en alt kısmına mobil modalde düzeltmeler için -->
@@ -396,6 +532,38 @@
                     }
                 }
             }
+        });
+    </script>
+    
+    <!-- Sayfanın en altına tutorial sorununu düzeltmek için -->
+    <script>
+        // Sayfa tamamen yüklendikten sonra tutorial kontrolü yapılsın
+        window.addEventListener('load', function() {
+            // Tutorial'ı zorla göstermek için: test modundaysa veya hiç gösterilmediyse
+            setTimeout(function() {
+                // Tutorial gösterilmiş mi kontrol et
+                const tutorialShown = localStorage.getItem('ar_tutorial_shown');
+                const testMode = window.location.hash === '#test-tutorial';
+                
+                // Test modundaysa veya ilk ziyaretse
+                if (testMode || !tutorialShown) {
+                    console.log("Tutorial gösterim kontrolü yapılıyor...");
+                    // 1 saniye bekleyip tutorial'ı açmayı dene - tüm içerik yüklensin
+                    
+                    if (window.TutorialFix && typeof window.TutorialFix.showTutorial === 'function') {
+                        console.log("Tutorial gösteriliyor (TutorialFix üzerinden)");
+                        window.TutorialFix.showTutorial();
+                    } else {
+                        console.log("Tutorial direkt gösteriliyor (manuel)");
+                        const instructionsModal = document.getElementById('instructionsModal');
+                        if (instructionsModal) {
+                            instructionsModal.style.display = 'flex';
+                            instructionsModal.classList.add('force-visible');
+                            document.body.style.overflow = 'hidden';
+                        }
+                    }
+                }
+            }, 1500);
         });
     </script>
 </body>

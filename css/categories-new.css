@@ -1,0 +1,286 @@
+/**
+ * Yeni Ferah Kategoriler Sistemi Stilleri
+ * Daha geniş boşluklar ve rahat kullanım için optimize edilmiş
+ */
+
+/* Kategoriler modalı ana konteyner */
+.categories-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Daha koyu bir arka plan */
+    backdrop-filter: blur(8px); /* Daha belirgin blur efekti */
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.categories-modal.active {
+    opacity: 1;
+}
+
+/* Modal içerik - daha ferah */
+.categories-modal-content {
+    background-color: var(--card-bg);
+    border-radius: 25px; /* Daha yumuşak köşeler */
+    width: 92%;
+    max-width: 500px; /* Daha geniş modal */
+    max-height: 85vh; /* Biraz daha kompakt görünüm */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25); /* Daha belirgin gölge */
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+    overflow: hidden;
+    animation: showModalContent 0.4s forwards;
+}
+
+/* Modal içerik animasyonu - daha yumuşak */
+@keyframes showModalContent {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Modal kapanırken - daha yumuşak animasyon */
+.categories-modal-content.closing {
+    animation: hideModalContent 0.4s forwards;
+}
+
+@keyframes hideModalContent {
+    to {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+}
+
+/* Modal başlık - daha ferah ve vurgulu */
+.categories-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px 30px; /* Başlık etrafında daha fazla boşluk */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08); /* Daha belirgin çizgi */
+    background: linear-gradient(to right, rgba(106, 90, 224, 0.05), transparent);
+}
+
+.categories-modal-header h3 {
+    font-size: 1.6rem; /* Daha büyük başlık */
+    font-weight: 700; /* Daha kalın yazı */
+    margin: 0;
+    color: var(--primary); /* Başlık rengini ana renge değiştir */
+    position: relative;
+    padding-left: 15px; /* Sol tarafta dekoratif çizgi için alan bırak */
+    letter-spacing: 0.5px; /* Harfler arası mesafeyi artır */
+}
+
+/* Başlık için dekoratif sol çizgi */
+.categories-modal-header h3::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 70%;
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+.categories-close-btn {
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    width: 45px; /* Daha büyük buton */
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem; /* Daha büyük ikon */
+    color: var(--text-medium);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.categories-close-btn:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+    color: var(--text-dark);
+}
+
+/* Modal gövdesi - daha ferah */
+.categories-modal-body {
+    padding: 25px 30px 35px; /* Daha fazla boşluk ekle */
+    max-height: calc(85vh - 80px); /* Header'ı hesaba katarak */
+    overflow-y: auto;
+}
+
+/* Kategoriler grid düzeni - daha ferah */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px; /* Öğeler arasında daha fazla boşluk - 16px idi */
+    padding: 10px 0; /* Üst ve alt boşluğu artır */
+}
+
+@media (max-width: 480px) {
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px; /* Mobilde daha az ama yine de yeterli boşluk - 15px idi */
+    }
+}
+
+/* Kategori öğeleri - daha ferah */
+.category-item {
+    background-color: var(--background);
+    border-radius: 18px; /* Daha yumuşak köşeler - 16px idi */
+    padding: 25px 8px; /* Dikey boşluğu artır - 20px 5px idi */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); /* Hafif gölge eklendi */
+}
+
+.category-item:hover {
+    transform: translateY(-7px); /* Daha belirgin hover efekti - 5px idi */
+    background-color: var(--primary-light);
+    color: white;
+    box-shadow: 0 10px 25px rgba(106, 90, 224, 0.3); /* Daha belirgin gölge */
+}
+
+.category-item:hover .category-icon {
+    color: white;
+    transform: translateY(-5px); /* Hover'da daha fazla hareket - 3px idi */
+}
+
+.category-item:active {
+    transform: translateY(-2px); /* Basıldığında biraz yukarıda kalsın */
+}
+
+.category-icon {
+    font-size: 2.5rem; /* Daha büyük ikonlar - 2.2rem idi */
+    color: var(--primary);
+    margin-bottom: 15px; /* İkon ve yazı arasında daha fazla boşluk - 10px idi */
+    transition: all 0.3s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Daha yumuşak animasyon */
+}
+
+.category-name {
+    font-size: 1.1rem; /* Daha büyük yazı - 1rem idi */
+    font-weight: 700; /* Daha kalın yazı - 600 idi */
+    color: var(--text-dark);
+    line-height: 1.4; /* Satır yüksekliğini ayarla */
+    padding: 0 5px; /* Metin etrafına küçük boşluk ekle */
+}
+
+/* Kategori alanlarını daha belirgin gruplar olarak göster */
+.category-group {
+    margin-bottom: 30px; /* Kategori grupları arasında daha fazla boşluk */
+}
+
+.category-group-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    padding-left: 10px;
+    border-left: 3px solid var(--primary);
+    line-height: 1.3;
+}
+
+/* Scroll çubukları - daha şık */
+.categories-modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.categories-modal-body::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.categories-modal-body::-webkit-scrollbar-thumb {
+    background-color: var(--primary-light);
+    border-radius: 10px;
+}
+
+.categories-modal-body::-webkit-scrollbar-thumb:hover {
+    background-color: var(--primary);
+}
+
+/* Yumuşak scroll engelleme - yalnızca modal açıkken */
+.soft-no-scroll {
+    overflow: hidden !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Dark mode uyumluluğu - daha kontrastlı */
+body.dark-mode .categories-modal-content {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .categories-modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(to right, rgba(106, 90, 224, 0.1), transparent);
+}
+
+body.dark-mode .category-item {
+    background-color: rgba(255, 255, 255, 0.08); /* Biraz daha açık renk - 0.06 idi */
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .category-icon {
+    color: var(--primary-light);
+}
+
+body.dark-mode .category-name {
+    color: var(--text-light);
+}
+
+body.dark-mode .category-group-title {
+    color: var(--text-light);
+    border-left-color: var(--primary-light);
+}
+
+body.dark-mode .category-item:hover {
+    background-color: var(--primary);
+    box-shadow: 0 10px 25px rgba(106, 90, 224, 0.35);
+}
+
+body.dark-mode .categories-close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Tablet ve Desktop için daha büyük kategori öğeleri */
+@media (min-width: 768px) {
+    .categories-modal-content {
+        max-width: 650px; /* Daha geniş modal - 600px idi */
+    }
+    
+    .categories-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px; /* Daha fazla boşluk - 20px idi */
+    }
+    
+    .category-item {
+        padding: 30px 8px; /* Daha fazla dikey boşluk - 25px 5px idi */
+    }
+    
+    .category-icon {
+        font-size: 2.8rem; /* Daha büyük ikonlar - 2.4rem idi */
+        margin-bottom: 18px; /* Daha fazla boşluk - 12px idi */
+    }
+    
+    .category-name {
+        font-size: 1.2rem; /* Daha büyük yazı - 1.1rem idi */
+    }
+}

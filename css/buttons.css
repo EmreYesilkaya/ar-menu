@@ -1,0 +1,176 @@
+/**
+ * AR Restoran - Buton Stilleri
+ * Tüm buton türleri için stiller
+ */
+
+/* Standart buton */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(106, 90, 224, 0.3);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(106, 90, 224, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(106, 90, 224, 0.3);
+}
+
+/* Yukarı çık (Back to Top) butonu - Tüm iyileştirmeler eklendi */
+.back-to-top {
+    position: fixed;
+    bottom: 80px; /* Bottom navigation üzerinde yer alacak - JS ile güncellenir */
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 95; /* Bottom navigation'dan düşük, diğer modallardan yüksek */
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: none;
+    outline: none;
+    pointer-events: none; /* Varsayılan olarak tıklanamaz */
+    text-decoration: none !important; /* Link kullanılırsa stil bozulmasın */
+}
+
+.back-to-top.visible {
+    opacity: 0.9;
+    transform: translateY(0);
+    pointer-events: auto; /* Görünür olduğunda tıklanabilir */
+}
+
+.back-to-top:hover {
+    opacity: 1;
+    background-color: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.back-to-top:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.back-to-top i {
+    font-size: 1.3rem;
+}
+
+/* Dark Mode Uyumluluğu */
+body.dark-mode .back-to-top {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .back-to-top:hover {
+    background-color: var(--primary-light);
+}
+
+/* Daha fazla buton türleri... */
+.btn-secondary {
+    background-color: var(--secondary);
+    color: white;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn-danger {
+    background-color: var(--danger);
+    color: white;
+}
+
+.btn-success {
+    background-color: var(--success);
+    color: white;
+}
+
+/* Eğitim butonu - özel stil */
+.instruction-button {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    box-shadow: 0 4px 12px rgba(106, 90, 224, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.instruction-button:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        rgba(255,255,255,0), 
+        rgba(255,255,255,0.2), 
+        rgba(255,255,255,0));
+    transition: left 1s;
+}
+
+.instruction-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(106, 90, 224, 0.4);
+}
+
+.instruction-button:hover:before {
+    left: 100%;
+}
+
+.instruction-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(106, 90, 224, 0.4);
+}
+
+.instruction-button i {
+    font-size: 1rem;
+    animation: pulse-light 2s infinite;
+}
+
+@keyframes pulse-light {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}

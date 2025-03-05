@@ -21,6 +21,24 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Sayfa ilk açıldığında anlatıcı gösterilmeli mi kontrol et - zamanlama düzeltildi
     checkFirstVisit();
+    
+    // Tema değişikliğini izle
+    const bodyObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.attributeName === 'class' && 
+                mutation.target === document.body) {
+                updateTutorialTheme();
+            }
+        });
+    });
+    
+    // Body elemanını izle
+    bodyObserver.observe(document.body, { attributes: true });
+    
+    // İlk yüklemede temayı kontrol et
+    if (document.body.classList.contains('dark-mode')) {
+        updateTutorialTheme();
+    }
 });
 
 // İlk ziyaret kontrolü - düzeltildi
@@ -342,6 +360,63 @@ function closeTutorial() {
     const modal = document.getElementById('instructionsModal');
     if (modal) {
         modal.style.display = 'none';
+    }
+}
+
+// Tema değişikliğini destekle
+function updateTutorialTheme() {
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    const instructionsModal = document.getElementById('instructionsModal');
+    
+    if (instructionsModal && isDarkMode) {
+        // Tutorial navigasyonu için dark mode stilleri
+        const tutorialNav = instructionsModal.querySelector('.tutorial-navigation');
+        if (tutorialNav) {
+            tutorialNav.style.backgroundColor = 'var(--card-bg)';
+            tutorialNav.style.borderTopColor = 'rgba(255, 255, 255, 0.08)';
+            
+            const buttons = tutorialNav.querySelectorAll('.tutorial-btn');
+            buttons.forEach(btn => {
+                // Primary butonlar
+                if (btn.classList.contains('next-btn') || btn.classList.contains('skip-btn')) {
+                    btn.style.backgroundColor = 'var(--primary)';
+                    btn.style.color = 'white';
+                }
+                // Secondary butonlar
+                else {
+                    btn.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+                    btn.style.color = '#e9ebff';
+                }
+                
+                // Devre dışı butonlar
+                if (btn.disabled) {
+                    btn.style.opacity = '0.5';
+                    btn.style.backgroundColor = 'rgba(255, 255, 255, 0.04)';
+                    btn.style.color = '#8a8ca0';
+                }
+            });
+        }
+        
+        // Tutorial ilerleme çubuğu ve göstergeleri için dark mode stilleri
+        const progressSection = instructionsModal.querySelector('.tutorial-progress');
+        if (progressSection) {
+            progressSection.style.backgroundColor = 'var(--card-bg)';
+            
+            const progressContainer = progressSection.querySelector('.progress-container');
+            if (progressContainer) {
+                progressContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            }
+            
+            const stepDots = progressSection.querySelectorAll('.step-dot');
+            stepDots.forEach(dot => {
+                dot.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                
+                if (dot.classList.contains('active')) {
+                    dot.style.backgroundColor = 'var(--primary-light)';
+                    dot.style.boxShadow = '0 0 0 2px var(--card-bg), 0 0 0 3px var(--primary)';
+                }
+            });
+        }
     }
 }
 

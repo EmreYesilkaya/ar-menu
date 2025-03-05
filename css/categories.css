@@ -1,0 +1,175 @@
+/**
+ * Kategoriler Ekranı Stilleri
+ * Dark mode ile tam uyumlu
+ */
+
+.categories-container {
+    padding: 15px;
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-md);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.categories-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.categories-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* Kategoriler grid - scrollbar kaldırıldı */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    overflow-y: visible; /* auto yerine visible yapıldı - scrollbar kaldırıldı */
+    max-height: none; /* 70vh yerine none yapıldı - scrollbar kaldırıldı */
+    padding: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* Webkit scrollbar kaldırma - kesin çözüm */
+.categories-grid::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+/* Firefox için scrollbar gizleme */
+.categories-grid {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background);
+    border-radius: 12px;
+    padding: 15px 10px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.category-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.category-icon {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.category-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    text-align: center;
+    transition: color 0.3s ease;
+}
+
+.category-item:hover .category-icon {
+    transform: scale(1.1);
+}
+
+/* Dark Mode Adaptasyonu */
+body.dark-mode .categories-container {
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .categories-title {
+    color: var(--text-dark);
+}
+
+body.dark-mode .category-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .category-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .category-name {
+    color: var(--text-dark);
+}
+
+body.dark-mode .category-icon {
+    color: var(--primary-light);
+}
+
+/* Dark Mode Adaptasyonu - Geliştirilmiş */
+body.dark-mode .categories-container,
+body.dark-mode .categories-panel {
+    background-color: var(--card-bg) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .categories-title {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .categories-grid {
+    background-color: transparent !important;
+}
+
+body.dark-mode .category-item {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.dark-mode .category-name {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .category-icon {
+    color: var(--primary-light) !important;
+}
+
+body.dark-mode .categories-panel-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+body.dark-mode .close-panel {
+    color: var(--text-medium) !important;
+}
+
+body.dark-mode .close-panel:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--text-dark) !important;
+}
+
+/* Responsive düzenlemeler */
+@media (max-width: 480px) {
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .category-icon {
+        font-size: 1.8rem;
+    }
+    
+    .category-name {
+        font-size: 0.85rem;
+    }
+}

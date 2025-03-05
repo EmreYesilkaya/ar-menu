@@ -1,4 +1,4 @@
-/* Alt Gezinme Çubuğu Stilleri */
+/* Daha Ferah Alt Gezinme Çubuğu Stilleri */
 
 .bottom-nav {
     position: fixed;
@@ -9,11 +9,11 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-    z-index: 90; /* Sayfadaki çoğu öğeden daha yüksek */
-    padding: 0.8rem 0;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.08); /* Daha belirgin gölge */
+    z-index: 90;
+    padding: 15px 0; /* Daha yüksek çubuk */
+    border-top-left-radius: 25px; /* Daha yumuşak köşeler */
+    border-top-right-radius: 25px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -25,8 +25,8 @@
     top: -1px;
     left: 50%;
     transform: translateX(-50%);
-    width: 40px;
-    height: 4px;
+    width: 50px; /* Daha geniş gösterge */
+    height: 5px;
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
@@ -40,20 +40,20 @@
     color: var(--text-medium);
     position: relative;
     flex: 1;
-    padding: 0.5rem;
-    border-radius: 12px;
-    transition: all 0.2s ease;
+    padding: 8px 5px; /* Daha fazla dokunma alanı */
+    border-radius: 15px;
+    transition: all 0.25s ease; /* Daha yumuşak geçiş */
 }
 
 .bottom-nav-icon {
-    font-size: 1.3rem;
-    margin-bottom: 0.3rem;
-    transition: transform 0.2s ease;
+    font-size: 1.5rem; /* Daha büyük ikonlar */
+    margin-bottom: 5px;
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     color: var(--text-medium);
 }
 
 .bottom-nav-icon-large {
-    font-size: 1.4rem;
+    font-size: 1.6rem; /* Daha büyük ana buton */
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     color: white;
     width: 48px;
@@ -231,10 +231,169 @@
 
 /* Dark Mode Adaptasyonu */
 body.dark-mode .bottom-nav {
-    background-color: var(--card-bg);
+    background-color: var(--card-bg) !important;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .bottom-nav::before {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .bottom-nav-item {
+    color: var(--text-medium);
+}
+
+body.dark-mode .bottom-nav-label {
+    color: var(--text-medium);
+}
+
+body.dark-mode .bottom-nav-item:not(.active) .bottom-nav-icon {
+    color: var(--text-medium);
+}
+
+body.dark-mode .bottom-nav-item.active {
+    color: var(--primary-light);
+}
+
+body.dark-mode .bottom-nav-item.active .bottom-nav-icon {
+    color: var(--primary-light);
+}
+
+body.dark-mode .bottom-nav-icon-large {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode .bottom-nav-badge {
     border-color: var(--card-bg);
+}
+
+body.dark-mode .categories-grid {
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .category-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .category-name {
+    color: var(--text-dark);
+}
+
+body.dark-mode .category-icon {
+    color: var(--primary-light);
+}
+
+body.dark-mode .profile-avatar {
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .bottom-nav-item:hover:not(.active) .bottom-nav-icon,
+body.dark-mode .bottom-nav-item:hover:not(.active) .bottom-nav-label {
+    color: white;
+}
+
+body.dark-mode .bottom-nav-icon {
+    color: var(--text-medium);
+}
+
+body.dark-mode .bottom-nav-item[data-action="profile"] .bottom-nav-icon {
+    color: var(--text-medium);
+}
+
+body.dark-mode .bottom-nav-item[data-action="profile"]:hover .bottom-nav-icon,
+body.dark-mode .bottom-nav-item[data-action="profile"]:hover .bottom-nav-label {
+    color: var(--primary-light);
+}
+
+body.dark-mode .bottom-nav-item[data-action="profile"].active .bottom-nav-icon,
+body.dark-mode .bottom-nav-item[data-action="profile"].active .bottom-nav-label {
+    color: var(--primary-light);
+}
+
+body.dark-mode .bottom-nav-item:hover .bottom-nav-icon,
+body.dark-mode .bottom-nav-item:hover .bottom-nav-label {
+    color: var(--primary-light);
+}
+
+body.dark-mode .categories-grid::-webkit-scrollbar-track {
+    background-color: var(--card-bg);
+}
+
+body.dark-mode .categories-grid::-webkit-scrollbar-thumb {
+    background-color: var(--primary-light);
+}
+
+/* Dark Mode Adaptasyonu - Geliştirilmiş ve Düzeltilmiş */
+body.dark-mode .bottom-nav {
+    background-color: var(--card-bg) !important;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .bottom-nav::before {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Özellikle profil ve kategori butonları için güçlü seçiciler */
+body.dark-mode .bottom-nav-item[data-action="profile"],
+body.dark-mode .bottom-nav-item[data-action="categories"] {
+    background-color: transparent !important;
+}
+
+body.dark-mode .bottom-nav-item[data-action="profile"] .bottom-nav-icon,
+body.dark-mode .bottom-nav-item[data-action="categories"] .bottom-nav-icon {
+    color: var(--text-medium) !important;
+}
+
+body.dark-mode .bottom-nav-item[data-action="profile"] .bottom-nav-label,
+body.dark-mode .bottom-nav-item[data-action="categories"] .bottom-nav-label {
+    color: var(--text-medium) !important;
+}
+
+/* Hover durumu */
+body.dark-mode .bottom-nav-item[data-action="profile"]:hover .bottom-nav-icon,
+body.dark-mode .bottom-nav-item[data-action="categories"]:hover .bottom-nav-icon,
+body.dark-mode .bottom-nav-item[data-action="profile"]:hover .bottom-nav-label,
+body.dark-mode .bottom-nav-item[data-action="categories"]:hover .bottom-nav-label {
+    color: var(--primary-light) !important;
+}
+
+/* Aktif durum */
+body.dark-mode .bottom-nav-item[data-action="profile"].active .bottom-nav-icon,
+body.dark-mode .bottom-nav-item[data-action="categories"].active .bottom-nav-icon,
+body.dark-mode .bottom-nav-item[data-action="profile"].active .bottom-nav-label,
+body.dark-mode .bottom-nav-item[data-action="categories"].active .bottom-nav-label {
+    color: var(--primary-light) !important;
+}
+
+/* Kategoriler Paneli */
+body.dark-mode .categories-panel {
+    background-color: var(--card-bg) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Kategoriler butonu özel stili */
+.bottom-nav-item[data-action="categories"] .bottom-nav-icon {
+    color: var(--primary);
+}
+
+body.dark-mode .bottom-nav-item[data-action="categories"] .bottom-nav-icon {
+    color: var(--primary-light);
+}
+
+.bottom-nav-item[data-action="categories"].active .bottom-nav-icon,
+.bottom-nav-item[data-action="categories"].active .bottom-nav-label {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+body.dark-mode .bottom-nav-item[data-action="categories"].active .bottom-nav-icon,
+body.dark-mode .bottom-nav-item[data-action="categories"].active .bottom-nav-label {
+    color: var(--primary-light);
 }

@@ -150,10 +150,91 @@ const ThemeSwitcher = {
     
     // Temayı uygula
     applyTheme() {
-        if (this.isDark) {
-            document.body.classList.add('dark-mode');
-        } else {
-            document.body.classList.remove('dark-mode');
+        // Yumuşak geçiş sağla ve zamanlamayı senkronize et
+        document.body.classList.add('theme-transition');
+        
+        // Bir sonraki çerçevede dark-mode sınıfını değiştir (daha iyi senkronizasyon için)
+        requestAnimationFrame(() => {
+            if (this.isDark) {
+                document.body.classList.add('dark-mode');
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.documentElement.removeAttribute('data-theme');
+            }
+            
+            // Özel elementlerin de güncellenmesini sağla
+            this.updateSpecialElements();
+            
+            // Profil panelini güncelle
+            this.updateProfilePanel();
+            
+            // Geçiş etkisini tamamla
+            setTimeout(() => {
+                document.body.classList.remove('theme-transition');
+            }, 50);
+        });
+    },
+    
+    // Özel elementleri güncelle
+    updateSpecialElements() {
+        // Bottom nav elementlerini ele al
+        const bottomNav = document.querySelector('.bottom-nav');
+        if (bottomNav) {
+            const bottomNavItems = bottomNav.querySelectorAll('.bottom-nav-item');
+            bottomNavItems.forEach(item => {
+                // Her bir bottom nav item'ın icon ve label renklerini güncelle
+                const icon = item.querySelector('.bottom-nav-icon');
+                const label = item.querySelector('.bottom-nav-label');
+                
+                if (icon && !icon.classList.contains('bottom-nav-icon-large')) {
+                    icon.style.transition = 'color 0.3s ease';
+                }
+                
+                if (label) {
+                    label.style.transition = 'color 0.3s ease';
+                }
+            });
+        }
+        
+        // Meta tema rengini güncelle (iOS ve Android için)
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (metaThemeColor) {
+            metaThemeColor.setAttribute('content', 
+                this.isDark ? '#1A1B2E' : '#6A5AE0');
+        }
+    },
+    
+    // Profil panelini güncelle
+    updateProfilePanel() {
+        const profilePanel = document.querySelector('.profile-panel');
+        if (profilePanel) {
+            if (this.isDark) {
+                // Profil butonlarını güncelle
+                profilePanel.querySelectorAll('.profile-action-btn').forEach(btn => {
+                    btn.style.backgroundColor = 'rgba(42, 43, 70, 0.6)';
+                    btn.style.color = 'var(--text-dark)';
+                    btn.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                });
+                
+                // Buton içindeki metinleri güncelle
+                profilePanel.querySelectorAll('.profile-action-text').forEach(text => {
+                    text.style.color = 'var(--text-dark)';
+                });
+                
+                // İkonları güncelle
+                profilePanel.querySelectorAll('.profile-action-icon').forEach(icon => {
+                    icon.style.backgroundColor = 'rgba(106, 90, 224, 0.15)';
+                    icon.style.color = 'var(--primary-light)';
+                });
+            } else {
+                // Light mode - stilleri temizle
+                profilePanel.querySelectorAll('.profile-action-btn, .profile-action-text, .profile-action-icon').forEach(el => {
+                    el.style.backgroundColor = '';
+                    el.style.color = '';
+                    el.style.borderColor = '';
+                });
+            }
         }
     },
     

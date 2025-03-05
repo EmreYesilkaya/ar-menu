@@ -1,0 +1,288 @@
+/**
+ * Daha Ferah Menü Tasarımı
+ * Menü öğeleri ve kartları için geniş ve estetik bir düzen sağlar
+ */
+
+/* Menü öğeleri için daha ferah kart düzeni */
+.menu-item {
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                box-shadow 0.3s ease;
+    background-color: var(--card-bg);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    position: relative;
+    height: 100%;
+}
+
+.menu-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Menü öğesi resmi için daha büyük alan */
+.menu-item-image {
+    height: 220px; /* Daha büyük resim alanı */
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.menu-item:hover .menu-item-image img {
+    transform: scale(1.05);
+}
+
+/* Bilgi içeriği için daha fazla boşluk */
+.menu-item-info {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Menü öğesi başlığı daha büyük ve ferah */
+.menu-item-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+/* Açıklama metni için daha fazla boşluk ve daha rahat okunabilirlik */
+.menu-item-description {
+    font-size: 1rem;
+    color: var(--text-medium);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+/* Fiyat ve yan bilgilerin düzeni daha ferah */
+.menu-item-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Fiyat bilgisi daha net ve belirgin */
+.menu-item-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+}
+
+/* Eylem düğmeleri daha belirgin ve ferah */
+.menu-item-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.menu-item-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background);
+    color: var(--text-medium);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1.1rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.menu-item-btn:hover {
+    background-color: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(106, 90, 224, 0.2);
+}
+
+.menu-item-btn:active {
+    transform: translateY(0);
+}
+
+/* Favori butonu düzenleme */
+.favorite-btn {
+    color: var(--text-medium);
+}
+
+.favorite-btn.active {
+    color: #ff5a5a;
+    background-color: rgba(255, 90, 90, 0.1);
+}
+
+.favorite-btn.active:hover {
+    background-color: rgba(255, 90, 90, 0.2);
+    color: #ff5a5a;
+}
+
+/* AR butonu düzenleme */
+.ar-btn:hover {
+    background-color: var(--secondary);
+}
+
+/* Etiketler bölümü düzenlemesi */
+.menu-item-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.menu-item-tag {
+    font-size: 0.85rem;
+    background-color: var(--tag-bg);
+    color: var(--tag-text);
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Kalori bilgisi düzenlemesi */
+.menu-item-calories {
+    font-size: 0.9rem;
+    color: var(--text-medium);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Özel durumlar için rozetler */
+.menu-item-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    z-index: 2;
+}
+
+.menu-item-badge.popular {
+    background-color: #ff5a5a;
+    color: white;
+}
+
+.menu-item-badge.new {
+    background-color: var(--primary);
+    color: white;
+}
+
+.menu-item-badge.sale {
+    background-color: #2ecc71;
+    color: white;
+}
+
+/* Önerilen menü öğeleri için özel stil */
+.menu-item.featured {
+    border: 2px solid var(--primary-light);
+}
+
+/* Görüntüyü büyütme etkisi */
+.menu-item-zoom {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.menu-item:hover .menu-item-zoom {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.menu-item-zoom:hover {
+    background-color: var(--primary);
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Dark mode uyumluluk */
+body.dark-mode .menu-item {
+    background-color: var(--card-bg);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .menu-item-title {
+    color: var(--text-light);
+}
+
+body.dark-mode .menu-item-details {
+    border-top-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .menu-item-btn {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-medium);
+}
+
+body.dark-mode .menu-item-zoom {
+    background-color: rgba(50, 50, 50, 0.9);
+    color: var(--text-light);
+}
+
+/* Tablet ve mobil için responsive düzenlemeler */
+@media (max-width: 768px) {
+    .menu-items {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+    .menu-item-image {
+        height: 200px;
+    }
+    
+    .menu-item-info {
+        padding: 20px;
+    }
+    
+    .menu-item-title {
+        font-size: 1.2rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .menu-items {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .menu-items {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+}

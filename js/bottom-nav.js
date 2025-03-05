@@ -1228,3 +1228,29 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.head.appendChild(notificationStyle);
 });
+
+// Kategoriler düğmesine tıklama işlevi eklendi
+document.querySelector('[data-action="categories"]').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    // Kategoriler modalını aç
+    showCategoriesModal();
+    
+    // Aktif buton stilini güncelle
+    document.querySelectorAll('.bottom-nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    this.classList.add('active');
+});
+
+// Kategoriler modalını açma fonksiyonu
+function showCategoriesModal() {
+    const categoriesModal = document.getElementById('categoriesModal');
+    if (categoriesModal) {
+        categoriesModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    } else {
+        console.warn('Kategoriler modalı bulunamadı!');
+    }
+}

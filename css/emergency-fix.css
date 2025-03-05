@@ -1,0 +1,131 @@
+/**
+ * ACİL CSS DÜZELTME
+ * z-index sorunlarını ve tıklama/etkileşim sorunlarını giderir
+ */
+
+/* Görünmez katmanları düzelt */
+body::before,
+body::after {
+    content: none !important; /* Görünmez overlay'leri kaldır */
+}
+
+/* Pointer events'i düzelt */
+body, html {
+    pointer-events: auto !important;
+}
+
+/* z-index hiyerarşisini düzelt */
+.header {
+    z-index: 100 !important;
+}
+
+.bottom-nav {
+    z-index: 90 !important;
+}
+
+.menu-tabs-container {
+    z-index: 80 !important;
+}
+
+.main-container {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+/* Modal ve overlay'lerin z-index'i */
+.modal,
+.categories-modal {
+    z-index: 1000 !important;
+}
+
+/* Tıklanabilir öğeler için etkileşimi iyileştir */
+button, 
+a,
+.menu-tab,
+.filter-btn, 
+.category-item,
+.bottom-nav-item,
+.search-input,
+.favorite-btn {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1) !important; /* Mobil dokunma efekti */
+}
+
+/* Etkileşimli öğeler için ek vurgulama */
+button:active, 
+a:active,
+.menu-tab:active,
+.filter-btn:active, 
+.category-item:active,
+.bottom-nav-item:active {
+    opacity: 0.8 !important; /* Basıldığında hafif transparan */
+}
+
+/* iOS'ta etkileşim gecikmesini düzeltme */
+@supports (-webkit-touch-callout: none) {
+    * {
+        -webkit-touch-callout: none !important;
+        -webkit-user-select: none !important;
+    }
+    
+    input, 
+    textarea {
+        -webkit-user-select: text !important;
+    }
+}
+
+/* Sayfayı kaplayan ve engel olabilecek herhangi bir şeyi düzelt */
+body > div:not(.main-container):not(.header):not(.bottom-nav):not(.modal):not(.categories-modal):not(.ar-container):not(#arContainer):not(.loading-screen):not(.back-to-top) {
+    pointer-events: none !important;
+    z-index: -1 !important;
+}
+
+/* Etkin modal ve kategori panelleri için pointerEvents ayarları */
+.modal.active,
+.categories-modal.active {
+    pointer-events: auto !important;
+}
+
+/* Scroll sorunlarını düzelt */
+body:not(.modal-open):not(.panel-open) {
+    overflow: auto !important;
+    position: static !important;
+    height: auto !important;
+    width: auto !important;
+}
+
+/* Mobil cihazlar için dokunmatik hedefleri artır */
+@media (max-width: 767px) {
+    .menu-tab {
+        padding: 14px 20px !important; /* Daha büyük dokunma alanı */
+    }
+    
+    .filter-btn {
+        padding: 12px 18px !important;
+    }
+    
+    .category-item {
+        padding: 20px 10px !important;
+    }
+    
+    .bottom-nav-item {
+        padding: 12px 5px !important;
+    }
+}
+
+/* Mobil menü için özel düzeltme */
+.bottom-nav {
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    position: fixed !important;
+    display: flex !important;
+}
+
+/* Kategori öğeleri için tıklama alanını genişlet */
+.category-icon, 
+.category-name {
+    pointer-events: none !important; /* Üst elemana tıklama olayını iletmek için */
+}

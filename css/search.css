@@ -1,295 +1,778 @@
 /**
  * AR Menü Arama ve Filtreleme Özellikleri Stilleri
- * Modern ve kullanıcı dostu arama arayüzü - İyileştirildi
+ * iOS 16+ Tarzında Minimal Tasarım - Tek Tıklamalı Filtreleme
  */
 
 /* Arama kutusu container */
 .search-container {
-    padding: 15px;
-    background-color: #fff;
+    padding: 16px;
+    background-color: var(--card-bg);
     margin-bottom: 15px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
     position: relative;
-    margin-bottom: 1.2rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 /* Arama kutusu flex container */
 .search-box {
     display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
     position: relative;
-    margin-bottom: 0.8rem;
+    margin-bottom: 20px;
 }
 
 /* Arama ikonu */
 .search-icon {
     position: absolute;
-    left: 15px;
+    left: 16px;
     top: 50%;
     transform: translateY(-50%);
-    color: #999;
-    pointer-events: none;
-    transition: color 0.2s ease;
-    left: 1.2rem;
     color: var(--text-light);
+    font-size: 16px;
+    pointer-events: none;
+    transition: all 0.2s ease;
 }
 
-/* Arama input alanı */
+/* Arama input alanı - iOS tarzı */
 .search-input {
     flex: 1;
-    padding: 12px 15px 12px 40px; /* Sol tarafta ikon için padding */
-    border: 1px solid #eee;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-    width: 100%;
-    padding: 1rem 1rem 1rem 3rem;
+    padding: 14px 16px 14px 42px;
     border: none;
-    border-radius: 100px;
-    background-color: var(--card-bg);
+    border-radius: 14px;
+    background-color: rgba(142, 142, 147, 0.12);
     color: var(--text-dark);
-    box-shadow: var(--shadow-sm);
+    font-size: 16px;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    width: 100%;
+    appearance: none;
 }
 
 .search-input:focus {
-    border-color: #6A5AE0;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(106, 90, 224, 0.2);
-    outline: none;
-    box-shadow: var(--shadow-md), 0 0 0 2px var(--primary-light);
+    background-color: rgba(142, 142, 147, 0.18);
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.15);
 }
 
-.search-input:focus + .search-icon,
-.search-input.focused + .search-icon {
-    color: #6A5AE0;
+/* Arama kutusu temizle butonu - iOS tarzı */
+.search-clear {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: none;
+    color: var(--text-light);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+    padding: 0;
+    z-index: 5;
 }
 
-/* Filtreleme butonları container */
+.search-clear:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.search-clear:active {
+    transform: translateY(-50%) scale(0.9);
+}
+
+/* Yeni Filtre Wrapper */
+.filter-wrapper {
+    position: relative;
+}
+
+/* Filtreleme butonları container - iOS 16+ tarzı */
 .filter-container {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-    padding-bottom: 5px;
+    flex-wrap: nowrap;
+    gap: 10px;
     overflow-x: auto;
-    scrollbar-width: none;  /* Firefox için scroll barı gizle */
-    -ms-overflow-style: none;  /* IE ve Edge için scroll barı gizle */
-    max-width: 100%;
-    padding-bottom: 10px;
-    display: flex;
-    overflow-x: auto;
-    gap: 0.5rem;
-    padding: 0.5rem 0;
+    margin: 0 -6px;
+    padding: 0 6px 6px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;  /* Snap to filter buttons */
 }
 
 .filter-container::-webkit-scrollbar {
-    display: none; /* Chrome, Safari ve Opera için scroll barı gizle */
+    display: none;
 }
 
-/* Filtreleme butonları */
+.filter-container:not(.scrolled-to-end) .filter-scroll-hint {
+    opacity: 1;
+}
+
+/* Filtreleme butonları - iOS tarzı */
 .filter-btn {
-    padding: 8px 14px;
-    background-color: #f5f5f5;
-    border: none;
+    padding: 8px 16px;
     border-radius: 20px;
-    font-size: 0.9rem;
+    background-color: rgba(142, 142, 147, 0.12);
+    color: var(--text-dark);
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     white-space: nowrap;
-    border: 1px solid rgba(0,0,0,0.05);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     flex: 0 0 auto;
-    padding: 0.5rem 1rem;
-    border-radius: 100px;
-    background-color: var(--background);
-    border: 1px solid rgba(0,0,0,0.08);
-    color: var(--text-medium);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transform: scale(1);
+    position: relative;
+    overflow: hidden;
+    scroll-snap-align: start;  /* Snap alignment */
+}
+
+.filter-btn::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    z-index: 0;
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+.filter-btn:active::after {
+    transform: translate(-50%, -50%) scale(20);
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.5s ease-out;
+}
+
+/* iOS tarzı aktif filtre butonu */
+.filter-btn.active {
+    background-image: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+    box-shadow: 
+        0 2px 8px rgba(var(--primary-rgb), 0.3),
+        inset 0 1px rgba(255, 255, 255, 0.2);
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.filter-btn:not(.active):hover {
+    background-color: rgba(142, 142, 147, 0.2);
+    transform: translateY(-1px);
+}
+
+.filter-btn:active {
+    transform: scale(0.95);
+}
+
+/* Filter ikon emojisi */
+.filter-emoji {
+    font-size: 16px;
+}
+
+/* Daha Fazla Filtre Göster/Gizle Butonu - iOS tarzı */
+.filter-expand-btn {
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
+    flex: 0 0 auto;
+    position: sticky;
+    right: 0;
+    top: 0;
+    z-index: 5;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.filter-expand-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -20px;
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(to right, transparent, var(--card-bg) 80%);
+    z-index: -1;
+}
+
+.filter-expand-btn i {
+    font-size: 14px;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.filter-expand-btn.expanded i {
+    transform: rotate(180deg);
+}
+
+/* Genişletilebilir Filtreler Alanı - iOS tarzı */
+.expanded-filters {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+    border-radius: 16px;
+    margin-top: 8px;
+}
+
+.expanded-filters.show {
+    max-height: 800px;
+    transition: max-height 0.5s cubic-bezier(0.5, 0, 1, 0);
+}
+
+/* Filtre Grupları Tasarımı - iOS tarzı */
+.filter-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 2px 0 10px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filter-group-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    padding-left: 4px;
+    margin-bottom: -4px;
+}
+
+.filter-group-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Aktif Filtreler Gösterge Alanı - iOS tarzı */
+.active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 16px;
+    min-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.active-filters:empty {
+    margin-top: 0;
+    padding-top: 0;
+    min-height: 0;
+}
+
+.active-filters:not(:empty) {
+    min-height: 32px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.active-filter-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    animation: tagFadeIn 0.3s cubic-bezier(0.2, 0, 0, 1.2);
+}
+
+.active-filter-tag .remove-filter {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.25);
     transition: all 0.2s ease;
 }
 
-.filter-btn.active {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    color: white;
-    box-shadow: 0 3px 8px rgba(106, 90, 224, 0.3);
-    transform: translateY(-1px);
-    background-color: var(--primary);
-    border-color: var(--primary);
-    box-shadow: 0 3px 8px rgba(106, 90, 224, 0.25);
+.active-filter-tag .remove-filter:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.15);
 }
 
-.filter-btn:hover:not(.active) {
-    background-color: #e9e9ef;
-    transform: translateY(-1px);
-    background-color: rgba(0,0,0,0.05);
+.active-filter-tag .remove-filter:active {
+    transform: scale(0.9);
 }
 
-/* Arama önizleme */
-.search-preview {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
+/* Yükleme göstergesi - iOS tarzı */
+.filter-loading {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(0, 122, 255, 0.2);
+    border-radius: 50%;
+    border-top-color: var(--primary);
+    animation: spin 0.8s linear infinite;
+    margin-left: 8px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
-/* Sonuç bulunamadı mesajı */
-.no-results {
+.filter-loading.show {
+    opacity: 1;
+}
+
+/* Boş sonuç mesajı - iOS style */
+.empty-section-message {
     text-align: center;
-    padding: 30px 20px;
+    padding: 2rem 1rem;
+    color: var(--text-medium);
+    background-color: rgba(240, 240, 245, 0.5);
+    border-radius: 16px;
+    margin: 1rem 0;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    animation: fadeInUp 0.5s ease-out;
 }
 
-.no-results-emoji {
-    font-size: 2rem;
-    margin-bottom: 10px;
+.empty-message-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+    animation: pulse 2s infinite;
 }
 
-.no-results-title {
-    color: #5B5D72;
-    font-weight: 600;
-    margin-bottom: 5px;
+/* Scroll ipucu göstergesi - kullanıcıya kaydırma yapabileceğini gösterir */
+.filter-scroll-hint {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 30px;
+    background: linear-gradient(to right, rgba(255,255,255,0), var(--card-bg));
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 4;
 }
 
-.no-results-message {
-    color: #8A8C9D;
-}
-
-/* Mobil uyumluluk */
-@media (max-width: 576px) {
-    .search-input {
-        font-size: 0.9rem;
-        padding: 10px 10px 10px 35px;
+/* Animasyonlar */
+@keyframes tagFadeIn {
+    from { 
+        opacity: 0;
+        transform: translateY(8px) scale(0.9);
     }
-    
-    .search-icon {
-        font-size: 0.9rem;
-        left: 12px;
-    }
-    
-    .filter-btn {
-        padding: 6px 10px;
-        font-size: 0.85rem;
-    }
-    
-    .search-container {
-        padding: 12px;
+    to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
     }
 }
 
-/* Tag styling improvements for search */
-.food-tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+@keyframes tagFadeOut {
+    from { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    to { 
+        opacity: 0;
+        transform: translateY(5px) scale(0.9);
+    }
 }
 
-/* Yeni filtre etiketleri için özel renkler */
-.tag-meat {
-    background-color: #E57373;
-    color: white;
+@keyframes pulse-highlight {
+    0% { box-shadow: 0 0 0 0 rgba(0, 122, 255, 0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(0, 122, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 122, 255, 0); }
 }
 
-.tag-chicken {
-    background-color: #FFB74D;
-    color: white;
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
-.tag-vegetarian {
-    background-color: #81C784;
-    color: white;
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.tag-vegan {
-    background-color: #66BB6A;
-    color: white;
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.7; }
 }
 
-.tag-spicy {
-    background-color: #FF5722;
-    color: white;
-}
-
-.tag-fresh {
-    background-color: #4FC3F7;
-    color: white;
-}
-
-.tag-hot {
-    background-color: #FF8A65;
-    color: white;
-}
-
-.tag-popular {
-    background-color: #FFC107;
-    color: #333;
-}
-
-/* Better styling for active filter buttons */
-.filter-btn.active {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    box-shadow: 0 2px 6px rgba(106, 90, 224, 0.3);
-    transform: translateY(-1px);
-}
-
-/* Search input focus animation */
-.search-input:focus {
-    animation: pulse-border 1s ease-out;
-}
-
-@keyframes pulse-border {
-    0% { box-shadow: 0 0 0 0 rgba(106, 90, 224, 0.4); }
-    70% { box-shadow: 0 0 0 6px rgba(106, 90, 224, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(106, 90, 224, 0); }
-}
-
-/* Dark Mode Adaptasyonu */
-body.dark-mode .search-input {
+/* Dark Mode Adaptasyonu - iOS tarzı */
+body.dark-mode .search-container {
     background-color: var(--card-bg);
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .search-input {
+    background-color: rgba(255, 255, 255, 0.08);
     color: var(--text-dark);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
 }
 
 body.dark-mode .search-input:focus {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), 0 0 0 2px var(--primary-light);
-}
-
-body.dark-mode .search-icon {
-    color: var(--text-light);
+    background-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.25);
 }
 
 body.dark-mode .filter-btn {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--text-dark);
 }
 
-body.dark-mode .filter-btn:hover:not(.active) {
-    background-color: rgba(255, 255, 255, 0.1);
+body.dark-mode .filter-btn:not(.active):hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+body.dark-mode .active-filters:not(:empty) {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .empty-section-message {
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
 }
 
 body.dark-mode .filter-btn.active {
-    background-color: var(--primary);
-    border-color: var(--primary-dark);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    background-image: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.3),
+        inset 0 1px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .filter-scroll-hint {
+    background: linear-gradient(to right, rgba(0,0,0,0), var(--card-bg));
 }
 
 /* Responsive düzenlemeler */
 @media (max-width: 768px) {
+    .filter-groups {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+    
     .search-input {
-        padding: 0.8rem 0.8rem 0.8rem 2.8rem;
-        font-size: 0.9rem;
+        padding: 12px 12px 12px 38px;
     }
     
     .search-icon {
-        left: 1rem;
+        left: 14px;
     }
     
     .filter-btn {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.85rem;
+        padding: 7px 14px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-groups {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    }
+}
+
+/* Filtre başlık bölümü - Yeni */
+.filter-section {
+    margin-bottom: 10px;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.filter-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+/* Daha Fazla Filtre Butonu - Yeniden Konumlandırıldı */
+.filter-expand-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-expand-btn i {
+    font-size: 12px;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.filter-expand-btn.expanded i {
+    transform: rotate(90deg);
+}
+
+.filter-expand-btn:hover {
+    background-color: rgba(106, 90, 224, 0.08);
+}
+
+.filter-expand-btn:active {
+    transform: scale(0.97);
+}
+
+/* Filtreleme butonları container */
+.filter-wrapper {
+    position: relative;
+}
+
+.filter-container {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.filter-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Filtreleme butonları - gelişmiş stil */
+.filter-btn {
+    padding: 8px 16px;
+    border-radius: 16px;
+    background-color: rgba(142, 142, 147, 0.12);
+    color: var(--text-dark);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Buton efekti */
+.filter-btn::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    z-index: 0;
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+.filter-btn:active::after {
+    transform: translate(-50%, -50%) scale(20);
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.5s ease-out;
+}
+
+/* Aktif buton - iyileştirilmiş görsellik */
+.filter-btn.active {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 3px 8px rgba(106, 90, 224, 0.3);
+    transform: translateY(-1px);
+    position: relative;
+    z-index: 1;
+}
+
+/* Buton hover efekti */
+.filter-btn:not(.active):hover {
+    background-color: rgba(142, 142, 147, 0.18);
+    transform: translateY(-1px);
+}
+
+/* Buton tıklama efekti */
+.filter-btn:active {
+    transform: scale(0.96);
+}
+
+/* Emoji ikonu */
+.filter-emoji {
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* Genişletilebilir Filtreler Alanı */
+.expanded-filters {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+    border-radius: 16px;
+    margin-top: 10px;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.expanded-filters.show {
+    max-height: 800px;
+    transition: max-height 0.5s cubic-bezier(0.5, 0, 1, 0);
+    background-color: rgba(0,0,0,0.01);
+}
+
+/* Filtre Grupları */
+.filter-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 16px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filter-group-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-medium);
+    letter-spacing: 0.02em;
+    margin-bottom: 2px;
+}
+
+.filter-group-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Scroll ipucu göstergesi */
+.filter-scroll-hint {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 20px;
+    background: linear-gradient(to right, rgba(255,255,255,0), var(--card-bg) 80%);
+    pointer-events: none;
+    opacity: 1;
+    z-index: 2;
+}
+
+/* Animasyonlar */
+@keyframes pulse-highlight {
+    0% { box-shadow: 0 0 0 0 rgba(106, 90, 224, 0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(106, 90, 224, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(106, 90, 224, 0); }
+}
+
+.filter-btn.active {
+    animation: pulse-highlight 1.5s 1;
+}
+
+/* Dark Mode Adaptasyonu */
+body.dark-mode .search-container {
+    background-color: var(--card-bg);
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .filter-title {
+    color: var(--text-light);
+}
+
+body.dark-mode .search-input {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--text-dark);
+}
+
+body.dark-mode .filter-btn {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .filter-btn:not(.active):hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+body.dark-mode .expanded-filters.show {
+    background-color: rgba(255,255,255,0.02);
+    border-color: rgba(255,255,255,0.08);
+}
+
+body.dark-mode .filter-scroll-hint {
+    background: linear-gradient(to right, rgba(0,0,0,0), var(--card-bg) 80%);
+}
+
+/* Responsive düzenlemeler */
+@media (max-width: 768px) {
+    .filter-groups {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    .search-input {
+        padding: 12px 12px 12px 38px;
+    }
+    
+    .filter-btn {
+        padding: 7px 14px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-groups {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        padding: 10px;
+    }
+    
+    .filter-header {
+        margin-bottom: 10px;
     }
 }

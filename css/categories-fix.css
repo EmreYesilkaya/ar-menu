@@ -1,0 +1,376 @@
+/**
+ * Kategoriler Panel Düzeltme Stillleri
+ * Kategoriler Modal ve Panel için stil düzeltmeleri
+ */
+
+/* Kategoriler paneli pozisyon düzeltmesi */
+.categories-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 80vh;
+    background-color: var(--card-bg);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: translateY(100%);
+    z-index: 95; /* Bottom nav üzerinde */
+    padding-bottom: env(safe-area-inset-bottom, 20px); /* iPhone X ve sonrası için alt boşluk */
+}
+
+.categories-panel.active {
+    transform: translateY(0);
+}
+
+.categories-panel::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 5px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+.categories-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+
+.categories-panel-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+}
+
+.close-panel {
+    background: transparent;
+    border: none;
+    color: var(--text-medium);
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.close-panel:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.categories-panel-content {
+    padding: 10px 15px 20px;
+    max-height: calc(80vh - 60px); /* Header yüksekliği hariç */
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; /* iOS için düzgün kaydırma */
+}
+
+/* Kategoriler grid düzeni */
+.categories-panel .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 5px 0;
+}
+
+@media (max-width: 480px) {
+    .categories-panel .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Kategoriler öğeleri */
+.categories-panel .category-item {
+    background-color: var(--background);
+    border-radius: 12px;
+    padding: 15px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.categories-panel .category-item:hover {
+    transform: translateY(-3px);
+    background-color: var(--primary-light);
+    color: white;
+    box-shadow: 0 5px 15px rgba(106, 90, 224, 0.2);
+}
+
+.categories-panel .category-item:hover .category-icon {
+    color: white;
+}
+
+.categories-panel .category-icon {
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+}
+
+.categories-panel .category-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* Kayma davranışını düzeltme */
+body.panel-open {
+    overflow: hidden;
+}
+
+/* Modal için overlay düzeltmesi */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: none;
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.modal-header h3 {
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin: 0;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.close-modal {
+    background: transparent;
+    border: none;
+    color: var(--text-medium);
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.close-modal:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--text-dark);
+}
+
+.modal-body {
+    padding: 15px 20px;
+    overflow-y: auto;
+    max-height: calc(90vh - 120px); /* Header ve potansiyel footer hariç */
+}
+
+/* BUG FIX: Scroll'u Gizleme */
+body.no-scroll {
+    overflow: hidden !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+body.panel-open {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+}
+
+/* BUG FIX: Önemli düzeltme - modal kapatıldıktan sonra otomatik düzeltme için */
+@keyframes restore-scroll {
+    to { overflow: auto; }
+}
+
+.modal-closing {
+    animation: restore-scroll 0.1s forwards;
+}
+
+/* BUG FIX: Kategoriler modalı kapatıldığında scrollun düzgün çalışmasını sağla */
+.restore-scroll {
+    overflow: auto !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    top: auto !important;
+}
+
+/* BUG FIX: Kategoriler Modalı için özel düzeltmeler */
+#categoriesModal {
+    z-index: 999; /* En üst katman */
+}
+
+#categoriesModal .modal-content {
+    max-width: 450px; /* Daha geniş modal */
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-height: 65vh; /* Boyutu sınırla */
+    overflow-y: auto;
+    padding: 5px;
+}
+
+/* BUG FIX: Kaydırma davranışını düzeltme */
+.categories-grid::-webkit-scrollbar {
+    width: 5px;
+}
+
+.categories-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.categories-grid::-webkit-scrollbar-thumb {
+    background-color: var(--primary-light);
+    border-radius: 20px;
+}
+
+/* Dark Mode Uyarlamaları */
+body.dark-mode .categories-panel {
+    background-color: var(--card-bg);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .categories-panel::before {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .categories-panel-header {
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .close-panel:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .categories-panel .category-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .categories-panel .category-item:hover {
+    background-color: var(--primary);
+}
+
+body.dark-mode .modal-header {
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .close-modal:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* BUG FIX: Z-index düzeltmeleri */
+.bottom-nav {
+    z-index: 90;
+}
+
+.categories-panel {
+    z-index: 95;
+}
+
+.modal {
+    z-index: 100;
+}
+
+/* BUG FIX: Kaydırma düzeltmeleri */
+html, body {
+    scroll-behavior: smooth;
+    overscroll-behavior-y: none; /* Bounce efektini engelle */
+}
+
+@supports (-webkit-touch-callout: none) {
+    /* iOS için özel düzeltmeler */
+    .categories-panel, .modal {
+        padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+}
+
+/* BUG FIX: Kategoriler paneli kaydırma düzeltmesi */
+.categories-panel.active + .main-container {
+    pointer-events: none; /* Panel aktifken içerikle etkileşimi engelle */
+}
+
+/* BUG FIX: Overlay stillerini güçlendir */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 94;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+body.panel-open::after {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}

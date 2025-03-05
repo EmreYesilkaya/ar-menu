@@ -420,3 +420,149 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("MenuDB modülü bulunamadı! menu-data.js dosyasının doğru şekilde yüklendiğinden emin olun.");
     }
 });
+
+/**
+ * Menu Loader - Menü verilerini yükleyip gösterir
+ * Etiketleme ve filtreleme sistemini yönetir
+ */
+
+document.addEventListener('DOMContentLoaded', async function() {
+    // Menü verilerini yükleme - jSON dosya yükleme veya global değişken kontrolü
+    let menuItems;
+    
+    // Global menuData değişkeni var mı kontrol et
+    if (typeof menuData !== 'undefined') {
+        menuItems = menuData;
+        console.log('Global menuData değişkeni kullanıldı.');
+    } else {
+        try {
+            // Veriler yoksa menü verilerini bir dosyadan almaya çalış
+            const response = await fetch('data/menu.json');
+            if (!response.ok) {
+                throw new Error('Menü verilerini yükleme başarısız: ' + response.status);
+            }
+            menuItems = await response.json();
+            console.log('Menü verileri JSON dosyasından başarıyla yüklendi.');
+        } catch (error) {
+            console.error('Menü verilerini yükleme hatası:', error);
+            showError('Menü verileri yüklenemedi. Lütfen sayfayı yenileyin.');
+            return;
+        }
+    }
+    
+    // Kategorileri yükle ve render et
+    try {
+        // Ana yemekleri yükle
+        if (menuItems.mainDishes && menuItems.mainDishes.length > 0) {
+            const mainDishesContainer = document.getElementById('mainDishes');
+            if (mainDishesContainer) {
+                renderMenuItems(menuItems.mainDishes, mainDishesContainer);
+                console.log(`${menuItems.mainDishes.length} ana yemek yüklendi.`);
+            }
+        }
+        
+        // Tatlıları yükle
+        if (menuItems.desserts && menuItems.desserts.length > 0) {
+            const dessertsContainer = document.getElementById('desserts');
+            if (dessertsContainer) {
+                renderMenuItems(menuItems.desserts, dessertsContainer);
+                console.log(`${menuItems.desserts.length} tatlı yüklendi.`);
+            }
+        }
+        
+        // İçecekleri yükle
+        if (menuItems.drinks && menuItems.drinks.length > 0) {
+            const drinksContainer = document.getElementById('drinks');
+            if (drinksContainer) {
+                renderMenuItems(menuItems.drinks, drinksContainer);
+                console.log(`${menuItems.drinks.length} içecek yüklendi.`);
+            }
+        }
+        
+        // Popüler öğeleri yükle
+        if (menuItems.popularItems && menuItems.popularItems.length > 0) {
+            const popularContainer = document.getElementById('popularItems');
+            if (popularContainer) {
+                renderMenuItems(menuItems.popularItems, popularContainer);
+                console.log(`${menuItems.popularItems.length} popüler öğe yüklendi.`);
+            }
+        }
+        
+        // Kahvaltı öğelerini yükle
+        if (menuItems.breakfast && menuItems.breakfast.length > 0) {
+            const breakfastContainer = document.getElementById('breakfast');
+            if (breakfastContainer) {
+                renderMenuItems(menuItems.breakfast, breakfastContainer);
+                console.log(`${menuItems.breakfast.length} kahvaltı öğesi yüklendi.`);
+            }
+        }
+        
+        // Çorbaları yükle
+        if (menuItems.soups && menuItems.soups.length > 0) {
+            const soupsContainer = document.getElementById('soups');
+            if (soupsContainer) {
+                renderMenuItems(menuItems.soups, soupsContainer);
+                console.log(`${menuItems.soups.length} çorba yüklendi.`);
+            }
+        }
+        
+        // Salataları yükle
+        if (menuItems.salads && menuItems.salads.length > 0) {
+            const saladsContainer = document.getElementById('salads');
+            if (saladsContainer) {
+                renderMenuItems(menuItems.salads, saladsContainer);
+                console.log(`${menuItems.salads.length} salata yüklendi.`);
+            }
+        }
+        
+        // Tüm işlemler bittikten sonra
+        console.log('Menü yükleme işlemi tamamlandı.');
+        
+        // Etiketleri emoji ile güçlendir
+        if (typeof window.enhanceTagsWithEmojis === 'function') {
+            window.enhanceTagsWithEmojis();
+        }
+        
+        // Etiket işleyiciyi başlat - DÜZELTME: Açılır etiketleri aktifleştir
+        if (typeof window.setupExpandableTags === 'function') {
+            // Kısa bir gecikme ile etiketleri başlat
+            setTimeout(() => {
+                window.setupExpandableTags();
+                console.log("Genişletilebilir etiketler ayarlandı");
+            }, 100);
+        }
+        
+        // Favorileri yükle
+        if (typeof loadFavorites === 'function') {
+            loadFavorites();
+        }
+        
+        // Filtrelemeleri uygula
+        if (typeof window.applyFilters === 'function') {
+            window.applyFilters();
+        }
+        
+    } catch (error) {
+        console.error('Menü render hatası:', error);
+        showError('Menü görüntülemede bir sorun oluştu.');
+    }
+    
+    // Hata mesajlarını göstermek için yardımcı fonksiyon
+    function showError(message) {
+        const statusMessage = document.getElementById('statusMessage');
+        if (statusMessage) {
+            statusMessage.textContent = message;
+            statusMessage.classList.add('error');
+            statusMessage.style.display = 'block';
+            
+            // 5 saniye sonra mesajı gizle
+            setTimeout(() => {
+                statusMessage.style.opacity = '0';
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                    statusMessage.style.opacity = '1';
+                }, 500);
+            }, 5000);
+        }
+    }
+});

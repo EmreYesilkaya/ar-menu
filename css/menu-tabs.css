@@ -25,3 +25,30 @@ body.dark-mode .menu-tab:hover:not(.active) {
 body.dark-mode .menu-tab[data-target="favorites"]:hover:not(.active) {
     background-color: rgba(255, 90, 101, 0.2);
 }
+
+/* Dark Mode Uyumluluğu */
+body.dark-mode .menu-tabs-container {
+    background-color: rgba(45, 47, 72, 0.8);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .menu-tab {
+    background-color: var(--card-bg);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: var(--text-medium);
+}
+
+body.dark-mode .menu-tab:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .menu-tab.active {
+    background-color: var(--primary);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Emoji ve ikon renkleri */
+body.dark-mode .tab-emoji {
+    opacity: 0.9;
+}

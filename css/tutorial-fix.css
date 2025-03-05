@@ -1,0 +1,87 @@
+/**
+ * TUTORIAL GÖRÜNÜRLÜK DÜZELTMESİ
+ * Modal gösterimi ve z-index sorunlarını düzeltir
+ */
+
+/* Modalın kesinlikle görünür olmasını sağla */
+#instructionsModal.force-visible {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 9999 !important; /* En üstte tutmak için */
+}
+
+/* Modal içeriğinin görünürlüğünü sağla */
+#instructionsModal .modal-content {
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* Z-index düzeltmesi */
+#instructionsModal {
+    z-index: 999;
+}
+
+.modal-header, 
+.modal-body, 
+.tutorial-navigation {
+    z-index: 1000;
+}
+
+/* Mobil cihazlarda dokunma sorununu düzelt */
+.tutorial-btn {
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+    touch-action: manipulation !important;
+    user-select: none !important;
+}
+
+/* Tutorial içeriğinin kaydırılabilmesi için */
+.modal-body {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/* Animasyonlar için düzeltme */
+@keyframes modalEnter {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Modal görünürlük düzeltmesi */
+.modal.active {
+    animation: modalEnter 0.3s ease forwards !important;
+}
+
+/* Safari için cursor düzeltmesi */
+.tutorial-btn, 
+.close-modal, 
+.step-dot {
+    cursor: pointer;
+}
+
+/* Tüm etkileşimli elemanların dokunma alanını genişlet */
+.close-modal, 
+.tutorial-btn, 
+.step-dot {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Butonların görünürlüğünü sağla */
+#tutorialNextBtn, 
+#tutorialBackBtn, 
+#tutorialSkipBtn, 
+#closeModalBtn {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}

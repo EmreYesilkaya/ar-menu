@@ -1,40 +1,46 @@
 /**
- * Asset Path Resolution Helper v2
- * Improved to handle various path structures and debug AR model loading issues
+ * Statik dosya yolunu çözümleme
+ * Görsel ve 3D model dosyalarının yolunu oluşturur
  */
 
-// Global path resolution helper
-window.resolveAssetPath = function(relativePath) {
-    // Debug log
-    console.log("Original path:", relativePath);
+function resolveAssetPath(path) {
+    // Base URL kontrol et ve yoksayarak gerekiyorsa çıkar
+    const baseUrl = window.location.origin + '/';
     
-    // Normalize path - replace any double slashes
-    let normalizedPath = relativePath.replace(/\/\//g, '/');
-    
-    // Clean up path - ensure it's relative
-    if (normalizedPath.startsWith('/')) {
-        normalizedPath = normalizedPath.substring(1);
+    if (path.startsWith('http') || path.startsWith('//')) {
+        // Tam URL verilmişse olduğu gibi kullan
+        return path;
+    } else if (path.startsWith('/')) {
+        // Kök klasöre göre belirtilmişse başındaki / işaretini kaldır
+        return path.substring(1);
+    } else {
+        // Göreceli yol ise olduğu gibi kullan
+        return path;
     }
-    
-    // Handle different possible path prefixes
-    if (normalizedPath.startsWith('assets/') || 
-        normalizedPath.startsWith('./assets/')) {
-        // Path already starts with assets - fine as is
-    } else if (normalizedPath.startsWith('models/') || 
-               normalizedPath.startsWith('./models/')) {
-        // Convert models/ to assets/models/ if needed
-        const modelFile = normalizedPath.replace('models/', '').replace('./models/', '');
-        normalizedPath = 'assets/models/' + modelFile;
-    }
-    
-    // Ensure path starts with ./ for relative paths
-    if (!normalizedPath.startsWith('./')) {
-        normalizedPath = './' + normalizedPath;
-    }
-    
-    console.log(`Path resolved: ${relativePath} → ${normalizedPath}`);
-    return normalizedPath;
-};
+}
+
+// Test görseli için yedek
+function getFallbackImage() {
+    return 'images/placeholder.jpg';
+}
+
+// Görsel yükleme hatalarını yakalamak için
+function handleImageError(img) {
+    console.warn(`Görsel yüklenemedi: ${img.src}`);
+    img.src = getFallbackImage();
+    img.classList.add('fallback-image');
+}
+
+// Sayfadaki tüm görsellere hata yakalama ekle
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('error', () => handleImageError(img));
+    });
+});
+
+// Global erişim için dışa aktar
+window.resolveAssetPath = resolveAssetPath;
+window.handleImageError = handleImageError;
 
 // AR Model Debug Tool - Improved to check all possible paths and load automatically
 window.debugARModel = function(modelName) {

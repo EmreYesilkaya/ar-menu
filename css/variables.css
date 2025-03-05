@@ -1,0 +1,67 @@
+/**
+ * AR Restoran - Değişkenler
+ * Tüm tema değişkenleri ve temel ölçüler bu dosyada tanımlanır
+ */
+
+:root {
+    /* Ana renkler */
+    --primary: #6A5AE0;         /* Mor - ana renk */
+    --primary-light: #8A7CE8;   /* Açık mor */
+    --primary-dark: #4A3DBF;    /* Koyu mor */
+    --secondary: #FF7966;       /* Mercan - ikincil renk */
+    --secondary-light: #FF9D90; /* Açık mercan */
+    --secondary-dark: #E55A48;  /* Koyu mercan */
+    --accent: #FFCB45;          /* Altın - vurgu rengi */
+    
+    /* Metin renkleri */
+    --text-dark: #2D2F48;       /* Çok koyu mavi-gri */
+    --text-medium: #5B5D72;     /* Orta mavi-gri */
+    --text-light: #8A8CA0;      /* Açık mavi-gri */
+    
+    /* Arkaplan renkleri */
+    --background: #F8F9FE;      /* Çok açık lavanta */
+    --card-bg: #FFFFFF;         /* Beyaz */
+    
+    /* Durum renkleri */
+    --danger: #FF5A65;          /* Kırmızı */
+    --success: #4CD964;         /* Yeşil */
+    --info: #5AC8FA;            /* Mavi */
+    --warning: #FDCA40;         /* Sarı */
+    
+    /* Tasarım değişkenleri */
+    --border-radius: 18px;      /* Köşe yuvarlaklığı */
+    --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.12);
+    
+    /* Animasyon */
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    /* Fontlar */
+    --font-main: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    --font-headings: 'SF Pro Rounded', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Koyu mod değişkenleri - bunlar theme.css'e taşınacak */
+body.dark-mode {
+    --primary: #7A6EE4;         /* Açık mor - dark mode ana renk */
+    --primary-light: #968FEA;   /* Daha açık mor */
+    --primary-dark: #5A4ED0;    /* Daha koyu mor */
+    --secondary: #FF8A7A;       /* Açık mercan */
+    --secondary-light: #FFA699; /* Daha açık mercan */
+    --secondary-dark: #E66756;  /* Daha koyu mercan */
+    --accent: #FFD45E;          /* Daha açık altın */
+    --text-dark: #E9EBFF;       /* Açık gri - dark mode ana metin */
+    --text-medium: #B7B9CC;     /* Orta gri - dark mode ikincil metin */
+    --text-light: #9092A7;      /* Hafif gri */
+    --background: #1A1B2E;      /* Koyu mavi-mor - dark mode arka plan */
+    --card-bg: #2D2F48;         /* Daha açık mavi-mor - dark mode kart arka planı */
+    --danger: #FF6B75;          /* Açık kırmızı */
+    --success: #5DE97C;         /* Açık yeşil */
+    --info: #68D1FF;            /* Açık mavi */
+    
+    /* Koyu mod gölge değişkenleri */
+    --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
+    --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.3);
+}

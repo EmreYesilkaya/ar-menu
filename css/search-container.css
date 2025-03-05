@@ -1,0 +1,449 @@
+/**
+ * Arama Konteynerı ve Filtreler
+ * Daha ferah ve modern arama alanı ve filtreler
+ */
+
+/* Ana arama konteynerı */
+.search-container {
+    margin-bottom: 30px;
+    position: relative;
+}
+
+/* Arama kutusu */
+.search-box {
+    background-color: var(--card-bg);
+    border-radius: 18px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.search-box:focus-within {
+    box-shadow: 0 8px 25px rgba(106, 90, 224, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Arama ikonu */
+.search-icon {
+    font-size: 1.2rem;
+    color: var(--text-medium);
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+}
+
+/* Arama giriş alanı */
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    padding: 12px 0;
+    font-family: inherit;
+}
+
+.search-input::placeholder {
+    color: var(--text-light);
+    opacity: 0.8;
+}
+
+/* Arama temizleme butonu */
+.search-clear {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    margin-right: 5px;
+}
+
+.search-clear:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--text-dark);
+}
+
+.search-input:not(:placeholder-shown) + .search-clear {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Filtre bölümü */
+.filter-section {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+/* Filtre başlığı alanı */
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.filter-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+/* Daha fazla filtre göster butonu */
+.filter-expand-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.filter-expand-btn:hover {
+    background-color: rgba(106, 90, 224, 0.1);
+    transform: translateY(-2px);
+}
+
+.filter-expand-btn:active {
+    transform: translateY(0);
+}
+
+/* Filtre sarmalayıcı - kaydırma için */
+.filter-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Filtre konteynerı */
+.filter-container {
+    display: flex;
+    gap: 12px;
+    padding: 5px 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox için */
+    -ms-overflow-style: none; /* IE için */
+    -webkit-overflow-scrolling: touch; /* iOS için */
+    position: relative;
+}
+
+/* Webkit kaydırma çubuğunu gizle */
+.filter-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Filtre butonları */
+.filter-btn {
+    background-color: var(--card-bg);
+    color: var(--text-medium);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+}
+
+.filter-btn.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 5px 15px rgba(106, 90, 224, 0.2);
+}
+
+.filter-btn:hover:not(.active) {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+}
+
+.filter-btn:active:not(.active) {
+    transform: translateY(0);
+}
+
+/* Filtre butonu içindeki ikon */
+.filter-btn i {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.filter-btn:hover:not(.active) i {
+    transform: translateY(-1px);
+}
+
+.filter-btn.active i {
+    color: white;
+}
+
+/* Kaydırma ipucu göstergesi */
+.filter-scroll-hint {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(var(--background-rgb), 0.9));
+    pointer-events: none;
+    opacity: 0.8;
+    z-index: 2;
+    display: none; /* JavaScript ile kontrol edilir */
+}
+
+/* Genişletilebilir filtre bölümü */
+.expanded-filters {
+    background-color: var(--card-bg);
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    display: none; /* JavaScript ile gösterilir */
+    animation: slide-down 0.3s ease;
+    transform-origin: top center;
+}
+
+/* Filtre grupları */
+.filter-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* Filtre grup başlığı */
+.filter-group-title {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Filtre grup öğeleri kapsayıcısı */
+.filter-group-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Animasyonlar */
+@keyframes slide-down {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Boş filtre mesajı */
+.filter-empty {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--text-medium);
+    background-color: rgba(245, 245, 250, 0.5);
+    border-radius: 12px;
+    margin: 20px auto;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.6;
+}
+
+.empty-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+}
+
+.empty-message {
+    color: var(--text-medium);
+    font-size: 0.95rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.empty-action {
+    margin-top: 20px;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.empty-action:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(106, 90, 224, 0.2);
+}
+
+/* Responsive düzenlemeler */
+@media (max-width: 768px) {
+    .search-container {
+        margin-bottom: 25px;
+    }
+    
+    .search-box {
+        border-radius: 16px;
+        padding: 6px;
+        margin-bottom: 15px;
+    }
+    
+    .search-icon {
+        font-size: 1.1rem;
+        padding: 0 12px;
+    }
+    
+    .search-input {
+        font-size: 1rem;
+        padding: 10px 0;
+    }
+    
+    .search-clear {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .filter-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        border-radius: 10px;
+    }
+    
+    .filter-group-title {
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+    }
+    
+    .expanded-filters {
+        padding: 15px;
+    }
+    
+    .filter-groups {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-box {
+        border-radius: 14px;
+        padding: 5px;
+    }
+    
+    .search-icon {
+        font-size: 1rem;
+        padding: 0 10px;
+    }
+    
+    .search-input {
+        font-size: 0.95rem;
+        padding: 8px 0;
+    }
+    
+    .search-clear {
+        width: 34px;
+        height: 34px;
+    }
+    
+    .filter-section {
+        margin-bottom: 20px;
+    }
+    
+    .filter-title {
+        font-size: 1rem;
+    }
+    
+    .filter-expand-btn {
+        font-size: 0.9rem;
+        padding: 5px 10px;
+    }
+    
+    .filter-btn {
+        padding: 7px 14px;
+        font-size: 0.85rem;
+        border-radius: 10px;
+        height: 36px;
+    }
+}
+
+/* Dark mode uyarlamaları */
+body.dark-mode .search-box {
+    background-color: var(--card-bg);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-mode .search-input {
+    color: var(--text-light);
+}
+
+body.dark-mode .search-input::placeholder {
+    color: var(--text-medium);
+    opacity: 0.7;
+}
+
+body.dark-mode .search-clear:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .filter-btn {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: var(--text-medium);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+body.dark-mode .filter-btn:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .expanded-filters {
+    background-color: var(--card-bg);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .filter-empty {
+    background-color: rgba(45, 47, 72, 0.4);
+}

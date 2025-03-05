@@ -1,0 +1,264 @@
+/**
+ * Filter Animations CSS
+ * iOS tarzı filtreleme animasyonları ve görsel efektleri
+ */
+
+/* Filtrele butonları için hopping (zıplama) efekti */
+@keyframes filterHop {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+    100% { transform: translateY(0); }
+}
+
+.filter-btn.active {
+    animation: filterHop 0.4s ease-out;
+}
+
+/* Aktif filtreleme göstergesi */
+.filter-indicator {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.filter-indicator.active {
+    opacity: 1;
+    animation: pulse 1.5s infinite;
+}
+
+.filter-indicator-dot {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Filtre butonlarının seçilme animasyonu - güçlendirildi */
+.filter-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: currentColor;
+    border-radius: 16px;
+    opacity: 0;
+    transform: scale(0.3);
+    transition: transform 0.3s, opacity 0.3s;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.filter-btn:active::before {
+    transform: scale(1);
+    opacity: 0.1;
+    transition: transform 0s, opacity 0s;
+}
+
+/* Seçili etiketlerin arka plan animasyonları - birden fazla seçim için daha belirgin */
+.filter-btn.active {
+    background-image: linear-gradient(
+        135deg, 
+        rgba(106, 90, 224, 1) 0%, 
+        rgba(126, 110, 250, 1) 100%
+    );
+    background-size: 200% 200%;
+    animation: gradientShift 5s ease infinite;
+    position: relative; /* Vurgulamak için */
+    z-index: 2;        /* Vurgulamak için */
+    transform: translateY(-2px) scale(1.03); /* Hafif yukarı kaldırma efekti */
+    box-shadow: 0 4px 10px rgba(106, 90, 224, 0.4); /* Daha belirgin gölge */
+}
+
+/* Seçili butonun içeriği için vurgu */
+.filter-btn.active .filter-text,
+.filter-btn.active .filter-emoji {
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Çoklu seçim için özel vurgu animasyonu */
+@keyframes activeFilterPulse {
+    0% { box-shadow: 0 4px 10px rgba(106, 90, 224, 0.4); }
+    50% { box-shadow: 0 4px 15px rgba(106, 90, 224, 0.6); }
+    100% { box-shadow: 0 4px 10px rgba(106, 90, 224, 0.4); }
+}
+
+/* Aktif filtre butonuna pulse animasyonu ekleme */
+.filter-btn.active {
+    animation: activeFilterPulse 2s infinite, gradientShift 5s ease infinite;
+}
+
+/* Aynı butona tıklama ipucu (hafif titreşim) */
+.filter-btn.active:hover {
+    animation: buttonWiggle 0.3s ease, activeFilterPulse 2s infinite, gradientShift 5s ease infinite;
+}
+
+@keyframes buttonWiggle {
+    0% { transform: translateY(-2px) scale(1.03) rotate(0deg); }
+    25% { transform: translateY(-2px) scale(1.03) rotate(-1deg); }
+    50% { transform: translateY(-2px) scale(1.03) rotate(0deg); }
+    75% { transform: translateY(-2px) scale(1.03) rotate(1deg); }
+    100% { transform: translateY(-2px) scale(1.03) rotate(0deg); }
+}
+
+/* "Tümü" filtresi için özel stil */
+.filter-btn[data-filter="all"].active {
+    background-image: linear-gradient(
+        135deg, 
+        #78909C 0%, 
+        #90A4AE 100%
+    );
+}
+
+/* "Daha Fazla" butonu hem filtre açıkken hem de kapalıyken farklı görünecek */
+.filter-expand-btn {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    position: relative;
+}
+
+.filter-expand-btn.expanded {
+    color: var(--primary-dark);
+    background-color: rgba(106, 90, 224, 0.08);
+}
+
+.filter-expand-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--primary);
+    border-radius: 14px;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: -1;
+}
+
+.filter-expand-btn:focus {
+    outline: none;
+}
+
+.filter-expand-btn:focus::after {
+    transform: scale(0.95);
+    opacity: 0.1;
+}
+
+/* Genişletilmiş Filtre Paneli Animasyonları */
+.expanded-filters {
+    transition: 
+        max-height 0.5s cubic-bezier(0.33, 1, 0.68, 1),
+        margin-top 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+        opacity 0.3s ease;
+    opacity: 0;
+}
+
+.expanded-filters.show {
+    opacity: 1;
+    transition: 
+        max-height 0.5s cubic-bezier(0.33, 1, 0.68, 1),
+        margin-top 0.3s 0.1s cubic-bezier(0.33, 1, 0.68, 1),
+        opacity 0.3s 0.1s ease;
+}
+
+/* Arama kutusu odaklandığında anime olmasyonu */
+.search-input:focus + .search-icon {
+    color: var(--primary);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Yeni efekt - tıklama dalgası animasyonu */
+.filter-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-btn .ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    background-color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* Özel süsleme: Aktif etiketlerin vurgulanması - BUG DÜZELTME */
+/* Bu özelliği kaldırıyoruz - çakışmaları önlemek için */
+.filter-btn.active::after {
+    /* Buradaki after içeriğini kaldırıyoruz, X göstergesi ile çakışıyor */
+    content: none;
+}
+
+/* Dark Mode uyumluluğu */
+body.dark-mode .filter-btn.active {
+    background-image: linear-gradient(
+        135deg, 
+        rgba(86, 70, 204, 1) 0%, 
+        rgba(106, 90, 224, 1) 100%
+    );
+}
+
+body.dark-mode .filter-btn .ripple {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+body.dark-mode .filter-expand-btn.expanded {
+    color: var(--primary-light);
+    background-color: rgba(106, 90, 224, 0.15);
+}
+
+/* Mobil cihazlar için kaydırma içeriklerinin optimizasyonu */
+@media (max-width: 768px) {
+    .filter-container {
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .filter-btn {
+        scroll-snap-align: start;
+    }
+    
+    .filter-btn.active::after {
+        bottom: -2px;
+        width: 4px;
+        height: 4px;
+    }
+}
+
+/* Filtreleme işlemi için yeni animasyon */
+.filter-btn.filtering {
+    animation: filterProcessing 0.8s ease;
+}
+
+@keyframes filterProcessing {
+    0% { transform: translateY(-2px) scale(1.03); }
+    50% { transform: translateY(-2px) scale(1.08); }
+    100% { transform: translateY(-2px) scale(1.03); }
+}

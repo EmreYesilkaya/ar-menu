@@ -1,0 +1,38 @@
+/**
+ * AR Restoran - Ana CSS Dosyası
+ * Tüm CSS bileşenlerini tek bir noktadan yükler
+ */
+
+/* Önce temalar ve değişkenler yüklenir */
+@import url('variables.css');
+@import url('theme.css');
+
+/* Temel stiller */
+@import url('base.css');
+
+/* Komponentler */
+@import url('components/header.css');
+@import url('components/menu-tabs.css');
+@import url('components/menu-items.css');  /* Yeni eklenen dosya */
+@import url('components/cards.css');
+@import url('components/buttons.css');
+@import url('components/modals.css');
+@import url('components/forms.css');
+@import url('components/profile.css');
+@import url('components/tutorial.css');
+@import url('components/ar.css');
+@import url('components/tags.css');
+
+/* Yeni eklenen efektler */
+@import url('ripple.css');
+@import url('filter-animations.css');
+@import url('filter-empty.css');
+
+/* Yardımcı sınıflar */
+@import url('utilities.css');
+
+/* Responsive */
+@import url('responsive.css');
+
+/* Animasyonlar */
+@import url('animations.css');

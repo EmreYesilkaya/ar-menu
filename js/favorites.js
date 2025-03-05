@@ -448,3 +448,203 @@ function showStatusMessage(message, duration = 2000) {
         document.body.removeChild(notification);
     }, duration);
 }
+
+/**
+ * Favori Yönetim Sistemi
+ * Favori ekleme/çıkarma ve görüntüleme işlevleri
+ */
+
+// Favorileri yükle ve göster
+function loadFavorites() {
+    const favorites = getFavorites();
+    updateFavoriteCount(favorites.length);
+    
+    if (favorites.length === 0) {
+        displayEmptyFavorites();
+        return;
+    }
+    
+    displayFavoriteItems(favorites);
+}
+
+// Favori listesini al
+function getFavorites() {
+    return JSON.parse(localStorage.getItem('favorites') || '[]');
+}
+
+// Favorileri güncelle
+function saveFavorites(favorites) {
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+}
+
+// Favorilere ekle/çıkar
+function toggleFavorite(itemId) {
+    const favorites = getFavorites();
+    const index = favorites.indexOf(itemId);
+    
+    if (index === -1) {
+        // Favorilere ekle
+        favorites.push(itemId);
+        showStatusMessage(`Ürün favorilere eklendi.`, 'success');
+    } else {
+        // Favorilerden çıkar
+        favorites.splice(index, 1);
+        showStatusMessage(`Ürün favorilerden çıkarıldı.`, 'info');
+        
+        // Favoriler sayfasındaysa ilgili öğeyi gizle
+        const favoritesSection = document.getElementById('favoriteItems');
+        if (favoritesSection) {
+            const itemToRemove = favoritesSection.querySelector(`[id="${itemId}"]`);
+            if (itemToRemove) {
+                // Animasyonla kaldır
+                itemToRemove.style.transition = 'all 0.3s ease';
+                itemToRemove.style.opacity = '0';
+                itemToRemove.style.transform = 'scale(0.9)';
+                
+                setTimeout(() => {
+                    itemToRemove.remove();
+                    
+                    // Favorilerin boş olup olmadığını kontrol et
+                    if (favoritesSection.querySelectorAll('.menu-item').length === 0) {
+                        displayEmptyFavorites();
+                    }
+                }, 300);
+            }
+        }
+    }
+    
+    // Favori sayısını güncelle
+    updateFavoriteCount(favorites.length);
+    
+    // Favorileri kaydet
+    saveFavorites(favorites);
+}
+
+// Favori sayısını güncelle
+function updateFavoriteCount(count) {
+    const badge = document.getElementById('favoritesBadge');
+    const headerBadge = document.querySelector('.heart-btn .notification-badge');
+    
+    if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'flex' : 'none';
+    }
+    
+    if (headerBadge) {
+        headerBadge.textContent = count;
+        headerBadge.style.display = count > 0 ? 'flex' : 'none';
+    }
+}
+
+// Boş favoriler mesajını göster
+function displayEmptyFavorites() {
+    const favoritesContainer = document.getElementById('favoriteItems');
+    if (!favoritesContainer) return;
+    
+    favoritesContainer.innerHTML = `
+        <div class="no-favorites">
+            <div class="no-favorites-emoji">💔</div>
+            <h3 class="no-favorites-title">Henüz favoriniz yok</h3>
+            <p class="no-favorites-message">Favori ürünlerinizi eklemek için menü öğelerindeki kalp ikonuna tıklayın.</p>
+        </div>
+    `;
+}
+
+// Favori öğeleri göster
+function displayFavoriteItems(favoriteIds) {
+    const favoritesContainer = document.getElementById('favoriteItems');
+    if (!favoritesContainer) return;
+    
+    favoritesContainer.innerHTML = '';
+    const menuItems = findMenuItems(favoriteIds);
+    
+    if (menuItems.length === 0) {
+        displayEmptyFavorites();
+        return;
+    }
+    
+    renderMenuItems(menuItems, favoritesContainer);
+}
+
+// ID'ye göre menü öğelerini bul
+function findMenuItems(itemIds) {
+    const allItems = [];
+    
+    // Tüm kategoriler içinde ara
+    for (const category in menuData) {
+        if (Array.isArray(menuData[category])) {
+            menuData[category].forEach(item => {
+                if (itemIds.includes(item.id)) {
+                    allItems.push(item);
+                }
+            });
+        }
+    }
+    
+    return allItems;
+}
+
+// Durumu göster
+function showStatusMessage(message, type = 'info') {
+    const statusMessage = document.getElementById('statusMessage');
+    if (!statusMessage) return;
+    
+    statusMessage.textContent = message;
+    statusMessage.className = `status-message ${type}`;
+    statusMessage.style.display = 'block';
+    
+    setTimeout(() => {
+        statusMessage.style.opacity = '0';
+        setTimeout(() => {
+            statusMessage.style.display = 'none';
+            statusMessage.style.opacity = '1';
+        }, 300);
+    }, 2000);
+}
+
+// Tüm favorileri bir seferde göster
+function showAllFavorites() {
+    // Favoriler sekmesini aktifleştir
+    document.querySelectorAll('.menu-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.getAttribute('data-target') === 'favorites') {
+            tab.classList.add('active');
+        }
+    });
+    
+    // Favoriler bölümünü göster ve diğerlerini gizle
+    document.querySelectorAll('.menu-section').forEach(section => {
+        section.style.display = 'none';
+        if (section.id === 'favoritesSection') {
+            section.style.display = 'block';
+            
+            // Sayfayı kaydır
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+}
+
+// Sayfa yüklendiğinde favorileri yükle
+document.addEventListener('DOMContentLoaded', function() {
+    // Favori butonlarını bul ve işlev ekle
+    document.querySelectorAll('#showFavorites, #favoritesBtn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showAllFavorites();
+        });
+    });
+    
+    // Favoriler sekmesine tıklama
+    document.querySelectorAll('.menu-tab[data-target="favorites"]').forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            showAllFavorites();
+        });
+    });
+    
+    loadFavorites();
+});
+
+// Global erişim için dışa aktar
+window.toggleFavorite = toggleFavorite;
+window.loadFavorites = loadFavorites;

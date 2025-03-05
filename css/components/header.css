@@ -1,0 +1,236 @@
+/**
+ * Başlık (Header) Bileşeni
+ * Daha ferah ve modern başlık tasarımı
+ */
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 75px; /* Daha yüksek başlık */
+    background-color: var(--card-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px; /* Yanlarda daha fazla boşluk */
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+/* Scroll edildiğinde başlığın daha kompakt hale gelmesi */
+.header.scrolled {
+    height: 65px;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+}
+
+/* Logo ve marka alanı */
+.header-branding {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.2;
+    margin: 0;
+}
+
+.brand-tagline {
+    font-size: 0.85rem;
+    color: var(--text-medium);
+    margin: 0;
+}
+
+/* Sağ taraftaki aksiyon butonları */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Butonlar arası daha fazla boşluk */
+}
+
+.header-btn {
+    width: 45px; /* Daha büyük butonlar */
+    height: 45px;
+    border-radius: 50%;
+    background-color: var(--background);
+    color: var(--text-medium);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+
+.header-btn:hover {
+    background-color: var(--primary);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(106, 90, 224, 0.25);
+}
+
+.header-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(106, 90, 224, 0.15);
+}
+
+/* Bildirim rozeti */
+.notification-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background-color: var(--secondary);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+/* Bildirim rozeti animasyonu */
+@keyframes badge-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.notification-badge.pulse {
+    animation: badge-pulse 1.5s infinite;
+}
+
+/* Arama butonu hover efekti */
+#searchBtn:hover {
+    background-color: #4CD964; /* Yeşil */
+    color: white;
+}
+
+/* Tema değiştirme butonu hover efekti */
+#themeToggleBtn:hover {
+    background-color: #5AC8FA; /* Mavi */
+    color: white;
+}
+
+/* Favori butonu hover efekti */
+#favoritesBtn:hover {
+    background-color: #FF2D55; /* Kırmızı */
+    color: white;
+}
+
+/* Bilgi butonu hover efekti */
+#infoBtn:hover {
+    background-color: #FF9500; /* Turuncu */
+    color: white;
+}
+
+/* Responsive düzenlemeler */
+@media (max-width: 768px) {
+    .header {
+        height: 65px;
+        padding: 0 15px;
+    }
+    
+    .header.scrolled {
+        height: 60px;
+    }
+    
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .brand-name {
+        font-size: 1.3rem;
+    }
+    
+    .brand-tagline {
+        font-size: 0.75rem;
+    }
+    
+    .header-actions {
+        gap: 10px;
+    }
+    
+    .header-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+    
+    .notification-badge {
+        min-width: 20px;
+        height: 20px;
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        height: 60px;
+        padding: 0 12px;
+    }
+    
+    .header.scrolled {
+        height: 55px;
+    }
+    
+    .brand-tagline {
+        display: none; /* Çok küçük ekranlarda tagline'ı gizle */
+    }
+    
+    .header-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+}
+
+/* Dark Mode Uyarlamaları */
+body.dark-mode .header {
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .header.scrolled {
+    background-color: rgba(45, 47, 72, 0.95);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-mode .header-btn {
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .notification-badge {
+    border-color: var(--card-bg);
+}

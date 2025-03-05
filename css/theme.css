@@ -101,6 +101,19 @@ header,
   transition: var(--theme-transition);
 }
 
+/* Daha iyi geçiş efektleri */
+body, 
+.header, 
+.bottom-nav, 
+.search-container, 
+.menu-section,
+.menu-item,
+.menu-tabs-container,
+.filter-container,
+.modal {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
 /* Buton ve ikon geçişleri */
 button, 
 a.btn,
@@ -119,6 +132,14 @@ a.btn,
 .theme-transition *:before,
 .theme-transition *:after {
   transition: none !important;
+}
+
+/* Senkronize geçiş özelliğini engelle */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+    transition: none !important;
 }
 
 /* Tema değiştirme butonu hareketli animasyon */
@@ -246,4 +267,26 @@ body.dark-mode .theme-toggle-btn::after {
 
 .theme-toggle-btn:hover::after {
   opacity: 1;
+}
+
+/* Tema değişim animasyonunu güzelleştir */
+@keyframes theme-flash {
+    0% { 
+        background-color: transparent; 
+    }
+    15% { 
+        background-color: rgba(255, 255, 255, 0.03);
+    }
+    100% { 
+        background-color: transparent; 
+    }
+}
+
+body.theme-changed {
+    animation: theme-flash 0.6s ease-out;
+}
+
+/* Arka plan renkleri koyu mod için garantileyelim */
+body.dark-mode {
+    background-color: var(--background) !important;
 }

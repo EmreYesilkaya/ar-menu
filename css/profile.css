@@ -1,0 +1,338 @@
+/**
+ * Profil Panel Stilleri
+ * Kullanıcı profili ve ilgili butonlar için özel stiller
+ * Dark mode ile tam uyumlu
+ */
+
+.profile-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 85vh;
+    background-color: var(--card-bg);
+    z-index: 95;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.1);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.profile-panel.active {
+    transform: translateY(0);
+}
+
+.profile-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.profile-panel-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.close-panel {
+    background: none;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-medium);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.close-panel:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--text-dark);
+}
+
+.profile-panel-content {
+    padding: 15px 20px;
+    overflow-y: auto;
+    max-height: calc(85vh - 67px);
+}
+
+/* Profil üst kısım - kullanıcı bilgisi */
+.profile-user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 0 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.profile-avatar-large {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid white;
+}
+
+.profile-user-details {
+    flex: 1;
+}
+
+.profile-username {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+.profile-email {
+    color: var(--text-medium);
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.profile-membership {
+    font-size: 0.8rem;
+    color: var(--primary);
+    font-weight: 500;
+}
+
+/* Profil butonları - Ayarlar, Rezervasyon, Sipariş vb. */
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-action-btn {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: var(--background);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    color: var(--text-dark);
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.profile-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    background-color: rgba(106, 90, 224, 0.05);
+}
+
+.profile-action-icon {
+    width: 24px;
+    height: 24px;
+    background-color: rgba(106, 90, 224, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    color: var(--primary);
+}
+
+.profile-action-text {
+    flex: 1;
+}
+
+.profile-action-arrow {
+    color: var(--text-light);
+}
+
+/* Çıkış yap butonu özel stili */
+.profile-logout-btn {
+    margin-top: 20px;
+    background-color: rgba(255, 90, 101, 0.1);
+    border-color: rgba(255, 90, 101, 0.2);
+}
+
+.profile-logout-btn .profile-action-icon {
+    background-color: rgba(255, 90, 101, 0.2);
+    color: #FF5A65;
+}
+
+.profile-logout-btn:hover {
+    background-color: rgba(255, 90, 101, 0.15);
+}
+
+/* Profil seçenekleri butonu ve iletişim butonu için stil */
+.profile-option {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: var(--background);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    color: var(--text-dark);
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.profile-option i {
+    margin-right: 12px;
+    font-size: 1.2rem;
+    color: var(--primary);
+    width: 24px;
+    text-align: center;
+}
+
+.profile-option:hover {
+    background-color: rgba(106, 90, 224, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* İletişim butonu için özel stil */
+#contactBtn {
+    background-color: rgba(106, 90, 224, 0.08);
+}
+
+#contactBtn i {
+    color: var(--primary);
+}
+
+#contactBtn:hover {
+    background-color: rgba(106, 90, 224, 0.12);
+}
+
+/* Responsive düzenlemeler */
+@media (min-width: 768px) {
+    .profile-panel {
+        max-width: 500px;
+        left: 50%;
+        transform: translate(-50%, 100%);
+        border-radius: 20px;
+    }
+
+    .profile-panel.active {
+        transform: translate(-50%, 0);
+    }
+}
+
+/* Dark Mode Adaptasyonu */
+body.dark-mode .profile-panel {
+    background-color: var(--card-bg) !important;
+    box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+body.dark-mode .profile-panel-header {
+    border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+body.dark-mode .profile-panel-title {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .close-panel {
+    color: var(--text-medium) !important;
+}
+
+body.dark-mode .close-panel:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .profile-avatar-large {
+    border-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+body.dark-mode .profile-username {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .profile-user-info {
+    border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Profil butonları dark mode düzeltmesi - daha güçlü seçiciler */
+body.dark-mode .profile-panel .profile-action-btn {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: var(--text-dark) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+body.dark-mode .profile-panel .profile-action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+body.dark-mode .profile-panel .profile-action-icon {
+    background-color: rgba(106, 90, 224, 0.15) !important;
+    color: var(--primary-light) !important;
+}
+
+body.dark-mode .profile-panel .profile-action-text {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .profile-panel .profile-action-arrow {
+    color: var(--text-medium) !important;
+}
+
+body.dark-mode .profile-panel .profile-logout-btn {
+    background-color: rgba(255, 90, 101, 0.08) !important;
+    border-color: rgba(255, 90, 101, 0.15) !important;
+}
+
+body.dark-mode .profile-panel .profile-logout-btn .profile-action-icon {
+    background-color: rgba(255, 90, 101, 0.15) !important;
+    color: #FF7A82 !important;
+}
+
+body.dark-mode .profile-panel .profile-logout-btn:hover {
+    background-color: rgba(255, 90, 101, 0.12) !important;
+}
+
+/* Dark Mode Adaptasyonu - Profil seçenekleri için */
+body.dark-mode .profile-option {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: var(--text-dark) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+body.dark-mode .profile-option i {
+    color: var(--primary-light) !important;
+}
+
+body.dark-mode .profile-option:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* İletişim butonu dark mode özelleştirmesi */
+body.dark-mode #contactBtn {
+    background-color: rgba(106, 90, 224, 0.15) !important;
+}
+
+body.dark-mode #contactBtn i {
+    color: var(--primary-light) !important;
+}
+
+body.dark-mode #contactBtn:hover {
+    background-color: rgba(106, 90, 224, 0.2) !important;
+}

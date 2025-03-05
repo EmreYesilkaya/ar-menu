@@ -3,6 +3,9 @@
  * Bu şekilde kullanıcı temayı ilk kez seçtiğinde beyaz/siyah ekran yanıp sönmesi önlenir
  */
 (function() {
+  // Erken ayarlanan tema sınıfı
+  document.body.classList.add('preload-theme');
+
   // Seçili temayı localStorage'dan al
   const savedTheme = localStorage.getItem('theme-preference');
   
@@ -10,17 +13,11 @@
   const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   
   // Tema değerini belirle
-  let theme;
-  if (savedTheme) {
-    // Kullanıcı tercihi varsa onu kullan
-    theme = savedTheme;
-  } else {
-    // Yoksa sistem tercihini kullan
-    theme = systemPrefersDark ? 'dark' : 'light';
-  }
+  const theme = savedTheme ? savedTheme : (systemPrefersDark ? 'dark' : 'light');
   
-  // Temayı ayarla
+  // Body'e tema sınıfını ekle
   if (theme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
     document.body.classList.add('dark-mode');
   }
   
@@ -29,14 +26,15 @@
   
   // Animasyonları kaldırma işlemini DOM yüklendikten sonraya zamanla
   window.addEventListener('DOMContentLoaded', () => {
+    // Preload sınıfını kaldır
+    document.body.classList.remove('preload-theme');
+    
+    // Animasyonları etkinleştir
     setTimeout(() => {
       document.body.classList.remove('theme-transition');
-    }, 100);
-  });
-  
-  // ThemeSwitcher script'ini dinamik olarak yüklemeyi garantile
-  window.addEventListener('DOMContentLoaded', () => {
-    // ThemeSwitcher script'inin eklenip eklenmediğini kontrol et
+    }, 300);
+    
+    // ThemeSwitcher script'ini dinamik olarak yüklemeyi garantile
     if (!window.ThemeSwitcher) {
       // Script'in zaten eklenmiş olup olmadığını kontrol et
       const existingScript = document.querySelector('script[src="js/theme-switcher.js"]');

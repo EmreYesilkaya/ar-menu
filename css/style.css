@@ -1,3 +1,4 @@
+/* Tema değişkenleri düzeltildi */
 :root {
     --primary: #6A5AE0;         /* Mor - ana renk */
     --primary-light: #8A7CE8;   /* Açık mor */
@@ -23,6 +24,25 @@
     --font-headings: 'SF Pro Rounded', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
+/* Koyu mod değişkenleri */
+body.dark-mode {
+    --primary: #7A6EE4;         /* Açık mor - dark mode ana renk */
+    --primary-light: #968FEA;   /* Daha açık mor */
+    --primary-dark: #5A4ED0;    /* Daha koyu mor */
+    --secondary: #FF8A7A;       /* Açık mercan */
+    --secondary-light: #FFA699; /* Daha açık mercan */
+    --secondary-dark: #E66756;  /* Daha koyu mercan */
+    --accent: #FFD45E;          /* Daha açık altın */
+    --text-dark: #E9EBFF;       /* Açık gri - dark mode ana metin */
+    --text-medium: #B7B9CC;     /* Orta gri - dark mode ikincil metin */
+    --text-light: #9092A7;      /* Hafif gri */
+    --background: #1A1B2E;      /* Koyu mavi-mor - dark mode arka plan */
+    --card-bg: #2D2F48;         /* Daha açık mavi-mor - dark mode kart arka planı */
+    --danger: #FF6B75;          /* Açık kırmızı */
+    --success: #5DE97C;         /* Açık yeşil */
+    --info: #68D1FF;            /* Açık mavi */
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -37,6 +57,7 @@ body {
     line-height: 1.5;
     min-height: 100vh;
     padding-top: 130px; /* Increased to accommodate both header and menu tabs */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Header styling - completely redesigned for better user experience */
@@ -297,7 +318,7 @@ body {
     padding: 1rem;
     max-width: 1200px;
     margin: 0 auto;
-    padding-bottom: 4rem;
+    padding-bottom: 2.5rem; /* 4rem'den 2.5rem'e düşürüldü */
 }
 
 /* Modernized search bar */
@@ -917,136 +938,118 @@ body {
     font-size: 1.5rem;
 }
 
-/* Modernized AR instructions modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    z-index: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    position: relative;
-    overflow: hidden;
-    max-width: 800px;
-    width: 90%;
-    max-height: 580px;
-    background-color: var(--card-bg);
-    border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-    transform: translateZ(0);
-    will-change: transform, opacity;
-    opacity: 1;
-    transition: all 0.3s ease;
-    margin: 0 auto; /* Ortalama için eklendi */
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-}
-
-.modal-header h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-headings);
-}
-
-.close-modal {
-    background: none;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--text-medium);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition);
-}
-
-.close-modal:hover {
-    background-color: rgba(0,0,0,0.05);
-    color: var(--text-dark);
-}
-
-.instruction-step {
-    display: flex;
-    margin-bottom: 1.5rem;
-    align-items: flex-start;
-}
-
-.step-number {
-    background-color: var(--primary);
-    color: white;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 1rem;
-    flex-shrink: 0;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
-}
-
-.step-content {
-    flex: 1;
-}
-
-.step-content p {
-    margin-bottom: 0.8rem;
-    color: var(--text-medium);
-}
-
-.step-image {
-    width: 100%;
-    border-radius: 16px;
-    margin-top: 0.8rem;
-    border: 1px solid rgba(0,0,0,0.05);
-    box-shadow: var(--shadow-sm);
-}
-
-/* Food tags */
+/* Etiket konteyner düzenlemeleri - emojiler için iyileştirildi */
 .food-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    margin-top: -0.5rem;
+    margin-bottom: 0.8rem;
+    margin-top: 0.5rem;
+    position: relative;
+    transition: all 0.3s ease;
 }
 
+/* Temel etiket stillemeleri - emoji için padding ayarlandı */
 .food-tag {
     display: inline-flex;
     align-items: center;
-    padding: 0.3rem 0.6rem;
+    padding: 0.3rem 0.8rem;
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 500;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-right: 0.3rem;
+    margin-bottom: 0.3rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    gap: 0.3rem; /* Emoji ile metin arasında boşluk */
+    white-space: nowrap; /* Uzun etiketlerin görünümü için */
+    line-height: 1.4;
 }
 
+/* Emojiler için stil iyileştirmesi */
+.food-tag::first-letter {
+    font-size: 1.1em;
+}
+
+/* Daha fazla etiketi göster butonu - emojisiz dursun */
+.food-tag.tag-more {
+    background-color: #f0f0f5;
+    color: var(--text-medium);
+    font-weight: 600;
+    min-width: 32px;
+    justify-content: center;
+    border: 1px dashed rgba(0,0,0,0.1);
+}
+
+/* Daha fazla etiketi göster butonu */
+.food-tag.tag-more {
+    background-color: #f0f0f5;
+    color: var(--text-medium);
+    cursor: pointer;
+    font-weight: 600;
+    min-width: 32px;
+    text-align: center;
+    transition: all 0.2s ease;
+    border: 1px dashed rgba(0,0,0,0.1);
+}
+
+.food-tag.tag-more:hover {
+    background-color: var(--primary-light);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    border-color: transparent;
+}
+
+/* Gizli etiketler ve animasyon */
+.food-tag.hidden-tag {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+}
+
+.food-tag.hidden-tag.hidden {
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* Tıklanabilir etiket gösterimi */
+.food-tag.clickable {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.food-tag.clickable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.food-tag.clickable:active {
+    transform: translateY(0px);
+}
+
+/* Giriş çıkış animasyonları */
+.food-tag.fade-in {
+    animation: fadeInTag 0.3s ease forwards;
+}
+
+.food-tag.fade-out {
+    animation: fadeOutTag 0.3s ease forwards;
+}
+
+@keyframes fadeInTag {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOutTag {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(5px); }
+}
+
+/* Tüm etiketlere renk ve stiller - genişletilmiş */
 .tag-vegan {
     background-color: #4CAF50;
     color: white;
@@ -1067,36 +1070,334 @@ body {
     color: #333;
 }
 
-.tag-new {
-    background-color: rgba(90, 200, 250, 0.15);
-    color: #0069A2;
+.tag-meat {
+    background-color: #D32F2F;
+    color: white;
+}
+
+.tag-chicken {
+    background-color: #FF9800;
+    color: white;
+}
+
+.tag-high-protein {
+    background-color: #9C27B0;
+    color: white;
+}
+
+.tag-low-carb {
+    background-color: #3F51B5;
+    color: white;
+}
+
+.tag-traditional {
+    background-color: #795548;
+    color: white;
+}
+
+.tag-hot {
+    background-color: #F44336;
+    color: white;
+}
+
+.tag-cold {
+    background-color: #00BCD4;
+    color: white;
+}
+
+.tag-fresh {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.tag-sweet {
+    background-color: #E91E63;
+    color: white;
+}
+
+.tag-breakfast {
+    background-color: #FF9800;
+    color: white;
+}
+
+.tag-regional {
+    background-color: #607D8B;
+    color: white;
+}
+
+.tag-premium {
+    background-color: #9E9E9E;
+    color: white;
+}
+
+.tag-organic {
+    background-color: #8BC34A;
+    color: white;
+}
+
+.tag-dairy-free {
+    background-color: #03A9F4;
+    color: white;
+}
+
+.tag-plant-based {
+    background-color: #009688;
+    color: white;
+}
+
+.tag-chef-special {
+    background-color: #673AB7;
+    color: white;
+}
+
+.tag-seasonal {
+    background-color: #CDDC39;
+    color: #333;
+}
+
+.tag-comfort-food {
+    background-color: #FF5722;
+    color: white;
 }
 
 .tag-gluten-free {
-    background-color: rgba(162, 132, 94, 0.15);
-    color: #7D643D;
+    background-color: #A1887F;
+    color: white;
 }
 
-/* Ratings and reviews */
-.rating {
-    display: flex;
-    align-items: center;
-    margin: 0.5rem 0;
-    color: var(--text-medium);
-    font-size: 0.9rem;
+.tag-eco-friendly {
+    background-color: #4CAF50;
+    color: white;
 }
 
-.rating i {
-    color: var(--accent);
-    margin-right: 0.2rem;
+.tag-local {
+    background-color: #607D8B;
+    color: white;
 }
 
-.rating-count {
-    margin-left: 0.5rem;
+.tag-dinner {
+    background-color: #673AB7;
+    color: white;
+}
+
+.tag-gourmet {
+    background-color: #9E9E9E;
+    color: #333;
+}
+
+.tag-healthy {
+    background-color: #2196F3;
+    color: white;
+}
+
+.tag-new {
+    background-color: #2196F3;
+    color: white;
+}
+
+.tag-low-calorie {
+    background-color: #2196F3;
+    color: white;
+}
+
+.tag-antioxidant {
+    background-color: #E91E63;
+    color: white;
+}
+
+/* Eksik etiketler için ek stiller */
+.tag-handcrafted {
+    background-color: #AA8855;
+    color: white;
+}
+
+.tag-homemade {
+    background-color: #996633;
+    color: white;
+}
+
+.tag-artisanal {
+    background-color: #886644;
+    color: white;
+}
+
+.tag-keto {
+    background-color: #559977;
+    color: white;
+}
+
+.tag-seafood {
+    background-color: #0097A7;
+    color: white;
+}
+
+.tag-fish {
+    background-color: #00838F;
+    color: white;
+}
+
+.tag-dessert {
+    background-color: #EC407A;
+    color: white;
+}
+
+.tag-soup {
+    background-color: #FF7043;
+    color: white;
+}
+
+.tag-salad {
+    background-color: #7CB342;
+    color: white;
+}
+
+.tag-pasta {
+    background-color: #FFB74D;
+    color: #333;
+}
+
+.tag-burger {
+    background-color: #FF5252;
+    color: white;
+}
+
+.tag-pizza {
+    background-color: #FF8A65;
+    color: white;
+}
+
+.tag-sandwich {
+    background-color: #C0CA33;
+    color: white;
+}
+
+.tag-wraps {
+    background-color: #FFCA28;
+    color: #333;
+}
+
+.tag-grill {
+    background-color: #E64A19;
+    color: white;
+}
+
+.tag-bbq {
+    background-color: #D84315;
+    color: white;
+}
+
+.tag-quick {
+    background-color: #00BFA5;
+    color: white;
+}
+
+.tag-slow-cooked {
+    background-color: #6D4C41;
+    color: white;
+}
+
+.tag-no-sugar {
+    background-color: #F06292;
+    color: white;
+}
+
+.tag-allergen-free {
+    background-color: #4DB6AC;
+    color: white;
+}
+
+.tag-nuts {
+    background-color: #D7CCC8;
+    color: #5D4037;
+}
+
+.tag-kids {
+    background-color: #FFF176;
+    color: #333;
+}
+
+.tag-family {
+    background-color: #7986CB;
+    color: white;
+}
+
+.tag-shareable {
+    background-color: #4FC3F7;
+    color: white;
+}
+
+.tag-brunch {
+    background-color: #FFE082;
+    color: #333;
+}
+
+.tag-lunch {
+    background-color: #26C6DA;
+    color: white;
+}
+
+.tag-supper {
+    background-color: #5C6BC0;
+    color: white;
+}
+
+.tag-snack {
+    background-color: #26A69A;
+    color: white;
+}
+
+.tag-appetizer {
+    background-color: #66BB6A;
+    color: white;
+}
+
+.tag-main {
+    background-color: #5E35B1;
+    color: white;
+}
+
+.tag-side {
+    background-color: #FFA726;
+    color: white;
+}
+
+.tag-drink {
+    background-color: #29B6F6;
+    color: white;
+}
+
+.tag-smoothie {
+    background-color: #9CCC65;
+    color: white;
+}
+
+.tag-fermented {
+    background-color: #9575CD;
+    color: white;
+}
+
+.tag-probiotic {
+    background-color: #4DD0E1;
+    color: white;
+}
+
+/* Dark mode için etiket düzeltmeleri */
+body.dark-mode .food-tag.tag-more {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.1);
     color: var(--text-light);
 }
 
-/* Call to action button */
+body.dark-mode .food-tag.tag-more:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+body.dark-mode .food-tag.clickable:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Call to action button - margin-bottom değeri düzeltildi */
 .cta-button {
     display: flex;
     align-items: center;
@@ -1117,7 +1418,7 @@ body {
     max-width: 300px;
     position: relative;
     z-index: 80; /* Bottom nav'dan daha düşük ama çoğu öğeden daha yüksek */
-    margin-bottom: 100px; /* Alt navigasyonun üzerinde görünmesi için boşluk */
+    margin-bottom: 60px; /* 100px'ten 60px'e düşürüldü - daha az boşluk */
 }
 
 .cta-button:hover {
@@ -1469,14 +1770,14 @@ body {
 }
 
 .spinner:before {
-    border-top-color: var(--primary);
-    border-left-color: var(--primary);
+    border-top-color: var (--primary);
+    border-left-color: var (--primary);
     animation: spinner 1s cubic-bezier(0.42, 0.61, 0.58, 0.41) infinite;
 }
 
 .spinner:after {
-    border-bottom-color: var(--secondary);
-    border-right-color: var(--secondary);
+    border-bottom-color: var (--secondary);
+    border-right-color: var (--secondary);
     animation: spinner 1s cubic-bezier(0.42, 0.61, 0.58, 0.41) infinite reverse;
 }
 
@@ -1580,116 +1881,6 @@ body {
     font-size: 1.5rem;
 }
 
-/* Modernized AR instructions modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    z-index: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    position: relative;
-    overflow: hidden;
-    max-width: 800px;
-    width: 90%;
-    max-height: 580px;
-    background-color: var(--card-bg);
-    border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-    transform: translateZ(0);
-    will-change: transform, opacity;
-    opacity: 1;
-    transition: all 0.3s ease;
-    margin: 0 auto; /* Ortalama için eklendi */
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-}
-
-.modal-header h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-headings);
-}
-
-.close-modal {
-    background: none;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--text-medium);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition);
-}
-
-.close-modal:hover {
-    background-color: rgba(0,0,0,0.05);
-    color: var(--text-dark);
-}
-
-.instruction-step {
-    display: flex;
-    margin-bottom: 1.5rem;
-    align-items: flex-start;
-}
-
-.step-number {
-    background-color: var(--primary);
-    color: white;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 1rem;
-    flex-shrink: 0;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
-}
-
-.step-content {
-    flex: 1;
-}
-
-.step-content p {
-    margin-bottom: 0.8rem;
-    color: var(--text-medium);
-}
-
-.step-image {
-    width: 100%;
-    border-radius: 16px;
-    margin-top: 0.8rem;
-    border: 1px solid rgba(0,0,0,0.05);
-    box-shadow: var(--shadow-sm);
-}
-
 /* Food tags */
 .food-tags {
     display: flex;
@@ -1780,7 +1971,7 @@ body {
     max-width: 300px;
     position: relative;
     z-index: 80; /* Bottom nav'dan daha düşük ama çoğu öğeden daha yüksek */
-    margin-bottom: 100px; /* Alt navigasyonun üzerinde görünmesi için boşluk */
+    margin-bottom: 60px; /* 100px'ten 60px'e düşürüldü - daha az boşluk */
 }
 
 .cta-button:hover {
@@ -2100,40 +2291,121 @@ body {
 /* Button to scroll back to top */
 .back-to-top {
     position: fixed;
-    bottom: 80px; /* Alt menü çubuğunun üzerinde durması için */
+    bottom: 80px; /* Varsayılan değer - JavaScript ile daha sonra güncellenir */
     right: 20px;
-    background-color: var(--primary);
-    color: white;
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
+    background-color: var(--primary); /* Stil değişkenimizi kullanıyoruz */
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 95; /* Bottom nav'dan yüksek, diğer modallardan düşük */
     cursor: pointer;
-    box-shadow: var(--shadow-md);
     opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px) scale(0.9);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 90;
-    font-size: 1.2rem;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: none;
+    outline: none;
+    pointer-events: none; /* Görünmezken tıklanamaz */
+    text-decoration: none !important; /* Link kullanılırsa stil bozulmasın */
 }
 
 .back-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0) scale(1);
+    opacity: 0.9;
+    transform: translateY(0);
+    pointer-events: auto; /* Görünür olunca tıklanabilir */
 }
 
 .back-to-top:hover {
+    opacity: 1;
     background-color: var(--primary-dark);
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 8px 20px rgba(106, 90, 224, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .back-to-top:active {
-    transform: translateY(0) scale(0.95);
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.back-to-top i {
+    font-size: 1.3rem;
+}
+
+/* Dark Mode Uyumluluğu */
+body.dark-mode .back-to-top {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .back-to-top:hover {
+    background-color: var(--primary-light);
+}
+
+/* Responsive Stil Ayarlamaları */
+@media (max-width: 768px) {
+    .back-to-top {
+        right: 20px;
+        bottom: 75px; /* Bottom navbar'a yakın */
+        width: 45px;
+        height: 45px;
+    }
+    
+    .cta-button {
+        margin-bottom: 50px; /* Mobil görünümde daha az boşluk */
+    }
+    
+    .main-container {
+        padding-bottom: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-to-top {
+        right: 15px;
+        bottom: 70px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .back-to-top i {
+        font-size: 1.1rem;
+    }
+    
+    .cta-button {
+        margin-bottom: 45px; /* Küçük ekranlarda daha da az boşluk */
+    }
+    
+    .main-container {
+        padding-bottom: 1.8rem;
+    }
+}
+
+/* Küçük ekranlar için ek düzenlemeler */
+@media (max-width: 360px) {
+    .back-to-top {
+        right: 10px;
+        bottom: 70px;
+        width: 38px;
+        height: 38px;
+        opacity: 0.8; /* Daha şeffaf */
+    }
+    
+    .back-to-top i {
+        font-size: 1rem;
+    }
+}
+
+/* Landscape modunda pozisyonu düzelt */
+@media (max-height: 450px) and (orientation: landscape) {
+    .back-to-top {
+        bottom: 15px;
+        right: 15px;
+    }
 }
 
 /* Mobil cihazlar için responsive ayarlamalar */
@@ -2570,82 +2842,7 @@ html {
     }
 }
 
-/* Enhanced instruction button - More stylish design */
-.instruction-button {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    color: white;
-    border: none;
-    border-radius: 50px;
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    box-shadow: 0 4px 12px rgba(106, 90, 224, 0.3);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    overflow: hidden;
-}
-
-.instruction-button:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-        rgba(255,255,255,0), 
-        rgba(255,255,255,0.2), 
-        rgba(255,255,255,0));
-    transition: left 1s;
-}
-
-.instruction-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(106, 90, 224, 0.4);
-}
-
-.instruction-button:hover:before {
-    left: 100%;
-}
-
-.instruction-button:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 6px rgba(106, 90, 224, 0.4);
-}
-
-.instruction-button i {
-    font-size: 1rem;
-    animation: pulse-light 2s infinite;
-}
-
-@keyframes pulse-light {
-    0% { opacity: 0.7; }
-    50% { opacity: 1; }
-    100% { opacity: 0.7; }
-}
-
-/* Responsive adjustments for instruction button */
-@media (max-width: 768px) {
-    .instruction-button {
-        padding: 7px 14px;
-        font-size: 0.85rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .instruction-button {
-        padding: 6px 12px;
-        font-size: 0.8rem;
-        margin-top: 8px;
-    }
-    
-    .instruction-button i {
-        font-size: 0.9rem;
-    }
+/* Favoriler bölümü için margin düzeltmesi - en sonda görüntülendiğinde */
+#favoritesSection:last-child {
+    margin-bottom: 60px; /* Son öğe olduğunda bottom margin ekle */
 }

@@ -1,0 +1,70 @@
+/**
+ * ACİL SCROLL DÜZELTME CSS
+ * Scroll sorunlarını kesin çözüme kavuşturacak stil geçersiz kılmaları
+ */
+
+/* En üst seviye geçersiz kılmalar */
+html.scrollable,
+html.scrollable body {
+    overflow: auto !important;
+    height: auto !important;
+    position: static !important;
+    width: auto !important;
+    overscroll-behavior: auto;
+}
+
+/* Scroll durumunun kesinlikle açık olması gereken durumlar */
+body:not(.modal-showing):not(.panel-showing) {
+    overflow: auto !important;
+    position: static !important;
+}
+
+/* Modal ve paneller kapandıktan sonra scrollun kesinlikle açık olması */
+body.modal-closed,
+body.panel-closed {
+    overflow: auto !important;
+    position: static !important;
+    top: auto !important;
+    width: auto !important;
+    height: auto !important;
+    animation: forceScrollOn 0.1s forwards;
+}
+
+@keyframes forceScrollOn {
+    to {
+        overflow: auto !important;
+        position: static !important;
+    }
+}
+
+/* Sistem tarafından otomatik uygulanan scroll fixleri için sınıf */
+.scroll-fixed {
+    overflow: auto !important;
+    position: static !important;
+}
+
+/* iOS için özel düzeltmeler */
+@supports (-webkit-touch-callout: none) {
+    html, body {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    body:after {
+        content: '';
+        width: 1px;
+        height: 1px;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        z-index: -1;
+        visibility: hidden;
+    }
+}
+
+/* Kategoriler modal kapatıldıktan sonra scrollu zorla etkinleştir */
+body.categories-modal-closed {
+    overflow: auto !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+}

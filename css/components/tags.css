@@ -1,0 +1,665 @@
+/**
+ * Etiketler Bileşeni Stilleri - Performans Optimizasyonlu
+ * Emojili etiketler için özelleştirilmiş CSS
+ */
+
+/* Etiket konteyner düzenlemeleri - will-change eklendi */
+.food-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+    margin-top: 0.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+    will-change: height, opacity;
+}
+
+/* Temel etiket stillemeleri - optimize edildi */
+.food-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-right: 0.3rem;
+    margin-bottom: 0.3rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    gap: 0.4rem; /* Emoji ile metin arasındaki boşluk */
+    white-space: nowrap;
+    line-height: 1.4;
+    user-select: none;
+    position: relative;
+    overflow: hidden; /* Ripple efekti için gerekli */
+    backface-visibility: hidden; /* Performans için */
+}
+
+/* Emoji için stil ayarlaması */
+.tag-emoji {
+    font-size: 1.1em; /* Emoji metin içinden biraz daha büyük */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.2em; /* Sabit genişlik */
+    text-align: center;
+}
+
+/* Etiket metni için stil */
+.tag-text {
+    line-height: 1.2;
+}
+
+/* Daha fazla etiketi göster butonu - optimizasyonlu */
+.food-tag.tag-more {
+    background-color: #e0e0e0;
+    color: var(--text-medium);
+    cursor: pointer;
+    font-weight: 600;
+    min-width: 32px;
+    text-align: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: 1px dashed rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 2; /* Diğer etiketlerin önünde olacak */
+    padding: 0.4rem 0.9rem; /* Padding artırıldı - daha kolay tıklanabilir */
+    touch-action: manipulation; /* Mobil cihazlarda tıklama gecikmesini engeller */
+}
+
+/* Performans için hafif hover efekti */
+.food-tag.tag-more:hover {
+    background-color: var(--primary-light);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+/* Daha hafif tıklama geri bildirimi */
+.food-tag.tag-more:active,
+.food-tag.tag-more.clicked {
+    transform: translateY(0);
+    transition: all 0.1s ease;
+    background-color: var(--primary-dark);
+    color: white;
+}
+
+/* Anlık değil, koşullu  animasyon - performansı etkileyen kısımlar optimize edildi */
+@keyframes tagMoreClick {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05); }
+}
+
+/* Genişletilmiş durumunda butonun görünümü */
+.food-tags.expanded .food-tag.tag-more {
+    background-color: var(--primary);
+    color: white;
+    border-color: transparent;
+}
+
+/* Gizli etiketler - optimize edildi */
+.food-tag.hidden-tag {
+    display: inline-flex;
+    opacity: 1;
+    margin-right: 0.3rem;
+    margin-bottom: 0.3rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.food-tag.hidden-tag.hidden {
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+}
+
+/* Tıklanabilir etiket gösterimi - optimize edildi */
+.food-tag.clickable {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Daha hafif hover efekti */
+.food-tag.clickable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.food-tag.clickable:active {
+    transform: translateY(0px);
+}
+
+/* Hızlı animasyonlar */
+.food-tag.fade-in {
+    animation: tagFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes tagFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes fadeOutTag {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(5px); }
+}
+
+/* Etiket konteyneri genişletildiğinde stil - optimize edildi */
+.food-tags.expanded {
+    padding: 0.6rem;
+    background-color: rgba(106, 90, 224, 0.03);
+    border-radius: 12px;
+    margin: 0.3rem 0;
+    transition: all 0.3s ease;
+}
+
+.food-tag.fade-out {
+    animation: fadeOutTag 0.3s ease forwards;
+}
+
+/* TÜM ETİKET STİLLERİ - Kapsamlı Liste */
+.tag-all {
+    background-color: #78909C;
+    color: white;
+}
+
+.tag-vegan {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.tag-vegetarian {
+    background-color: #8BC34A;
+    color: white;
+}
+
+.tag-spicy {
+    background-color: #FF5722;
+    color: white;
+}
+
+.tag-popular {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.tag-meat {
+    background-color: #D32F2F;
+    color: white;
+}
+
+.tag-chicken {
+    background-color: #FF9800;
+    color: white;
+}
+
+.tag-high-protein, .tag-protein {
+    background-color: #9C27B0;
+    color: white;
+}
+
+.tag-low-carb {
+    background-color: #3F51B5;
+    color: white;
+}
+
+.tag-eggs, .tag-yumurta {
+    background-color: #FFF59D;
+    color: #5F4339;
+}
+
+.tag-morning, .tag-sabah {
+    background-color: #FFB74D; 
+    color: white;
+}
+
+.tag-refreshing {
+    background-color: #4DD0E1;
+    color: white;
+}
+
+.tag-summer, .tag-yaz {
+    background-color: #FDD835;
+    color: #5F4339;
+}
+
+.tag-citrus {
+    background-color: #FFD600;
+    color: #5F4339;
+}
+
+.tag-spring {
+    background-color: #AED581;
+    color: white;
+}
+
+.tag-winter {
+    background-color: #90CAF9;
+    color: white;
+}
+
+.tag-autumn {
+    background-color: #FF8A65;
+    color: white;
+}
+
+.tag-warming {
+    background-color: #EF5350;
+    color: white;
+}
+
+.tag-cooling {
+    background-color: #29B6F6;
+    color: white;
+}
+
+.tag-folk {
+    background-color: #6D4C41;
+    color: white;
+}
+
+.tag-cultural {
+    background-color: #3949AB;
+    color: white;
+}
+
+.tag-caffeine {
+    background-color: #5D4037;
+    color: white;
+}
+
+.tag-cheese, .tag-peynir {
+    background-color: #FFC72C;
+    color: #5F4339;
+}
+
+.tag-wholesome {
+    background-color: #8D6E63;
+    color: white;
+}
+
+.tag-starter {
+    background-color: #546E7A;
+    color: white;
+}
+
+.tag-sharing, .tag-paylaşımlık, .tag-paylasimlik {
+    background-color: #7986CB;
+    color: white;
+}
+
+.tag-traditional {
+    background-color: #795548;
+    color: white;
+}
+
+.tag-hot {
+    background-color: #F44336;
+    color: white;
+}
+
+.tag-cold {
+    background-color: #00BCD4;
+    color: white;
+}
+
+.tag-fresh {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.tag-sweet {
+    background-color: #E91E63;
+    color: white;
+}
+
+.tag-breakfast {
+    background-color: #FF9800;
+    color: white;
+}
+
+.tag-regional {
+    background-color: #607D8B;
+    color: white;
+}
+
+.tag-premium {
+    background-color: #9E9E9E;
+    color: white;
+}
+
+.tag-organic {
+    background-color: #8BC34A;
+    color: white;
+}
+
+.tag-dairy-free {
+    background-color: #03A9F4;
+    color: white;
+}
+
+.tag-plant-based {
+    background-color: #009688;
+    color: white;
+}
+
+.tag-chef-special {
+    background-color: #673AB7;
+    color: white;
+}
+
+.tag-seasonal {
+    background-color: #CDDC39;
+    color: #333;
+}
+
+.tag-comfort-food {
+    background-color: #FF5722;
+    color: white;
+}
+
+.tag-gluten-free {
+    background-color: #A1887F;
+    color: white;
+}
+
+.tag-eco-friendly {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.tag-local {
+    background-color: #607D8B;
+    color: white;
+}
+
+.tag-dinner {
+    background-color: #673AB7;
+    color: white;
+}
+
+.tag-gourmet {
+    background-color: #9E9E9E;
+    color: #333;
+}
+
+.tag-healthy {
+    background-color: #2196F3;
+    color: white;
+}
+
+.tag-new {
+    background-color: #2196F3;
+    color: white;
+}
+
+.tag-low-calorie {
+    background-color: #2196F3;
+    color: white;
+}
+
+.tag-antioxidant {
+    background-color: #E91E63;
+    color: white;
+}
+
+.tag-handcrafted {
+    background-color: #AA8855;
+    color: white;
+}
+
+.tag-homemade {
+    background-color: #996633;
+    color: white;
+}
+
+.tag-artisanal {
+    background-color: #886644;
+    color: white;
+}
+
+.tag-keto {
+    background-color: #559977;
+    color: white;
+}
+
+.tag-seafood {
+    background-color: #0097A7;
+    color: white;
+}
+
+.tag-fish {
+    background-color: #00838F;
+    color: white;
+}
+
+.tag-dessert {
+    background-color: #EC407A;
+    color: white;
+}
+
+.tag-soup {
+    background-color: #FF7043;
+    color: white;
+}
+
+.tag-salad {
+    background-color: #7CB342;
+    color: white;
+}
+
+.tag-pasta {
+    background-color: #FFB74D;
+    color: #333;
+}
+
+.tag-burger {
+    background-color: #FF5252;
+    color: white;
+}
+
+.tag-pizza {
+    background-color: #FF8A65;
+    color: white;
+}
+
+.tag-sandwich {
+    background-color: #C0CA33;
+    color: white;
+}
+
+.tag-wraps {
+    background-color: #FFCA28;
+    color: #333;
+}
+
+.tag-grill {
+    background-color: #E64A19;
+    color: white;
+}
+
+.tag-bbq {
+    background-color: #D84315;
+    color: white;
+}
+
+.tag-quick {
+    background-color: #00BFA5;
+    color: white;
+}
+
+.tag-slow-cooked {
+    background-color: #6D4C41;
+    color: white;
+}
+
+.tag-no-sugar {
+    background-color: #F06292;
+    color: white;
+}
+
+.tag-allergen-free {
+    background-color: #4DB6AC;
+    color: white;
+}
+
+.tag-nuts {
+    background-color: #D7CCC8;
+    color: #5D4037;
+}
+
+.tag-kids {
+    background-color: #FFF176;
+    color: #333;
+}
+
+.tag-family {
+    background-color: #7986CB;
+    color: white;
+}
+
+.tag-shareable {
+    background-color: #4FC3F7;
+    color: white;
+}
+
+.tag-brunch {
+    background-color: #FFE082;
+    color: #333;
+}
+
+.tag-lunch {
+    background-color: #26C6DA;
+    color: white;
+}
+
+.tag-supper {
+    background-color: #5C6BC0;
+    color: white;
+}
+
+.tag-snack {
+    background-color: #26A69A;
+    color: white;
+}
+
+.tag-appetizer {
+    background-color: #66BB6A;
+    color: white;
+}
+
+.tag-main {
+    background-color: #5E35B1;
+    color: white;
+}
+
+.tag-side {
+    background-color: #FFA726;
+    color: white;
+}
+
+.tag-drink {
+    background-color: #29B6F6;
+    color: white;
+}
+
+.tag-smoothie {
+    background-color: #9CCC65;
+    color: white;
+}
+
+.tag-fermented {
+    background-color: #9575CD;
+    color: white;
+}
+
+.tag-probiotic {
+    background-color: #4DD0E1;
+    color: white;
+}
+
+/* Filter Button Emoji Styling */
+.filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-emoji {
+    font-size: 1.1em;
+}
+
+/* Dark mode için etiket düzeltmeleri */
+body.dark-mode .food-tag.tag-more {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+}
+
+body.dark-mode .food-tag.tag-more:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+body.dark-mode .food-tag.clickable:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode için açık fon, koyu yazı olan etiketleri düzelt */
+body.dark-mode .tag-eggs,
+body.dark-mode .tag-summer,
+body.dark-mode .tag-citrus,
+body.dark-mode .tag-cheese,
+body.dark-mode .tag-peynir,
+body.dark-mode .tag-yumurta,
+body.dark-mode .tag-yaz {
+    color: rgba(0, 0, 0, 0.8);
+}
+
+/* Responsive Düzenlemeler */
+@media (max-width: 768px) {
+    .food-tag {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.7rem;
+    }
+    
+    .tag-emoji {
+        font-size: 1em;
+    }
+    
+    /* Mobil cihazlarda daha büyük tıklama alanı */
+    .food-tag.tag-more {
+        padding: 0.5rem 1rem;
+        min-width: 40px;
+    }
+}
+
+/* Daha iyi erişilebilirlik için odak durumu stili */
+.food-tag:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Ripple efekti - tıklama animasyonu */
+.food-tag .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.7);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
